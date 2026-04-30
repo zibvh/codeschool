@@ -3,8 +3,8 @@ rules_version = '2';
 // codeSchool — Firestore Security Rules
 // Project: codeschool-41f52
 // Roles: admin | tutor | student
-// Collections: users, courses, enrollments, payments, certificates,
-//              submissions, examSubmissions, testResults,
+// Collections: users, pending_users, courses, enrollments, payments,
+//              certificates, submissions, examSubmissions, testResults,
 //              notifications, questions, settings
 // ═══════════════════════════════════════════════════════════════════
 
@@ -19,7 +19,6 @@ service cloud.firestore {
       return request.auth != null;
     }
 
-    // Reads the caller's user doc — cached per request by Firestore
     function myProfile() {
       return get(/databases/$(database)/documents/users/$(request.auth.uid)).data;
     }
@@ -48,9 +47,34 @@ service cloud.firestore {
       return isSignedIn() && request.auth.uid == uid;
     }
 
-    // Prevents any field from being changed that isn't in the allowed set
     function onlyFields(fields) {
       return request.resource.data.diff(resource.data).affectedKeys().hasOnly(fields);
+    }
+
+    // ──────────────────────────────────────────────────────────────
+    // PENDING_USERS
+    // Written during email/password signup BEFORE email verification.
+    // The user is authenticated (Firebase creates the auth account
+    // first) but has no profile doc yet — so we can't call myRole().
+    // Rule: a user may create/read/delete their OWN pending doc only.
+    // The login flow promotes pending_users → users on first login.
+    // ──────────────────────────────────────────────────────────────
+    match /pending_users/{uid} {
+      // Owner can read their own pending doc (e.g. resend-verification flow)
+      allow read: if isMe(uid) || isAdmin();
+
+      // Any newly-authenticated user can create their own pending doc.
+      // We enforce: uid matches auth, role must be 'student', status 'active'.
+      allow create: if isMe(uid)
+        && request.resource.data.uid == uid
+        && request.resource.data.role == 'student'
+        && request.resource.data.status == 'active';
+
+      // No client-side updates to pending docs
+      allow update: if isAdmin();
+
+      // Owner or admin can delete (login flow deletes after promotion)
+      allow delete: if isMe(uid) || isAdmin();
     }
 
     // ──────────────────────────────────────────────────────────────
@@ -61,12 +85,18 @@ service cloud.firestore {
       // student profiles (needed for grading/submissions).
       allow read: if isMe(uid) || isAdmin() || isTutor();
 
-      // Only admin can create user docs (registration flow via admin invite / backend)
-      allow create: if isAdmin();
+      // Self-registration: a user can create their OWN doc if:
+      //   - They are the authenticated user (isMe)
+      //   - They can only register as 'student' with status 'active'
+      //   - Used by: Google/GitHub social sign-in (no pending_users step)
+      allow create: if isAdmin()
+        || (isMe(uid)
+            && request.resource.data.uid == uid
+            && request.resource.data.role == 'student'
+            && request.resource.data.status == 'active');
 
-      // Admins can write anything.
-      // Users can update their own doc but CANNOT change role, status,
-      // registrationFeePaid, paystackSubaccountCode, or email.
+      // Self-update: users can update safe profile fields only.
+      // Cannot change role, status, email, or payment fields.
       allow update: if isAdmin()
         || (isMe(uid) && onlyFields([
              'firstName','lastName','fullName','photoURL',
@@ -81,26 +111,19 @@ service cloud.firestore {
     // COURSES
     // ──────────────────────────────────────────────────────────────
     match /courses/{courseId} {
-      // Public browsing — anyone (even signed-out) can read live courses.
-      // Admins and tutors can read all statuses (pending, draft, etc.)
       allow read: if resource.data.status == 'live'
         || isAdmin()
         || (isTutor() && resource.data.tutorId == request.auth.uid);
 
-      // Active tutors can create courses (lands as status:'pending')
       allow create: if isActiveTutor()
         && request.resource.data.tutorId == request.auth.uid
         && request.resource.data.status == 'pending';
 
-      // Tutors can update their own courses ONLY if not yet live/rejected.
-      // Admins can update anything (approve, set price, reject, etc.)
       allow update: if isAdmin()
         || (isActiveTutor()
             && resource.data.tutorId == request.auth.uid
             && resource.data.status in ['pending', 'pending_edit', 'draft']);
 
-      // Tutors can hard-delete their own draft/pending courses.
-      // Admins can delete anything.
       allow delete: if isAdmin()
         || (isActiveTutor()
             && resource.data.tutorId == request.auth.uid
@@ -108,12 +131,9 @@ service cloud.firestore {
     }
 
     // ──────────────────────────────────────────────────────────────
-    // QUESTIONS  (course question bank, read by students during exam)
+    // QUESTIONS
     // ──────────────────────────────────────────────────────────────
     match /questions/{questionId} {
-      // Students can read questions for courses they're enrolled in.
-      // Tutors can read/write questions for their own courses.
-      // Admins can do anything.
       allow read: if isAdmin()
         || (isTutor() && resource.data.tutorId == request.auth.uid)
         || (isStudent() && exists(/databases/$(database)/documents/enrollments/$(request.auth.uid + '_' + resource.data.courseId)));
@@ -126,25 +146,19 @@ service cloud.firestore {
     // ENROLLMENTS
     // ──────────────────────────────────────────────────────────────
     match /enrollments/{enrollId} {
-      // Student sees their own. Tutor sees enrollments in their courses.
-      // Admin sees all.
       allow read: if isAdmin()
         || (isSignedIn() && resource.data.studentId == request.auth.uid)
         || (isTutor() && resource.data.tutorId == request.auth.uid);
 
-      // Students create their own enrollments.
       allow create: if isStudent()
         && request.resource.data.studentId == request.auth.uid;
 
-      // Students can update their own enrollment (progress, completedLessons).
-      // Admins can update anything.
       allow update: if isAdmin()
         || (isStudent()
             && resource.data.studentId == request.auth.uid
             && onlyFields(['completedLessons','progress','paid','paystackRef',
                            'certRequested','certIssued','certId','updatedAt']));
 
-      // Only admin can delete enrollments
       allow delete: if isAdmin();
     }
 
@@ -152,20 +166,15 @@ service cloud.firestore {
     // PAYMENTS
     // ──────────────────────────────────────────────────────────────
     match /payments/{payId} {
-      // Admin sees all. Tutor sees payments for their courses.
-      // Student sees their own payments.
       allow read: if isAdmin()
         || (isTutor() && resource.data.tutorId == request.auth.uid)
         || (isStudent() && resource.data.studentId == request.auth.uid);
 
-      // Students and the system (via student dashboard) create payment records
       allow create: if isStudent()
         && request.resource.data.studentId == request.auth.uid;
 
-      // Only admin marks tutor payouts (tutorPaid, tutorPaidAt)
       allow update: if isAdmin();
 
-      // No deletes — payment records are permanent audit trail
       allow delete: if false;
     }
 
@@ -173,22 +182,16 @@ service cloud.firestore {
     // CERTIFICATES
     // ──────────────────────────────────────────────────────────────
     match /certificates/{certId} {
-      // Certs are publicly readable (shareable links)
       allow read: if true;
 
-      // Students create their own cert requests.
-      // Admins can create/overwrite any cert.
       allow create: if isAdmin()
         || (isStudent() && request.resource.data.studentId == request.auth.uid);
 
-      // Students can update their own cert (e.g. mark paid).
-      // Admins can update anything.
       allow update: if isAdmin()
         || (isStudent()
             && resource.data.studentId == request.auth.uid
             && onlyFields(['paid','locked','paidAt','paystackRef']));
 
-      // Only admin can delete certs
       allow delete: if isAdmin();
     }
 
@@ -196,17 +199,13 @@ service cloud.firestore {
     // ASSIGNMENT SUBMISSIONS
     // ──────────────────────────────────────────────────────────────
     match /submissions/{subId} {
-      // Student sees their own. Tutor sees submissions for their courses.
-      // Admin sees all.
       allow read: if isAdmin()
         || (isStudent() && resource.data.studentId == request.auth.uid)
         || (isTutor() && resource.data.tutorId == request.auth.uid);
 
-      // Students submit their own work
       allow create: if isStudent()
         && request.resource.data.studentId == request.auth.uid;
 
-      // Tutors grade (add score/feedback). Admins can update anything.
       allow update: if isAdmin()
         || (isTutor()
             && resource.data.tutorId == request.auth.uid
@@ -226,7 +225,6 @@ service cloud.firestore {
       allow create: if isStudent()
         && request.resource.data.studentId == request.auth.uid;
 
-      // Tutors grade exams. Admins can update anything.
       allow update: if isAdmin()
         || (isTutor()
             && resource.data.tutorId == request.auth.uid
@@ -236,7 +234,7 @@ service cloud.firestore {
     }
 
     // ──────────────────────────────────────────────────────────────
-    // TEST RESULTS  (quick in-lesson knowledge checks)
+    // TEST RESULTS
     // ──────────────────────────────────────────────────────────────
     match /testResults/{resultId} {
       allow read: if isAdmin()
@@ -246,7 +244,6 @@ service cloud.firestore {
       allow create: if isStudent()
         && request.resource.data.studentId == request.auth.uid;
 
-      // Test results are immutable after creation (no cheating)
       allow update: if isAdmin();
       allow delete: if isAdmin();
     }
@@ -255,19 +252,14 @@ service cloud.firestore {
     // NOTIFICATIONS
     // ──────────────────────────────────────────────────────────────
     match /notifications/{notifId} {
-      // Users read notifs addressed to them or broadcast ('all').
-      // Admins read everything.
       allow read: if isAdmin()
         || (isSignedIn()
             && (resource.data.userId == request.auth.uid
                 || resource.data.target == 'all'
                 || resource.data.target == request.auth.uid));
 
-      // Only admin creates notifications
       allow create: if isAdmin();
 
-      // Any signed-in user can mark their own notif as read.
-      // Admins can write anything.
       allow update: if isAdmin()
         || (isSignedIn()
             && (resource.data.userId == request.auth.uid
@@ -279,17 +271,15 @@ service cloud.firestore {
     }
 
     // ──────────────────────────────────────────────────────────────
-    // SETTINGS  (revenue splits, activation fees, platform config)
+    // SETTINGS
     // ──────────────────────────────────────────────────────────────
     match /settings/{docId} {
-      // All signed-in users can read settings (tutors need revenue split).
-      // Only admin can write.
       allow read: if isSignedIn();
       allow write: if isAdmin();
     }
 
     // ──────────────────────────────────────────────────────────────
-    // CATCH-ALL — deny everything not explicitly matched above
+    // CATCH-ALL
     // ──────────────────────────────────────────────────────────────
     match /{document=**} {
       allow read, write: if false;
