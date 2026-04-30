@@ -1,0 +1,1338 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>Admin Dashboard — codeSchool</title>
+
+<!-- SEO -->
+<meta name="description" content="codeSchool platform administration.">
+<meta name="keywords" content="codeSchool, learn to code, Nigeria, online coding courses, HTML, CSS, JavaScript, Python, e-learning, programming, certificates">
+<meta name="author" content="codeSchool">
+<meta name="robots" content="index, follow">
+<link rel="canonical" href="https://codeSchool.onrender.com/admin-dashboard.html">
+
+<!-- Open Graph (Facebook, WhatsApp, LinkedIn) -->
+<meta property="og:type" content="website">
+<meta property="og:title" content="Admin Dashboard — codeSchool">
+<meta property="og:description" content="codeSchool platform administration.">
+<meta property="og:url" content="https://codeSchool.onrender.com/admin-dashboard.html">
+<meta property="og:image" content="https://codeSchool.onrender.com/codeSchool.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="codeSchool — Learn To Code">
+<meta property="og:site_name" content="codeSchool">
+<meta property="og:locale" content="en_NG">
+
+<!-- Twitter Card -->
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Admin Dashboard — codeSchool">
+<meta name="twitter:description" content="codeSchool platform administration.">
+<meta name="twitter:image" content="https://codeSchool.onrender.com/codeSchool.png">
+<meta name="twitter:image:alt" content="codeSchool — Learn To Code">
+<meta name="twitter:site" content="@codeSchool">
+
+<!-- Theme & mobile -->
+<meta name="theme-color" content="#0B1A0E">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="codeSchool">
+<link rel="icon" type="image/png" href="codeSchool.png">
+<link rel="apple-touch-icon" href="codeSchool.png">
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Mono:wght@300;400;500&family=Outfit:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{
+  --blue:#1A4720;--blue-mid:#2A7040;--blue-glow:#4A9B5F;
+  --red:#C47B1A;--red-bright:#E89020;
+  --white:#FFFFFF;--dark:#0B1A0E;--dark2:#122010;
+  --surface:rgba(255,255,255,.03);--border:rgba(255,255,255,.08);
+  --gray:#8A94B8;--gray2:#4A5378;
+  --green:#22C55E;--amber:#F59E0B;--orange:#F97316;
+  --mono:'DM Mono',monospace;--display:'Syne',sans-serif;--body:'Outfit',sans-serif;
+  --nav-h:60px;--bottom-h:64px;
+}
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box;}
+html,body{height:100%;overflow-x:hidden;}
+body{font-family:var(--body);background:var(--dark);color:var(--white);}
+
+.topbar{height:var(--nav-h);background:rgba(11,26,14,.95);border-bottom:1px solid var(--border);backdrop-filter:blur(20px);display:flex;align-items:center;justify-content:space-between;padding:0 1rem 0 1.25rem;position:sticky;top:0;z-index:100;}
+.logo{font-family:var(--display);font-size:1.3rem;font-weight:800;letter-spacing:-.03em;color:var(--white);text-decoration:none;}
+.logo span{color:var(--amber);}
+.admin-badge{display:flex;align-items:center;gap:.35rem;background:rgba(232,144,32,.15);border:1px solid rgba(232,144,32,.35);padding:.25rem .75rem;border-radius:20px;font-family:var(--mono);font-size:.6rem;color:var(--amber);}
+.avatar-btn{width:34px;height:34px;border-radius:50%;background:linear-gradient(135deg,var(--amber),#D4960A);display:flex;align-items:center;justify-content:center;font-family:var(--display);font-weight:800;font-size:.8rem;cursor:pointer;}
+
+.scroll-area{flex:1;overflow-y:auto;overflow-x:hidden;padding-bottom:calc(var(--bottom-h)+env(safe-area-inset-bottom,16px));}
+.panel{display:none;padding:1rem;}
+.panel.active{display:block;animation:fadeIn .25s ease;}
+@keyframes fadeIn{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
+
+.bottom-nav{position:fixed;bottom:0;left:0;right:0;height:var(--bottom-h);background:rgba(11,26,14,.97);border-top:1px solid var(--border);backdrop-filter:blur(20px);display:flex;align-items:stretch;padding-bottom:env(safe-area-inset-bottom,0);z-index:100;}
+.bnav-item{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;cursor:pointer;color:var(--gray2);font-family:var(--mono);font-size:.5rem;letter-spacing:.03em;text-transform:uppercase;border:none;background:none;padding-top:2px;position:relative;}
+.bnav-item.active{color:#F5B040;}
+.bnav-icon{font-size:1.1rem;}
+.bnav-badge{position:absolute;top:5px;right:calc(50% - 14px);background:var(--amber);color:#fff;font-family:var(--mono);font-size:.5rem;padding:.1rem .3rem;border-radius:10px;min-width:16px;text-align:center;}
+.bnav-badge.hidden{display:none;}
+
+/* stats */
+.stats-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:.75rem;margin-bottom:1rem;}
+.stat-card{background:var(--dark2);border:1px solid var(--border);border-radius:12px;padding:1.1rem;position:relative;overflow:hidden;transition:border-color .2s;}
+.stat-card::after{content:'';position:absolute;top:0;left:0;right:0;height:3px;}
+.sc-blue::after{background:linear-gradient(90deg,var(--forest-mid),var(--forest-glow));}
+.sc-red::after{background:linear-gradient(90deg,var(--amber-dark),var(--amber));}
+.sc-green::after{background:linear-gradient(90deg,#16a34a,var(--green));}
+.sc-amber::after{background:linear-gradient(90deg,#d97706,var(--amber));}
+.stat-icon{font-size:1.25rem;margin-bottom:.5rem;}
+.stat-val{font-family:var(--display);font-size:1.15rem;font-weight:700;letter-spacing:-.02em;line-height:1;}
+.stat-label{font-family:var(--mono);font-size:.58rem;color:var(--gray);letter-spacing:.08em;text-transform:uppercase;margin-top:.25rem;}
+
+/* alert banner – only shown when items exist */
+.alert-banner{
+  display:flex;align-items:flex-start;gap:.75rem;
+  background:rgba(245,158,11,.07);border:1px solid rgba(245,158,11,.25);
+  border-radius:12px;padding:1rem 1.1rem;margin-bottom:.75rem;
+}
+.alert-banner.info{background:rgba(74,155,95,.07);border-color:rgba(74,155,95,.25);}
+.alert-banner.success{background:rgba(34,197,94,.07);border-color:rgba(34,197,94,.2);}
+.alert-dot{width:8px;height:8px;border-radius:50%;margin-top:4px;flex-shrink:0;}
+.ad-amber{background:var(--amber);}
+.ad-blue{background:var(--forest-glow);}
+.ab-text{flex:1;}
+.ab-title{font-family:var(--display);font-size:.88rem;font-weight:700;margin-bottom:.15rem;}
+.ab-sub{font-family:var(--mono);font-size:.63rem;color:var(--gray);letter-spacing:.03em;}
+.ab-action{font-family:var(--mono);font-size:.63rem;color:#4A9B5F;background:none;border:none;cursor:pointer;margin-top:.4rem;padding:0;}
+
+/* section */
+.sec-label{font-family:var(--display);font-size:.95rem;font-weight:700;letter-spacing:-.02em;margin:1.25rem 0 .75rem;display:flex;align-items:center;justify-content:space-between;}
+
+/* btns */
+.btn{font-family:var(--mono);font-size:.7rem;letter-spacing:.05em;text-transform:uppercase;padding:.45rem .95rem;border-radius:8px;cursor:pointer;transition:all .2s;border:none;display:inline-flex;align-items:center;gap:.3rem;}
+.btn-primary{background:var(--forest-mid);color:var(--white);}
+.btn-primary:hover{background:var(--forest-glow);}
+.btn-red{background:var(--amber-dark);color:var(--white);}
+.btn-red:hover{background:var(--amber);}
+.btn-ghost{background:var(--surface);color:var(--gray);border:1px solid var(--border);}
+.btn-ghost:hover{color:var(--white);}
+.btn-green{background:rgba(34,197,94,.12);color:var(--green);border:1px solid rgba(34,197,94,.25);}
+.btn-green:hover{background:rgba(34,197,94,.2);}
+.btn-danger{background:rgba(232,144,32,.1);color:var(--amber);border:1px solid rgba(232,144,32,.2);}
+.btn-danger:hover{background:rgba(232,144,32,.18);}
+.btn-green{background:rgba(34,197,94,.12);color:var(--green);border:1px solid rgba(34,197,94,.25);}
+.btn-green:hover{background:rgba(34,197,94,.2);}
+.btn-sm{padding:.3rem .7rem;font-size:.62rem;}
+.btn-full{width:100%;justify-content:center;}
+
+/* course review card */
+.review-card{background:var(--dark2);border:1px solid rgba(245,158,11,.25);border-radius:14px;overflow:hidden;margin-bottom:.75rem;}
+.rc-header{padding:.85rem 1.1rem .75rem;border-bottom:1px solid var(--border);display:flex;justify-content:space-between;align-items:center;}
+.rc-lang{font-family:var(--mono);font-size:.6rem;letter-spacing:.1em;text-transform:uppercase;padding:.18rem .55rem;border-radius:4px;}
+.lang-html{background:rgba(255,107,107,.12);color:#F5C060;}
+.lang-css{background:rgba(74,155,95,.12);color:#4A9B5F;}
+.lang-js{background:rgba(255,214,0,.12);color:#FFD600;}
+.lang-other{background:rgba(74,155,95,.12);color:#4A9B5F;}
+.rc-flag{font-family:var(--mono);font-size:.6rem;color:var(--amber);background:rgba(245,158,11,.1);border:1px solid rgba(245,158,11,.2);padding:.18rem .55rem;border-radius:4px;}
+.rc-body{padding:.85rem 1.1rem;}
+.rc-title{font-family:var(--display);font-size:1rem;font-weight:700;margin-bottom:.2rem;}
+.rc-tutor{font-family:var(--mono);font-size:.65rem;color:var(--gray);margin-bottom:.5rem;}
+.rc-desc{font-size:.82rem;color:var(--gray);line-height:1.5;margin-bottom:.75rem;}
+.rc-meta{display:flex;gap:1rem;flex-wrap:wrap;margin-bottom:.75rem;}
+.rc-meta-item{font-family:var(--mono);font-size:.62rem;color:var(--gray);}
+.rc-meta-item strong{color:var(--white);}
+.fee-edit{display:flex;align-items:center;gap:.4rem;margin-bottom:.75rem;}
+.fee-input{background:rgba(255,255,255,.04);border:1px solid var(--border);border-radius:6px;padding:.4rem .7rem;font-family:var(--mono);font-size:.8rem;color:var(--white);outline:none;width:120px;transition:border-color .2s;}
+.fee-input:focus{border-color:#4A9B5F;}
+.fee-label{font-family:var(--mono);font-size:.6rem;color:var(--gray);text-transform:uppercase;letter-spacing:.07em;}
+.rc-footer{padding:.75rem 1.1rem;border-top:1px solid var(--border);display:flex;gap:.5rem;flex-wrap:wrap;}
+
+/* lesson preview */
+.lesson-peek{background:rgba(255,255,255,.02);border-radius:8px;padding:.5rem .75rem;margin-bottom:.35rem;font-size:.82rem;display:flex;gap:.5rem;align-items:center;}
+.lesson-peek-icon{font-size:.85rem;}
+.lesson-peek-name{flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+.lesson-peek-type{font-family:var(--mono);font-size:.6rem;color:var(--gray);}
+.show-more-btn{font-family:var(--mono);font-size:.62rem;color:#4A9B5F;background:none;border:none;cursor:pointer;padding:.3rem 0;}
+
+/* table */
+.table-wrap{background:var(--dark2);border:1px solid var(--border);border-radius:12px;overflow-x:auto;-webkit-overflow-scrolling:touch;}
+table{width:100%;border-collapse:collapse;min-width:480px;}
+thead tr{border-bottom:1px solid var(--border);background:rgba(255,255,255,.02);}
+thead th{font-family:var(--mono);font-size:.58rem;letter-spacing:.1em;text-transform:uppercase;color:var(--gray);padding:.8rem 1rem;text-align:left;white-space:nowrap;}
+tbody tr{border-bottom:1px solid rgba(255,255,255,.04);transition:background .15s;}
+tbody tr:last-child{border-bottom:none;}
+tbody tr:hover{background:rgba(255,255,255,.02);}
+td{padding:.7rem 1rem;font-size:.875rem;vertical-align:middle;}
+.user-cell{display:flex;align-items:center;gap:.6rem;}
+.user-av{width:28px;height:28px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-family:var(--display);font-weight:700;font-size:.65rem;flex-shrink:0;}
+.av-b{background:linear-gradient(135deg,var(--forest-mid),var(--forest-glow));}
+.av-g{background:linear-gradient(135deg,#16a34a,var(--green));}
+.av-r{background:linear-gradient(135deg,var(--amber),#D4960A);}
+.av-a{background:linear-gradient(135deg,#d97706,var(--amber));}
+
+/* badge */
+.badge{display:inline-flex;align-items:center;gap:.3rem;font-family:var(--mono);font-size:.58rem;letter-spacing:.05em;text-transform:uppercase;padding:.18rem .55rem;border-radius:4px;}
+.badge::before{content:'';width:5px;height:5px;border-radius:50%;}
+.b-pass{background:rgba(34,197,94,.12);color:var(--green);}.b-pass::before{background:var(--green);}
+.b-fail{background:rgba(232,144,32,.1);color:var(--amber);}.b-fail::before{background:var(--amber);}
+.b-pend{background:rgba(245,158,11,.12);color:var(--amber);}.b-pend::before{background:var(--amber);}
+.b-info{background:rgba(74,155,95,.12);color:#4A9B5F;}.b-info::before{background:var(--forest-glow);}
+
+/* cert card */
+.cert-row{background:var(--dark2);border:1px solid var(--border);border-radius:12px;padding:.85rem 1.1rem;margin-bottom:.5rem;display:flex;align-items:center;gap:.75rem;flex-wrap:wrap;}
+.cert-info{flex:1;min-width:0;}
+.cert-name{font-weight:500;font-size:.875rem;}
+.cert-course{font-family:var(--mono);font-size:.65rem;color:var(--gray);}
+.cert-id{font-family:var(--mono);font-size:.58rem;color:#4A9B5F;}
+
+/* empty */
+.empty-state{text-align:center;padding:2.5rem 1rem;color:var(--gray);}
+.empty-state .emoji{font-size:2.5rem;margin-bottom:.75rem;}
+.empty-state p{font-family:var(--mono);font-size:.72rem;letter-spacing:.04em;}
+
+/* bar chart */
+.chart-card{background:var(--dark2);border:1px solid var(--border);border-radius:12px;padding:1.1rem;}
+.chart-title{font-family:var(--display);font-size:.9rem;font-weight:700;margin-bottom:.15rem;}
+.chart-sub{font-family:var(--mono);font-size:.6rem;color:var(--gray);margin-bottom:1rem;}
+.bar-chart{display:flex;flex-direction:column;gap:.5rem;}
+.bar-row{display:flex;align-items:center;gap:.75rem;}
+.bar-label{font-family:var(--mono);font-size:.62rem;color:var(--gray);width:55px;flex-shrink:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+.bar-track{flex:1;height:7px;background:rgba(255,255,255,.05);border-radius:4px;overflow:hidden;}
+.bar-fill{height:100%;border-radius:4px;transition:width 1s ease;}
+.bar-val{font-family:var(--mono);font-size:.62rem;color:var(--gray);width:24px;text-align:right;}
+
+/* form */
+.form-group{margin-bottom:.9rem;}
+.form-label{display:block;font-family:var(--mono);font-size:.6rem;letter-spacing:.1em;text-transform:uppercase;color:var(--gray);margin-bottom:.4rem;}
+.form-input{width:100%;background:rgba(255,255,255,.04);border:1px solid var(--border);border-radius:8px;padding:.65rem .9rem;font-family:var(--body);font-size:.9rem;color:var(--white);outline:none;transition:border-color .2s;}
+.form-input:focus{border-color:#4A9B5F;box-shadow:0 0 0 3px rgba(74,155,95,.1);}
+.form-input::placeholder{color:var(--gray2);}
+
+/* modal */
+.modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,.75);z-index:200;display:none;align-items:flex-end;justify-content:center;backdrop-filter:blur(4px);}
+.modal-overlay.open{display:flex;animation:fadeIn .2s ease;}
+.modal-sheet{background:var(--dark2);border:1px solid rgba(74,155,95,.2);border-radius:20px 20px 0 0;padding:1.5rem;width:100%;max-height:85vh;overflow-y:auto;box-shadow:0 -20px 80px rgba(0,0,0,.5);animation:slideUp .3s ease;padding-bottom:calc(1.5rem + env(safe-area-inset-bottom,0));}
+@keyframes slideUp{from{opacity:0;transform:translateY(60px)}to{opacity:1;transform:translateY(0)}}
+.modal-handle{width:40px;height:4px;background:rgba(255,255,255,.1);border-radius:2px;margin:0 auto 1.25rem;}
+.modal-title{font-family:var(--display);font-size:1.1rem;font-weight:700;margin-bottom:.2rem;}
+.modal-sub{font-family:var(--mono);font-size:.68rem;color:var(--gray);margin-bottom:1.25rem;}
+
+/* toast */
+.toast{position:fixed;bottom:calc(var(--bottom-h)+12px);right:1rem;background:var(--dark2);border:1px solid rgba(74,155,95,.3);border-radius:10px;padding:.7rem 1.1rem;font-family:var(--mono);font-size:.72rem;color:var(--white);z-index:999;transform:translateY(100px);opacity:0;transition:transform .3s ease,opacity .3s;box-shadow:0 20px 60px rgba(0,0,0,.4);max-width:280px;}
+.toast.show{transform:translateY(0);opacity:1;}
+.toast.success{border-color:rgba(34,197,94,.4);}
+.toast.error{border-color:rgba(232,144,32,.4);}
+.toast.warning{border-color:rgba(245,158,11,.4);}
+
+/* skeleton */
+.skeleton{background:linear-gradient(90deg,var(--dark2) 25%,rgba(255,255,255,.04) 50%,var(--dark2) 75%);background-size:200% 100%;animation:shimmer 1.5s infinite;border-radius:6px;}
+@keyframes shimmer{0%{background-position:200% 0}100%{background-position:-200% 0}}
+.skel-card{height:160px;border-radius:14px;margin-bottom:.75rem;}
+
+/* search */
+.search-bar{display:flex;align-items:center;gap:.5rem;background:var(--surface);border:1px solid var(--border);border-radius:8px;padding:.45rem .85rem;margin-bottom:1rem;transition:border-color .2s;}
+.search-bar:focus-within{border-color:rgba(74,155,95,.4);}
+.search-bar input{background:none;border:none;outline:none;font-family:var(--body);font-size:.875rem;color:var(--white);width:100%;}
+.search-bar input::placeholder{color:var(--gray2);}
+
+/* desktop */
+@media(min-width:768px){
+  :root{--bottom-h:0px;}
+  body{flex-direction:row;}
+  .topbar{position:fixed;top:0;left:0;right:0;padding:0 2rem;}
+  .scroll-area{margin-top:var(--nav-h);margin-left:220px;padding-bottom:2rem;}
+  .panel{padding:2rem;}
+  .bottom-nav{display:none;}
+  .desktop-sidebar{display:flex;flex-direction:column;width:220px;background:var(--dark2);border-right:1px solid var(--border);position:fixed;top:var(--nav-h);left:0;height:calc(100vh - var(--nav-h));overflow-y:auto;z-index:50;}
+  .ds-nav{flex:1;padding:.75rem 0;}
+  .ds-item{display:flex;align-items:center;gap:.75rem;padding:.6rem 1.25rem;font-size:.875rem;color:var(--gray);cursor:pointer;transition:all .2s;border-left:2px solid transparent;background:none;border-right:none;border-top:none;border-bottom:none;width:100%;text-align:left;font-family:var(--body);}
+  .ds-item:hover{color:var(--white);background:rgba(255,255,255,.03);}
+  .ds-item.active{color:var(--white);background:rgba(74,155,95,.08);border-left-color:#4A9B5F;}
+  .ds-icon{font-size:.95rem;width:20px;text-align:center;}
+  .ds-badge{margin-left:auto;background:var(--amber);color:#fff;font-family:var(--mono);font-size:.55rem;padding:.1rem .4rem;border-radius:10px;}
+  .ds-badge.hidden{display:none;}
+  .ds-footer{padding:1rem 1.25rem;border-top:1px solid var(--border);}
+  .ds-user{display:flex;align-items:center;gap:.65rem;}
+  .ds-av{width:32px;height:32px;border-radius:50%;background:linear-gradient(135deg,var(--amber),#D4960A);display:flex;align-items:center;justify-content:center;font-family:var(--display);font-weight:800;font-size:.78rem;flex-shrink:0;}
+  .ds-info{flex:1;min-width:0;}
+  .ds-name{font-size:.8rem;font-weight:600;}
+  .ds-role{font-family:var(--mono);font-size:.58rem;color:var(--amber);}
+  .ds-logout{background:none;border:none;cursor:pointer;color:var(--gray);font-size:.85rem;flex-shrink:0;}
+  .ds-logout:hover{color:var(--amber);}
+  .stats-grid{grid-template-columns:repeat(4,1fr);}
+}
+@media(min-width:1100px){
+  .scroll-area{margin-left:240px;}
+  .desktop-sidebar{width:240px;}
+}
+#auth-loading{position:fixed;inset:0;background:var(--dark);z-index:9999;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:1rem;}
+#auth-loading .logo-l{font-family:Syne,sans-serif;font-size:2rem;font-weight:800;color:#fff;letter-spacing:-.03em;}
+#auth-loading .logo-l span{color:#E89020;}
+#auth-loading .spin{width:28px;height:28px;border:3px solid rgba(255,255,255,.1);border-top-color:#4A9B5F;border-radius:50%;animation:spin .7s linear infinite;}
+@keyframes spin{to{transform:rotate(360deg)}}
+#auth-loading.hide{opacity:0;pointer-events:none;transition:opacity .3s;}
+</style>
+
+<style>
+/* Icon integration styles */
+svg.lucide-icon, [class*="ds-icon"] svg, [class*="stat-icon"] svg, [class*="bnav-icon"] svg, .emoji svg {
+  display: inline-block;
+  vertical-align: middle;
+  flex-shrink: 0;
+}
+.ds-icon svg, .bnav-icon svg {
+  width: 1.1em;
+  height: 1.1em;
+}
+.stat-icon svg {
+  width: 1.8em;
+  height: 1.8em;
+}
+.emoji svg {
+  width: 2rem;
+  height: 2rem;
+}
+</style>
+</head>
+<body>
+<div id="auth-loading"><div class="logo-l">frNt<span>c</span>Oda</div><div class="spin"></div></div>
+<script>
+// Hard failsafe — if auth never resolves in 10s, hide loader and show error
+(function(){
+  setTimeout(function(){
+    var loader = document.getElementById('auth-loading');
+    if (loader && !loader.classList.contains('hide')) {
+      loader.classList.add('hide');
+      setTimeout(function(){ if(loader.parentNode) loader.remove(); }, 400);
+      var toast = document.getElementById('toast');
+      if (toast) {
+        toast.textContent = 'Connection timed out. Check your internet or Firebase config.';
+        toast.className = 'toast show error';
+        toast.style.zIndex = '99999';
+      }
+      console.warn('[codeSchool] Auth loader failsafe triggered after 10s');
+    }
+  }, 10000);
+})();
+</script>
+
+<header class="topbar">
+  <div style="display:flex;align-items:center;gap:.75rem;">
+    <a href="index.html" class="logo">frNt<span>c</span>Oda</a>
+    <div class="admin-badge"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" ><path d="M12 20a8 8 0 1 0 0-16 8 8 0 0 0 0 16z"/><path d="M12 14a2 2 0 1 0 0-4 2 2 0 0 0 0 4z"/><path d="M12 2v2"/><path d="M12 20v2"/><path d="m4.93 4.93 1.41 1.41"/><path d="m17.66 17.66 1.41 1.41"/><path d="M2 12h2"/><path d="M20 12h2"/><path d="m6.34 17.66-1.41 1.41"/><path d="m19.07 4.93-1.41 1.41"/></svg> Admin</div>
+  </div>
+  <div style="display:flex;align-items:center;gap:.5rem;">
+    <div class="avatar-btn" id="topbar-av" onclick="showPanel('profile')">A</div>
+  </div>
+</header>
+
+<nav class="desktop-sidebar" id="desktop-sidebar" style="display:none;">
+  <div class="ds-nav">
+    <button class="ds-item active" data-panel="home" onclick="showPanel('home')"><span class="ds-icon"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" ><line x1="18" x2="18" y1="20" y2="10"/><line x1="12" x2="12" y1="20" y2="4"/><line x1="6" x2="6" y1="20" y2="14"/></svg></span> Overview</button>
+    <button class="ds-item" data-panel="courses" onclick="showPanel('courses')"><span class="ds-icon"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" ><path d="M4 19.5v-15A2.5 2.5 0 0 1 6.5 2H20v20H6.5a2.5 2.5 0 0 1 0-5H20"/><path d="M8 7h6"/><path d="M8 11h8"/></svg></span> Courses <span class="ds-badge hidden" id="ds-badge-courses">0</span></button>
+    <button class="ds-item" data-panel="tutors" onclick="showPanel('tutors')"><span class="ds-icon"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" ><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg></span> Tutors <span class="ds-badge hidden" id="ds-badge-tutors">0</span></button>
+    <button class="ds-item" data-panel="students" onclick="showPanel('students')"><span class="ds-icon"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" ><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg></span> Students</button>
+    <button class="ds-item" data-panel="payments" onclick="showPanel('payments')"><span class="ds-icon"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" ><rect width="20" height="14" x="2" y="5" rx="2"/><line x1="2" x2="22" y1="10" y2="10"/></svg></span> Payments</button>
+    <button class="ds-item" data-panel="certs" onclick="showPanel('certs')"><span class="ds-icon"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" ><path d="M22 10v6M2 10l10-5 10 5-10 5z"/><path d="M6 12v5c3 3 9 3 12 0v-5"/></svg></span> Certificates</button>
+    <button class="ds-item" data-panel="notify" onclick="showPanel('notify')"><span class="ds-icon"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg></span> Notifications</button>
+    <button class="ds-item" data-panel="settings" onclick="showPanel('settings')"><span class="ds-icon"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg></span> Settings</button>
+    <button class="ds-item" data-panel="profile" onclick="showPanel('profile')"><span class="ds-icon"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" ><path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg></span> Profile</button>
+  </div>
+  <div class="ds-footer">
+    <div class="ds-user">
+      <div class="ds-av" id="ds-av">A</div>
+      <div class="ds-info">
+        <div class="ds-name" id="ds-name">Admin</div>
+        <div class="ds-role">Administrator</div>
+      </div>
+      <button class="ds-logout" onclick="doLogout()">⬡</button>
+    </div>
+  </div>
+</nav>
+
+<main class="scroll-area" id="main-scroll">
+
+  <!-- OVERVIEW -->
+  <section class="panel active" id="panel-home">
+    <!-- Alerts — only rendered when count > 0 -->
+    <div id="alerts-area"></div>
+
+    <div class="stats-grid">
+      <div class="stat-card sc-blue"><div class="stat-icon"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" ><path d="M4 19.5v-15A2.5 2.5 0 0 1 6.5 2H20v20H6.5a2.5 2.5 0 0 1 0-5H20"/><path d="M8 7h6"/><path d="M8 11h8"/></svg></div><div class="stat-val" id="st-courses">—</div><div class="stat-label">Live Courses</div></div>
+      <div class="stat-card sc-red"><div class="stat-icon"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" ><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg></div><div class="stat-val" id="st-students">—</div><div class="stat-label">Students</div></div>
+      <div class="stat-card sc-green"><div class="stat-icon"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" ><line x1="12" x2="12" y1="1" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg></div><div class="stat-val" id="st-revenue">—</div><div class="stat-label">Revenue</div></div>
+      <div class="stat-card sc-amber"><div class="stat-icon"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" ><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg></div><div class="stat-val" id="st-tutors">—</div><div class="stat-label">Tutors</div></div>
+    </div>
+
+    <div class="sec-label">Revenue (last 6 months)</div>
+    <div class="chart-card" style="margin-bottom:1rem;">
+      <div class="bar-chart" id="rev-chart"></div>
+    </div>
+
+    <div class="sec-label">Recent Signups</div>
+    <div class="table-wrap" id="recent-signups-wrap">
+      <table><thead><tr><th>User</th><th>Role</th><th>Joined</th></tr></thead>
+      <tbody id="recent-tbody"></tbody></table>
+    </div>
+  </section>
+
+  <!-- COURSES -->
+  <section class="panel" id="panel-courses">
+    <div class="sec-label" style="margin-top:0;">Course Management</div>
+    <div class="search-bar" style="margin-bottom:.75rem;"><span><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg></span><input type="text" placeholder="Search courses by title, tutor or language…" id="course-search" oninput="filterCourseList(this.value)"></div>
+    <div style="display:flex;gap:.35rem;flex-wrap:wrap;margin-bottom:1rem;">
+      <button class="btn btn-ghost btn-sm" onclick="filterCourses('pending')">Pending Review</button>
+      <button class="btn btn-ghost btn-sm" onclick="filterCourses('live')">Live</button>
+      <button class="btn btn-ghost btn-sm" onclick="filterCourses('all')">All</button>
+    </div>
+    <div id="courses-list">
+      <div class="skel-card skeleton"></div><div class="skel-card skeleton"></div>
+    </div>
+  </section>
+
+  <!-- TUTORS -->
+  <section class="panel" id="panel-tutors">
+    <div class="sec-label" style="margin-top:0;">
+      Tutors
+      <button class="btn btn-primary btn-sm" onclick="openModal('create-tutor-modal')">+ Create Tutor</button>
+    </div>
+    <div class="search-bar"><span><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" ><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg></span><input type="text" placeholder="Search tutors…" id="tutor-search" oninput="filterTutorTable(this.value)"></div>
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>Tutor</th><th>Courses</th><th>Status</th><th>Actions</th></tr></thead>
+        <tbody id="tutors-tbody"></tbody>
+      </table>
+    </div>
+  </section>
+
+  <!-- STUDENTS -->
+  <section class="panel" id="panel-students">
+    <div class="sec-label" style="margin-top:0;">Students</div>
+    <div class="search-bar"><span><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" ><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg></span><input type="text" placeholder="Search students…" id="student-search" oninput="filterStudentTable(this.value)"></div>
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>Student</th><th>Enrolled</th><th>Status</th><th>Actions</th></tr></thead>
+        <tbody id="students-tbody"></tbody>
+      </table>
+    </div>
+  </section>
+
+  <!-- PAYMENTS -->
+  <section class="panel" id="panel-payments">
+    <div class="sec-label" style="margin-top:0;">Payment Transactions</div>
+    <div class="stats-grid" style="grid-template-columns:repeat(3,1fr);">
+      <div class="stat-card sc-green" style="padding:.85rem;"><div class="stat-val" id="p-total" style="font-size:1.2rem;">—</div><div class="stat-label">Total</div></div>
+      <div class="stat-card sc-blue" style="padding:.85rem;"><div class="stat-val" id="p-platform" style="font-size:1.2rem;">—</div><div class="stat-label">Platform Share</div></div>
+      <div class="stat-card sc-amber" style="padding:.85rem;"><div class="stat-val" id="p-payout" style="font-size:1.2rem;">—</div><div class="stat-label">Tutor Payout Due</div></div>
+    </div>
+    <div class="table-wrap" style="margin-top:1rem;">
+      <table>
+        <thead><tr><th>Student</th><th>Course</th><th>Type</th><th>Amount</th><th>Tutor Share</th><th>Date</th></tr></thead>
+        <tbody id="payments-tbody"></tbody>
+      </table>
+    </div>
+  </section>
+
+  <!-- CERTIFICATES -->
+  <section class="panel" id="panel-certs">
+    <div class="sec-label" style="margin-top:0;">Certificates Issued</div>
+    <div id="certs-list"></div>
+  </section>
+
+  <!-- PROFILE -->
+  <section class="panel" id="panel-profile">
+    <div class="sec-label" style="margin-top:0;">Admin Profile</div>
+    <div style="background:var(--dark2);border:1px solid var(--border);border-radius:14px;padding:1.5rem;text-align:center;margin-bottom:1rem;">
+      <div style="width:72px;height:72px;border-radius:50%;background:linear-gradient(135deg,var(--amber),#D4960A);display:flex;align-items:center;justify-content:center;font-family:var(--display);font-weight:800;font-size:1.5rem;margin:0 auto .75rem;" id="profile-av">A</div>
+      <div style="font-family:var(--display);font-size:1.2rem;font-weight:700;" id="profile-name">Admin</div>
+      <div style="font-family:var(--mono);font-size:.7rem;color:var(--gray);margin-top:.2rem;" id="profile-email">—</div>
+    </div>
+    <button class="btn btn-ghost btn-full" onclick="doLogout()">Sign Out</button>
+  </section>
+
+  <!-- NOTIFICATIONS -->
+  <section class="panel" id="panel-notify">
+    <div class="sec-label" style="margin-top:0;">Send Notifications to Tutors</div>
+
+    <!-- Compose box -->
+    <div style="background:var(--dark2);border:1px solid var(--border);border-radius:14px;padding:1.25rem;margin-bottom:1rem;">
+      <div class="form-group">
+        <label class="form-label">Recipient</label>
+        <div style="display:flex;gap:.5rem;margin-bottom:.5rem;flex-wrap:wrap;" id="notify-target-wrap">
+          <button class="btn btn-ghost btn-sm notify-target-btn active" data-target="all" onclick="setNotifyTarget('all',this)">All Tutors</button>
+          <button class="btn btn-ghost btn-sm notify-target-btn" data-target="single" onclick="setNotifyTarget('single',this)">Specific Tutor</button>
+        </div>
+        <select class="form-input" id="notify-tutor-select" style="display:none;margin-top:.35rem;">
+          <option value="">— Select tutor —</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label class="form-label">Notification Type</label>
+        <select class="form-input" id="notify-type">
+          <option value="info">Info</option>
+          <option value="warning">Warning</option>
+          <option value="success">Announcement</option>
+          <option value="action">Action Required</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label class="form-label">Title</label>
+        <input class="form-input" id="notify-title" placeholder="e.g. Platform update, Payout processed…">
+      </div>
+      <div class="form-group">
+        <label class="form-label">Message</label>
+        <textarea class="form-input" id="notify-msg" rows="4" placeholder="Write your message here…" style="resize:vertical;min-height:90px;"></textarea>
+      </div>
+      <button class="btn btn-primary btn-full" onclick="sendNotification()" id="btn-send-notify">
+        Send Notification →
+      </button>
+    </div>
+
+    <!-- Sent history -->
+    <div class="sec-label">Sent Notifications</div>
+    <div id="notify-history">
+      <div class="skeleton skel-card" style="height:60px;"></div>
+    </div>
+  </section>
+
+  <!-- SETTINGS -->
+  <section class="panel" id="panel-settings">
+    <div class="sec-label" style="margin-top:0;">Platform Settings</div>
+
+    <!-- Revenue split card -->
+    <div style="background:var(--dark2);border:1px solid var(--border);border-radius:14px;padding:1.25rem;margin-bottom:1rem;">
+      <div style="font-family:var(--display);font-size:.95rem;font-weight:700;margin-bottom:.25rem;">Revenue Split</div>
+      <div style="font-family:var(--mono);font-size:.65rem;color:var(--gray);margin-bottom:1.1rem;">These rates are applied silently — tutors do not see percentages anywhere on the platform.</div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:.75rem;margin-bottom:1rem;">
+        <div class="form-group" style="margin-bottom:0;">
+          <label class="form-label">Course Enrolment — Tutor %</label>
+          <div style="display:flex;align-items:center;gap:.4rem;">
+            <input class="form-input" type="number" id="set-course-pct" min="0" max="100" step="0.5" placeholder="e.g. 70" style="flex:1;">
+            <span style="font-family:var(--mono);font-size:.8rem;color:var(--gray);">%</span>
+          </div>
+        </div>
+        <div class="form-group" style="margin-bottom:0;">
+          <label class="form-label">Certificate Fee — Tutor %</label>
+          <div style="display:flex;align-items:center;gap:.4rem;">
+            <input class="form-input" type="number" id="set-cert-pct" min="0" max="100" step="0.5" placeholder="e.g. 50" style="flex:1;">
+            <span style="font-family:var(--mono);font-size:.8rem;color:var(--gray);">%</span>
+          </div>
+        </div>
+      </div>
+      <div style="background:rgba(255,255,255,.03);border:1px solid var(--border);border-radius:8px;padding:.65rem .9rem;font-family:var(--mono);font-size:.65rem;color:var(--gray);margin-bottom:1rem;line-height:1.7;" id="set-split-preview">
+        Enter values above to see a preview.
+      </div>
+      <button class="btn btn-primary" onclick="saveRevenueSettings()" id="btn-save-rev">Save Revenue Settings</button>
+    </div>
+
+    <!-- Tutor registration fee -->
+    <div style="background:var(--dark2);border:1px solid var(--border);border-radius:14px;padding:1.25rem;margin-bottom:1rem;">
+      <div style="font-family:var(--display);font-size:.95rem;font-weight:700;margin-bottom:.25rem;">Tutor Activation Fee</div>
+      <div style="font-family:var(--mono);font-size:.65rem;color:var(--gray);margin-bottom:.85rem;">One-time fee tutors pay to activate their account.</div>
+      <div style="display:flex;align-items:center;gap:.5rem;">
+        <span style="font-family:var(--mono);font-size:.9rem;color:var(--gray);">₦</span>
+        <input class="form-input" type="number" id="set-activation-fee" placeholder="e.g. 1000" style="max-width:180px;">
+        <button class="btn btn-primary btn-sm" onclick="saveActivationFee()">Save</button>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<!-- CREATE TUTOR MODAL -->
+<div class="modal-overlay" id="create-tutor-modal">
+  <div class="modal-sheet">
+    <div class="modal-handle"></div>
+    <div class="modal-title">Create Tutor Account</div>
+    <div class="modal-sub">The tutor will receive their login credentials by email. They log in via the tutor portal.</div>
+    <div class="form-group">
+      <label class="form-label">Full Name</label>
+      <input class="form-input" id="ct-name" placeholder="e.g. Chidi Okeke">
+    </div>
+    <div class="form-group">
+      <label class="form-label">Email Address</label>
+      <input class="form-input" id="ct-email" type="email" placeholder="tutor@example.com">
+    </div>
+    <div class="form-group">
+      <label class="form-label">Temporary Password</label>
+      <div style="display:flex;gap:.4rem;">
+        <input class="form-input" id="ct-pw" type="text" placeholder="Min. 6 characters" style="flex:1;">
+        <button class="btn btn-ghost btn-sm" onclick="genPassword()" style="flex-shrink:0;">Generate</button>
+      </div>
+      <div style="font-family:var(--mono);font-size:.6rem;color:var(--gray);margin-top:.3rem;">Share this with the tutor — they can change it after login.</div>
+    </div>
+    <div class="form-group">
+      <label class="form-label">Specialisation (optional)</label>
+      <input class="form-input" id="ct-spec" placeholder="e.g. JavaScript, Python, React…">
+    </div>
+    <div style="display:flex;gap:.5rem;margin-top:.25rem;">
+      <button class="btn btn-ghost btn-full" onclick="closeModal('create-tutor-modal')">Cancel</button>
+      <button class="btn btn-primary btn-full" onclick="createTutorAccount()" id="btn-create-tutor">Create Account →</button>
+    </div>
+  </div>
+</div>
+
+<!-- BOTTOM NAV -->
+<nav class="bottom-nav">
+  <button class="bnav-item active" data-panel="home" onclick="showPanel('home')"><span class="bnav-icon"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" ><line x1="18" x2="18" y1="20" y2="10"/><line x1="12" x2="12" y1="20" y2="4"/><line x1="6" x2="6" y1="20" y2="14"/></svg></span>Overview</button>
+  <button class="bnav-item" data-panel="courses" onclick="showPanel('courses')"><span class="bnav-icon"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" ><path d="M4 19.5v-15A2.5 2.5 0 0 1 6.5 2H20v20H6.5a2.5 2.5 0 0 1 0-5H20"/><path d="M8 7h6"/><path d="M8 11h8"/></svg></span>Courses<span class="bnav-badge hidden" id="bnav-courses">0</span></button>
+  <button class="bnav-item" data-panel="tutors" onclick="showPanel('tutors')"><span class="bnav-icon"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" ><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg></span>Tutors<span class="bnav-badge hidden" id="bnav-tutors">0</span></button>
+  <button class="bnav-item" data-panel="students" onclick="showPanel('students')"><span class="bnav-icon"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" ><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg></span>Students</button>
+  <button class="bnav-item" data-panel="payments" onclick="showPanel('payments')"><span class="bnav-icon"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" ><rect width="20" height="14" x="2" y="5" rx="2"/><line x1="2" x2="22" y1="10" y2="10"/></svg></span>Pay</button>
+  <button class="bnav-item" data-panel="notify" onclick="showPanel('notify')"><span class="bnav-icon"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg></span>Notify</button>
+  <button class="bnav-item" data-panel="settings" onclick="showPanel('settings')"><span class="bnav-icon"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg></span>Settings</button>
+</nav>
+
+<div class="toast" id="toast"></div>
+
+<!-- COURSE DETAIL MODAL -->
+<div class="modal-overlay" id="course-detail-modal">
+  <div class="modal-sheet">
+    <div class="modal-handle"></div>
+    <div id="course-detail-body"></div>
+  </div>
+</div>
+
+<script>
+// Navigation stub — runs synchronously before Firebase module loads.
+// The module's window.showPanel overwrites this once it executes.
+(function(){
+  window.showPanel = function(id, data){
+    window._pendingPanel = {id:id, data:data};
+    document.querySelectorAll('.panel').forEach(function(p){p.classList.remove('active');});
+    document.querySelectorAll('.bnav-item,.ds-item').forEach(function(b){b.classList.remove('active');});
+    var panel = document.getElementById('panel-'+id);
+    if(panel) panel.classList.add('active');
+    document.querySelectorAll('[data-panel="'+id+'"]').forEach(function(b){b.classList.add('active');});
+    var scroll = document.getElementById('main-scroll');
+    if(scroll) scroll.scrollTo(0,0);
+  };
+  window.doLogout = async function(){ window.location.href = 'admin.html'; };
+  window.closeModal = function(id){ var m=document.getElementById(id); if(m) m.classList.remove('open'); };
+  window.openModal = function(id){ var m=document.getElementById(id); if(m) m.classList.add('open'); };
+  window.closePayModal = function(){ var m=document.getElementById('pay-modal'); if(m) m.classList.remove('open'); };
+  window.showToast = function(msg,type){
+    var t=document.getElementById('toast'); if(!t) return;
+    t.textContent=msg; t.className='toast show '+(type||'');
+    clearTimeout(t._to); t._to=setTimeout(function(){t.classList.remove('show');},3200);
+  };
+  // Sidebar visibility - run immediately and on resize
+  function checkSidebar(){
+    var s=document.getElementById('desktop-sidebar');
+    if(s) s.style.display = window.innerWidth>=768 ? 'flex' : 'none';
+  }
+  window.addEventListener('resize', checkSidebar);
+  if(document.readyState==='loading'){
+    document.addEventListener('DOMContentLoaded', checkSidebar);
+  } else {
+    checkSidebar();
+  }
+})();
+</script>
+<script type="module">
+
+import { initializeApp, getApps } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
+import { getAuth, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
+import { getFirestore, collection, doc, getDocs, getDoc, setDoc, addDoc, updateDoc, deleteDoc, serverTimestamp, query, where, orderBy, limit } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
+
+
+// ── ERROR BOUNDARY ──────────────────────────────────────────────
+window.addEventListener('error', function(e) {
+  console.error('Dashboard error:', e.message, e.filename, e.lineno);
+});
+
+try {
+const app = getApps().length ? getApps()[0] : initializeApp({
+  apiKey:"AIzaSyDjSs8AoDt6bG4-_FxWJbRLFM0tyR2S2D0",
+  authDomain:"codeschool-41f52.firebaseapp.com",
+  projectId:"codeschool-41f52",
+  storageBucket:"codeschool-41f52.firebasestorage.app",
+  messagingSenderId:"224975256200",
+  appId:"1:224975256200:web:68ffc1a1160f3315d77d3d"
+});
+const auth = getAuth(app);
+const db = getFirestore(app);
+
+let adminUser = null;
+let allTutors=[], allStudents=[], allCourses=[], allPayments=[];
+let currentCourseFilter = 'pending';
+
+// ── NAV ────────────────────────────────────────────────────────────
+window.showPanel = function(id) {
+  document.querySelectorAll('.panel').forEach(p=>p.classList.remove('active'));
+  document.querySelectorAll('.bnav-item,.ds-item').forEach(b=>b.classList.remove('active'));
+  document.getElementById('panel-'+id)?.classList.add('active');
+  document.querySelectorAll(`[data-panel="${id}"]`).forEach(b=>b.classList.add('active'));
+  document.getElementById('main-scroll')?.scrollTo(0,0);
+  if (id==='courses') loadCourses(currentCourseFilter);
+  if (id==='tutors') loadTutors();
+  if (id==='students') loadStudents();
+  if (id==='payments') loadPayments();
+  if (id==='certs') loadCerts();
+};
+
+// Desktop sidebar handled by bootstrap script above
+
+// ── AUTH ───────────────────────────────────────────────────────────
+onAuthStateChanged(auth, async u => {
+  const loader = document.getElementById('auth-loading');
+  if (!u) { setTimeout(() => { window.location.href='admin.html'; }, 500); return; }
+  const snap = await getDoc(doc(db,'users',u.uid));
+  if (!snap.exists()) { await signOut(auth); window.location.href='admin.html'; return; }
+  const p = snap.data();
+  if (p.role !== 'admin') { await signOut(auth); window.location.href='admin.html'; return; }
+  // <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" ><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg> Auth confirmed — hide loader, show dashboard
+  if (loader) { loader.classList.add('hide'); setTimeout(() => loader.remove(), 350); }
+  adminUser = u;
+  const name = p.fullName||'Admin';
+  document.getElementById('topbar-av').textContent = name.charAt(0);
+  document.getElementById('ds-av').textContent = name.charAt(0);
+  document.getElementById('ds-name').textContent = name;
+  document.getElementById('profile-av').textContent = name.charAt(0);
+  document.getElementById('profile-name').textContent = name;
+  document.getElementById('profile-email').textContent = p.email||u.email;
+  loadOverview();
+});
+
+// ── OVERVIEW ───────────────────────────────────────────────────────
+async function loadOverview() {
+  const [coursesSnap, usersSnap, paymentsSnap] = await Promise.all([
+    getDocs(collection(db,'courses')),
+    getDocs(collection(db,'users')),
+    getDocs(collection(db,'payments'))
+  ]);
+
+  const courses = coursesSnap.docs.map(d=>({id:d.id,...d.data()}));
+  const users = usersSnap.docs.map(d=>({id:d.id,...d.data()}));
+  const payments = paymentsSnap.docs.map(d=>({id:d.id,...d.data()}));
+
+  allCourses = courses;
+  allTutors = users.filter(u=>u.role==='tutor');
+  allStudents = users.filter(u=>u.role==='student'||!u.role);
+  allPayments = payments;
+
+  const liveCourses = courses.filter(c=>c.status==='live').length;
+  const pendingCourses = courses.filter(c=>c.status==='pending'||c.status==='pending_edit').length;
+  const pendingTutors = allTutors.filter(t=>t.status==='pending').length;
+  const totalRevenue = payments.reduce((s,p)=>s+(p.amount||0),0);
+  const pendingPayouts = payments.filter(p=>!p.tutorPaid&&p.tutorShare>0&&p.splitType!=='paystack_split').reduce((s,p)=>s+(p.tutorShare||0),0);
+
+  document.getElementById('st-courses').textContent = liveCourses;
+  document.getElementById('st-students').textContent = allStudents.length;
+  document.getElementById('st-revenue').textContent = '₦'+(totalRevenue/1000).toFixed(0)+'k';
+  document.getElementById('st-tutors').textContent = allTutors.filter(t=>t.status==='active').length;
+
+  // ── SMART ALERTS (only shown when count > 0) ────────────────────
+  const alertsArea = document.getElementById('alerts-area');
+  const alertHTML = [];
+
+  if (pendingCourses > 0) {
+    alertHTML.push(`<div class="alert-banner">
+      <div class="alert-dot ad-amber"></div>
+      <div class="ab-text">
+        <div class="ab-title">${pendingCourses} Course${pendingCourses>1?'s':''} Awaiting Review</div>
+        <div class="ab-sub">Submitted by tutors — approve, edit fee, or reject.</div>
+        <button class="ab-action" onclick="showPanel('courses');filterCourses('pending')">Review now →</button>
+      </div>
+    </div>`);
+    // badges
+    ['bnav-courses','ds-badge-courses'].forEach(id=>{
+      const el=document.getElementById(id);
+      if(el){el.textContent=pendingCourses;el.classList.remove('hidden');}
+    });
+  }
+
+  if (pendingTutors > 0) {
+    alertHTML.push(`<div class="alert-banner info">
+      <div class="alert-dot ad-blue"></div>
+      <div class="ab-text">
+        <div class="ab-title">${pendingTutors} Tutor Application${pendingTutors>1?'s':''} Pending</div>
+        <div class="ab-sub">Review and approve new tutor accounts.</div>
+        <button class="ab-action" onclick="showPanel('tutors')">Review tutors →</button>
+      </div>
+    </div>`);
+    ['bnav-tutors','ds-badge-tutors'].forEach(id=>{
+      const el=document.getElementById(id);
+      if(el){el.textContent=pendingTutors;el.classList.remove('hidden');}
+    });
+  }
+
+  if (pendingPayouts > 0) {
+    alertHTML.push(`<div class="alert-banner">
+      <div class="alert-dot ad-amber"></div>
+      <div class="ab-text">
+        <div class="ab-title">₦${pendingPayouts.toLocaleString()} in Tutor Payouts Due</div>
+        <div class="ab-sub">Tutors without a Paystack subaccount linked need a manual payout.</div>
+        <button class="ab-action" onclick="showPanel('payments')">View payments →</button>
+      </div>
+    </div>`);
+  }
+
+  alertsArea.innerHTML = alertHTML.join('');
+
+  // Revenue chart
+  renderRevenueChart(payments);
+
+  // Recent signups
+  const recent = [...users].sort((a,b)=>(b.createdAt?.seconds||0)-(a.createdAt?.seconds||0)).slice(0,8);
+  const tbody = document.getElementById('recent-tbody');
+  tbody.innerHTML = recent.map(u=>{
+    const name = u.fullName||u.firstName||'User';
+    const init = name.charAt(0).toUpperCase();
+    const avClass = u.role==='tutor'?'av-b':u.role==='admin'?'av-r':'av-g';
+    const date = u.createdAt?.toDate?.()?.toLocaleDateString('en-NG')||'—';
+    return `<tr>
+      <td><div class="user-cell"><div class="user-av ${avClass}">${init}</div><div>
+        <div style="font-size:.875rem;font-weight:500;">${name}</div>
+        <div style="font-family:var(--mono);font-size:.6rem;color:var(--gray);">${u.email||'—'}</div>
+      </div></div></td>
+      <td><span class="badge ${u.role==='tutor'?'b-info':u.role==='admin'?'b-fail':'b-pass'}">${u.role||'student'}</span></td>
+      <td style="font-family:var(--mono);font-size:.65rem;color:var(--gray);">${date}</td>
+    </tr>`;
+  }).join('');
+}
+
+function renderRevenueChart(payments) {
+  const months = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+  const now = new Date();
+  const counts = {};
+  for (let i=5;i>=0;i--) {
+    const d = new Date(now.getFullYear(),now.getMonth()-i,1);
+    counts[`${d.getFullYear()}-${d.getMonth()}`]={label:months[d.getMonth()],amount:0};
+  }
+  payments.forEach(p=>{
+    if (!p.paidAt?.toDate) return;
+    const d=p.paidAt.toDate();
+    const key=`${d.getFullYear()}-${d.getMonth()}`;
+    if (counts[key]) counts[key].amount+=p.amount||0;
+  });
+  const vals = Object.values(counts);
+  const max = Math.max(...vals.map(v=>v.amount),1);
+  document.getElementById('rev-chart').innerHTML = vals.map(v=>`
+    <div class="bar-row">
+      <div class="bar-label">${v.label}</div>
+      <div class="bar-track"><div class="bar-fill" style="width:${Math.max((v.amount/max)*100,v.amount>0?2:0)}%;background:var(--forest-glow);"></div></div>
+      <div class="bar-val" style="width:50px;">${v.amount>0?'₦'+(v.amount/1000).toFixed(1)+'k':'—'}</div>
+    </div>`).join('');
+}
+
+// ── COURSES ────────────────────────────────────────────────────────
+window.filterCourses = function(filter) {
+  currentCourseFilter = filter;
+  loadCourses(filter);
+};
+
+async function loadCourses(filter='pending') {
+  const el = document.getElementById('courses-list');
+  el.innerHTML = '<div class="skel-card skeleton"></div><div class="skel-card skeleton"></div>';
+  let filtered = allCourses.filter(c=>c.status!=='deleted');
+  if (filter==='pending') filtered = filtered.filter(c=>c.status==='pending'||c.status==='pending_edit');
+  else if (filter==='live') filtered = filtered.filter(c=>c.status==='live');
+  if (filtered.length===0) {
+    el.innerHTML = `<div class="empty-state"><div class="emoji">${filter==='pending'?'<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" ><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>':'<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" ><path d="M22 13V6a2 2 0 0 0-2-2H4a2 2 0 0 0-2 2v12c0 1.1.9 2 2 2h8"/><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/><path d="M16 19h6"/><path d="M19 16v6"/></svg>'}</div><p>${filter==='pending'?'No courses pending review — all clear!':'No courses yet'}</p></div>`;
+    return;
+  }
+  el.innerHTML = filtered.map(c => courseReviewCardHTML(c)).join('');
+}
+
+function courseReviewCardHTML(c) {
+  const lang=c.language||'JavaScript';
+  const langColorMap = {HTML:'lang-html',CSS:'lang-css',JavaScript:'lang-js'};
+  const langClass = langColorMap[lang]||'lang-other';
+  const isPending = c.status==='pending'||c.status==='pending_edit';
+  const lessons = (c.lessons||[]);
+  const previewLessons = lessons.slice(0,3);
+  const moreCount = lessons.length - 3;
+  return `<div class="review-card" id="rcard-${c.id}">
+    <div class="rc-header">
+      <span class="rc-lang ${langClass}">${lang}</span>
+      ${isPending?`<span class="rc-flag"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" ><path d="M5 22h14"/><path d="M5 2h14"/><path d="M17 22v-4.172a2 2 0 0 0-.586-1.414L12 12l-4.414 4.414A2 2 0 0 0 7 17.828V22"/><path d="M7 2v4.172a2 2 0 0 0 .586 1.414L12 12l4.414-4.414A2 2 0 0 0 17 6.172V2"/></svg> ${c.status==='pending_edit'?'Edit pending':'Awaiting review'}</span>`:`<span style="font-family:var(--mono);font-size:.6rem;color:var(--green);">● Live</span>`}
+    </div>
+    <div class="rc-body">
+      <div class="rc-title">${c.title}</div>
+      <div class="rc-tutor">by ${c.tutorName||'Unknown Tutor'}</div>
+      <div class="rc-desc">${(c.description||'').slice(0,140)}${c.description?.length>140?'…':''}</div>
+      <div class="rc-meta">
+        <span class="rc-meta-item"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" ><path d="M4 19.5v-15A2.5 2.5 0 0 1 6.5 2H20v20H6.5a2.5 2.5 0 0 1 0-5H20"/><path d="M8 7h6"/><path d="M8 11h8"/></svg> <strong>${lessons.length}</strong> items</span>
+        <span class="rc-meta-item"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" ><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg> <strong>${c.studentsCount||0}</strong> enrolled</span>
+      </div>
+      ${previewLessons.map(l=>`<div class="lesson-peek">
+        <span class="lesson-peek-icon">${l.type==='Assignment'?'<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" ><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>':l.type==='Final Test'?'<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" ><path d="M14.5 2v17.5c0 1.4-1.1 2.5-2.5 2.5s-2.5-1.1-2.5-2.5V2"/><path d="M8.5 2h7"/><path d="M14.5 16h-5"/><path d="m2.5 13.5 5-5"/><path d="m21.5 13.5-5-5"/></svg>':'<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" ><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg>'}</span>
+        <span class="lesson-peek-name">${l.title||l.name||'Lesson'}</span>
+        <span class="lesson-peek-type">${l.type||'Lesson'}</span>
+      </div>`).join('')}
+      ${moreCount>0?`<button class="show-more-btn" onclick="this.textContent='';document.getElementById('more-${c.id}').style.display='block'">+${moreCount} more</button>
+      <div id="more-${c.id}" style="display:none;">${lessons.slice(3).map(l=>`<div class="lesson-peek">
+        <span class="lesson-peek-icon">${l.type==='Assignment'?'<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" ><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>':l.type==='Final Test'?'<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" ><path d="M14.5 2v17.5c0 1.4-1.1 2.5-2.5 2.5s-2.5-1.1-2.5-2.5V2"/><path d="M8.5 2h7"/><path d="M14.5 16h-5"/><path d="m2.5 13.5 5-5"/><path d="m21.5 13.5-5-5"/></svg>':'<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" ><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg>'}</span>
+        <span class="lesson-peek-name">${l.title||l.name||'Lesson'}</span>
+        <span class="lesson-peek-type">${l.type||'Lesson'}</span>
+      </div>`).join('')}</div>`:''}
+      ${isPending?`<div class="fee-edit">
+        <span class="fee-label">Approve at ₦</span>
+        <input class="fee-input" type="number" id="fee-${c.id}" placeholder="${c.price||0}" value="${c.price||0}">
+      </div>`:''}
+    </div>
+    <div class="rc-footer">
+      ${isPending?`
+        <button class="btn btn-green btn-sm" onclick="approveCourse('${c.id}',this)"><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="display:inline;vertical-align:middle;margin-right:2px"><polyline points="20 6 9 17 4 12"/></svg> Approve & Go Live</button>
+        <button class="btn btn-danger btn-sm" onclick="rejectCourse('${c.id}',this)">Reject</button>`
+      :`<button class="btn btn-danger btn-sm" onclick="adminDeleteCourse('${c.id}',this)">Remove</button>`}
+    </div>
+  </div>`;
+}
+
+window.approveCourse = async function(courseId, btn) {
+  const fee = document.getElementById('fee-'+courseId)?.value;
+  try {
+    await updateDoc(doc(db,'courses',courseId),{status:'live',approvedAt:serverTimestamp(),...(fee?{price:Number(fee)}:{})});
+    document.getElementById('rcard-'+courseId)?.remove();
+    showToast('Course approved and live <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="display:inline;vertical-align:middle;margin-right:2px"><polyline points="20 6 9 17 4 12"/></svg>','success');
+    loadOverview();
+  } catch(e) { showToast('Error: '+e.message,'error'); }
+};
+
+window.rejectCourse = async function(courseId, btn) {
+  if (!confirm('Reject this course?')) return;
+  await updateDoc(doc(db,'courses',courseId),{status:'rejected'});
+  document.getElementById('rcard-'+courseId)?.remove();
+  showToast('Course rejected','warning');
+};
+
+window.adminDeleteCourse = async function(courseId, btn) {
+  if (!confirm('Permanently delete this course? This cannot be undone.')) return;
+  try {
+    await deleteDoc(doc(db,'courses',courseId));
+    document.getElementById('rcard-'+courseId)?.remove();
+    // Remove from in-memory array too
+    allCourses = allCourses.filter(c => c.id !== courseId);
+    showToast('Course permanently deleted','warning');
+    loadOverview();
+  } catch(e) {
+    showToast('Delete failed: ' + e.message, 'error');
+  }
+};
+
+// ── TUTORS ─────────────────────────────────────────────────────────
+async function loadTutors() {
+  const tbody = document.getElementById('tutors-tbody');
+  if (allTutors.length===0) {
+    const snap = await getDocs(query(collection(db,'users'),where('role','==','tutor')));
+    allTutors = snap.docs.map(d=>({id:d.id,...d.data()}));
+  }
+  renderTutorRows(allTutors);
+}
+
+function renderTutorRows(tutors) {
+  const tbody = document.getElementById('tutors-tbody');
+  if (!tutors.length) {
+    tbody.innerHTML='<tr><td colspan="4" style="text-align:center;color:var(--gray);font-family:var(--mono);font-size:.75rem;padding:2rem;">No tutors yet</td></tr>';
+    return;
+  }
+  tbody.innerHTML = tutors.map(t=>{
+    const name=t.fullName||t.firstName||'Tutor';
+    const init=name.charAt(0).toUpperCase();
+    const isPending=t.status==='pending'||!t.status;
+    const courseCount = allCourses.filter(c=>c.tutorId===t.id&&c.status==='live').length;
+    return `<tr data-uid="${t.id}" data-status="${t.status||'pending'}">
+      <td><div class="user-cell"><div class="user-av av-b">${init}</div>
+        <div><div style="font-size:.875rem;font-weight:500;">${name}</div>
+        <div style="font-family:var(--mono);font-size:.6rem;color:var(--gray);">${t.email||'—'}</div></div></div></td>
+      <td style="font-family:var(--mono);font-size:.7rem;">${courseCount}</td>
+      <td><span class="badge ${isPending?'b-pend':t.status==='suspended'?'b-fail':'b-pass'}">${isPending?'Pending':t.status==='suspended'?'Suspended':'Active'}</span></td>
+      <td style="display:flex;gap:.3rem;flex-wrap:wrap;">
+        ${isPending?`<button class="btn btn-green btn-sm" onclick="approveTutor('${t.id}',this)">Approve</button>
+        <button class="btn btn-danger btn-sm" onclick="rejectTutor('${t.id}',this)">Reject</button>`
+        :t.status==='suspended'
+          ?`<button class="btn btn-green btn-sm" onclick="suspendUser('${t.id}',this)">Restore</button>`
+          :`<button class="btn btn-danger btn-sm" onclick="suspendUser('${t.id}',this)">Suspend</button>`}
+      </td>
+    </tr>`;
+  }).join('');
+}
+
+window.filterTutorTable = function(q) {
+  const f=allTutors.filter(t=>(t.fullName||t.firstName||'').toLowerCase().includes(q.toLowerCase())||(t.email||'').toLowerCase().includes(q.toLowerCase()));
+  renderTutorRows(f);
+};
+
+window.approveTutor = async function(uid, btn) {
+  await updateDoc(doc(db,'users',uid),{status:'active',approvedAt:serverTimestamp()});
+  btn.closest('tr').querySelector('.badge').textContent='Active';
+  btn.closest('tr').querySelector('.badge').className='badge b-pass';
+  btn.closest('td').innerHTML='<span style="font-family:var(--mono);font-size:.7rem;color:var(--green);">Approved <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="display:inline;vertical-align:middle;margin-right:2px"><polyline points="20 6 9 17 4 12"/></svg></span>';
+  showToast('Tutor approved <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="display:inline;vertical-align:middle;margin-right:2px"><polyline points="20 6 9 17 4 12"/></svg>','success');
+  loadOverview();
+};
+
+window.rejectTutor = async function(uid, btn) {
+  if (!confirm('Reject and delete this tutor application?')) return;
+  await deleteDoc(doc(db,'users',uid));
+  btn.closest('tr').remove();
+  showToast('Application rejected','warning');
+};
+
+// ── STUDENTS ───────────────────────────────────────────────────────
+async function loadStudents() {
+  const tbody = document.getElementById('students-tbody');
+  if (allStudents.length===0) {
+    const snap = await getDocs(query(collection(db,'users'),where('role','!=','admin')));
+    allStudents = snap.docs.map(d=>({id:d.id,...d.data()})).filter(u=>u.role!=='tutor');
+  }
+  renderStudentRows(allStudents);
+}
+
+function renderStudentRows(students) {
+  const tbody = document.getElementById('students-tbody');
+  if (!students.length) {
+    tbody.innerHTML='<tr><td colspan="4" style="text-align:center;color:var(--gray);font-family:var(--mono);font-size:.75rem;padding:2rem;">No students yet</td></tr>';
+    return;
+  }
+  tbody.innerHTML = students.map(s=>{
+    const name=s.fullName||s.firstName||'Student';
+    const init=name.charAt(0).toUpperCase();
+    const isSuspended=s.status==='suspended';
+    return `<tr data-uid="${s.id}" data-status="${s.status||'active'}">
+      <td><div class="user-cell"><div class="user-av av-g">${init}</div>
+        <div><div style="font-size:.875rem;font-weight:500;">${name}</div>
+        <div style="font-family:var(--mono);font-size:.6rem;color:var(--gray);">${s.email||'—'}</div></div></div></td>
+      <td style="font-family:var(--mono);font-size:.7rem;color:var(--gray);">${s.createdAt?.toDate?.()?.toLocaleDateString('en-NG')||'—'}</td>
+      <td><span class="badge ${isSuspended?'b-fail':'b-pass'}">${isSuspended?'Suspended':'Active'}</span></td>
+      <td style="display:flex;gap:.3rem;">
+        <button class="btn ${isSuspended?'btn-green':'btn-danger'} btn-sm" onclick="suspendUser('${s.id}',this)">${isSuspended?'Restore':'Suspend'}</button>
+        <button class="btn btn-ghost btn-sm" onclick="deleteUser('${s.id}',this)">Del</button>
+      </td>
+    </tr>`;
+  }).join('');
+}
+
+window.filterStudentTable = function(q) {
+  const f=allStudents.filter(s=>(s.fullName||s.firstName||'').toLowerCase().includes(q.toLowerCase())||(s.email||'').toLowerCase().includes(q.toLowerCase()));
+  renderStudentRows(f);
+};
+
+window.suspendUser = async function(uid, btn) {
+  const row = btn.closest('tr');
+  const currentStatus = row ? row.getAttribute('data-status') : 'active';
+  const newStatus = currentStatus === 'suspended' ? 'active' : 'suspended';
+  try {
+    await updateDoc(doc(db, 'users', uid), { status: newStatus, statusUpdatedAt: serverTimestamp() });
+    if (row) row.setAttribute('data-status', newStatus);
+    btn.textContent = newStatus === 'active' ? 'Suspend' : 'Restore';
+    btn.className = 'btn btn-sm ' + (newStatus === 'active' ? 'btn-danger' : 'btn-green');
+    const badge = btn.closest('tr')?.querySelector('.badge');
+    if (badge) { badge.textContent = newStatus === 'active' ? 'Active' : 'Suspended'; badge.className = 'badge ' + (newStatus === 'active' ? 'b-pass' : 'b-fail'); }
+    showToast(newStatus === 'active' ? 'User restored' : 'User suspended', 'success');
+  } catch(e) { showToast('Error: ' + e.message, 'error'); }
+};
+
+window.deleteUser = async function(uid, btn) {
+  if (!confirm('Permanently remove this user?')) return;
+  await deleteDoc(doc(db,'users',uid));
+  btn.closest('tr').remove();
+  showToast('User removed','warning');
+};
+
+// ── PAYMENTS ───────────────────────────────────────────────────────
+async function loadPayments() {
+  if (allPayments.length===0) {
+    const snap = await getDocs(collection(db,'payments'));
+    allPayments = snap.docs.map(d=>({id:d.id,...d.data()}));
+  }
+  const total = allPayments.reduce((s,p)=>s+(p.amount||0),0);
+  const platform = allPayments.reduce((s,p)=>s+(p.platformShare||(p.amount-(p.tutorShare||0))||0),0);
+  const payout = allPayments.filter(p=>!p.tutorPaid&&p.tutorShare>0&&p.splitType!=='paystack_split').reduce((s,p)=>s+(p.tutorShare||0),0);
+  document.getElementById('p-total').textContent='₦'+total.toLocaleString();
+  document.getElementById('p-platform').textContent='₦'+platform.toLocaleString();
+  document.getElementById('p-payout').textContent='₦'+payout.toLocaleString();
+  const tbody = document.getElementById('payments-tbody');
+  if (!allPayments.length) {
+    tbody.innerHTML='<tr><td colspan="6" style="text-align:center;color:var(--gray);font-family:var(--mono);font-size:.75rem;padding:2rem;">No transactions yet</td></tr>';
+    return;
+  }
+  tbody.innerHTML = allPayments.map(p=>{
+    const isAutoSplit = p.splitType === 'paystack_split';
+    const needsPayout = !p.tutorPaid && (p.tutorShare||0)>0 && !isAutoSplit;
+    const tutorShareCell = (p.tutorShare||0) > 0
+      ? (isAutoSplit
+          ? `<span style="font-family:var(--mono);font-size:.65rem;color:var(--green);"><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="display:inline;vertical-align:middle;margin-right:2px"><polyline points="20 6 9 17 4 12"/></svg> ₦${(p.tutorShare||0).toLocaleString()} <span style="color:var(--gray);font-size:.58rem;">auto</span></span>`
+          : needsPayout
+            ? `<button class="btn btn-ghost btn-sm" onclick="markPaid('${p.id}',this)">Mark Paid ₦${(p.tutorShare||0).toLocaleString()}</button>`
+            : `<span style="font-family:var(--mono);font-size:.65rem;color:var(--green);">✓ ₦${(p.tutorShare||0).toLocaleString()}</span>`)
+      : '—';
+    return `<tr>
+      <td style="font-size:.82rem;">${p.studentName||'—'}</td>
+      <td style="font-size:.82rem;color:var(--gray);">${p.courseTitle||'—'}</td>
+      <td><span class="badge b-info">${p.type||'payment'}</span></td>
+      <td style="font-family:var(--display);font-weight:700;color:var(--green);">₦${(p.amount||0).toLocaleString()}</td>
+      <td>${tutorShareCell}</td>
+      <td style="font-family:var(--mono);font-size:.62rem;color:var(--gray);">${p.paidAt?.toDate?.()?.toLocaleDateString('en-NG')||'—'}</td>
+    </tr>`;
+  }).join('');
+}
+
+window.markPaid = async function(payId, btn) {
+  if (!confirm('Mark this tutor payout as paid?')) return;
+  await updateDoc(doc(db,'payments',payId),{tutorPaid:true,tutorPaidAt:serverTimestamp()});
+  btn.textContent='<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="display:inline;vertical-align:middle;margin-right:2px"><polyline points="20 6 9 17 4 12"/></svg> Paid';btn.className='btn btn-ghost btn-sm';btn.onclick=null;
+  showToast('Marked as paid <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="display:inline;vertical-align:middle;margin-right:2px"><polyline points="20 6 9 17 4 12"/></svg>','success');
+};
+
+// ── CERTS ──────────────────────────────────────────────────────────
+async function loadCerts() {
+  const snap = await getDocs(collection(db,'certificates'));
+  const certs = snap.docs.map(d=>({id:d.id,...d.data()}));
+  const el = document.getElementById('certs-list');
+  if (!certs.length) {
+    el.innerHTML='<div class="empty-state"><div class="emoji"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" ><path d="M22 10v6M2 10l10-5 10 5-10 5z"/><path d="M6 12v5c3 3 9 3 12 0v-5"/></svg></div><p>No certificates issued yet</p></div>';
+    return;
+  }
+  el.innerHTML = certs.map(c=>`
+    <div class="cert-row">
+      <div style="font-size:1.5rem;"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" ><path d="M22 10v6M2 10l10-5 10 5-10 5z"/><path d="M6 12v5c3 3 9 3 12 0v-5"/></svg></div>
+      <div class="cert-info">
+        <div class="cert-name">${c.studentName||'Student'}</div>
+        <div class="cert-course">${c.courseName||'—'}</div>
+        <div class="cert-id">${c.certId}</div>
+      </div>
+      <button class="btn btn-danger btn-sm" onclick="revokeCert('${c.certId}',this)">Revoke</button>
+    </div>`).join('');
+}
+
+window.revokeCert = async function(certId, btn) {
+  if (!confirm('Revoke this certificate? Cannot be undone.')) return;
+  await deleteDoc(doc(db,'certificates',certId));
+  btn.closest('.cert-row').remove();
+  showToast('Certificate revoked','warning');
+};
+
+// ── HELPERS ────────────────────────────────────────────────────────
+window.filterCourseList = function(q) {
+  const query2 = q.toLowerCase().trim();
+  if (!query2) { loadCourses(currentCourseFilter); return; }
+  const filtered = allCourses.filter(c =>
+    c.status !== 'deleted' &&
+    ((c.title||'').toLowerCase().includes(query2) ||
+    (c.tutorName||'').toLowerCase().includes(query2) ||
+    (c.language||'').toLowerCase().includes(query2))
+  );
+  const el = document.getElementById('courses-list');
+  if (!filtered.length) {
+    el.innerHTML = '<div class="empty-state"><p>No courses match "'+q+'"</p></div>';
+    return;
+  }
+  el.innerHTML = filtered.map(c => courseReviewCardHTML(c)).join('');
+};
+
+window.showToast = function(msg,type='') {
+  const t=document.getElementById('toast');
+  t.textContent=msg;t.className='toast show '+(type||'');
+  clearTimeout(t._to);t._to=setTimeout(()=>t.classList.remove('show'),3200);
+};
+window.doLogout = async function() { await signOut(auth); window.location.href='admin.html'; };
+document.querySelectorAll('.modal-overlay').forEach(m=>m.addEventListener('click',e=>{if(e.target===m)m.classList.remove('open');}));
+
+// ── NOTIFICATIONS ──────────────────────────────────────────────────
+let _notifyTarget = 'all';
+
+window.setNotifyTarget = function(target, btn) {
+  _notifyTarget = target;
+  document.querySelectorAll('.notify-target-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  document.getElementById('notify-tutor-select').style.display = target === 'single' ? 'block' : 'none';
+};
+
+window.sendNotification = async function() {
+  const title = document.getElementById('notify-title').value.trim();
+  const msg   = document.getElementById('notify-msg').value.trim();
+  const type  = document.getElementById('notify-type').value;
+  if (!title || !msg) { showToast('Title and message are required.', 'error'); return; }
+  const btn = document.getElementById('btn-send-notify');
+  btn.disabled = true; btn.textContent = 'Sending…';
+  try {
+    const notif = { title, message: msg, type, sentAt: serverTimestamp(), sentBy: adminUser.uid, read: false };
+    if (_notifyTarget === 'all') {
+      await addDoc(collection(db,'notifications'), { ...notif, target: 'all' });
+      showToast('Sent to all tutors ✓', 'success');
+    } else {
+      const uid = document.getElementById('notify-tutor-select').value;
+      if (!uid) { showToast('Select a tutor first.','error'); btn.disabled=false; btn.textContent='Send Notification →'; return; }
+      await addDoc(collection(db,'notifications'), { ...notif, target: uid });
+      showToast('Notification sent ✓','success');
+    }
+    document.getElementById('notify-title').value = '';
+    document.getElementById('notify-msg').value = '';
+    loadNotifyHistory();
+  } catch(e) { showToast('Failed: '+e.message,'error'); }
+  btn.disabled=false; btn.textContent='Send Notification →';
+};
+
+async function loadNotifyHistory() {
+  const el = document.getElementById('notify-history');
+  if (!el) return;
+  try {
+    const snap = await getDocs(query(collection(db,'notifications'), orderBy('sentAt','desc'), limit(20)));
+    if (snap.empty) { el.innerHTML='<div class="empty-state"><p style="font-size:.72rem;">No notifications sent yet.</p></div>'; return; }
+    const typeColors = {info:'rgba(74,155,95,.12)',warning:'rgba(245,158,11,.12)',success:'rgba(34,197,94,.12)',action:'rgba(232,144,32,.12)'};
+    const typeBorder = {info:'rgba(74,155,95,.25)',warning:'rgba(245,158,11,.25)',success:'rgba(34,197,94,.25)',action:'rgba(232,144,32,.25)'};
+    const typeLabel  = {info:'Info',warning:'Warning',success:'Announcement',action:'Action Required'};
+    el.innerHTML = snap.docs.map(d => {
+      const n = d.data();
+      const date = n.sentAt?.toDate?.()?.toLocaleDateString('en-NG')||'—';
+      const targetLabel = n.target==='all' ? 'All Tutors' : (allTutors.find(t=>t.id===n.target)?.fullName||n.target);
+      return `<div style="background:${typeColors[n.type]||typeColors.info};border:1px solid ${typeBorder[n.type]||typeBorder.info};border-radius:10px;padding:.75rem 1rem;margin-bottom:.5rem;display:flex;justify-content:space-between;align-items:flex-start;gap:.75rem;">
+        <div style="flex:1;min-width:0;">
+          <div style="font-size:.875rem;font-weight:600;">${n.title}</div>
+          <div style="font-family:var(--mono);font-size:.63rem;color:var(--gray);margin-top:.2rem;line-height:1.5;">${n.message}</div>
+          <div style="display:flex;gap:.5rem;margin-top:.4rem;flex-wrap:wrap;">
+            <span style="font-family:var(--mono);font-size:.58rem;color:var(--gray);">→ ${targetLabel}</span>
+            <span style="font-family:var(--mono);font-size:.58rem;color:var(--gray);">${date}</span>
+            <span style="font-family:var(--mono);font-size:.58rem;color:var(--gray);">${typeLabel[n.type]||n.type}</span>
+          </div>
+        </div>
+        <button class="btn btn-ghost btn-sm" style="font-size:.58rem;flex-shrink:0;" onclick="deleteNotif('${d.id}',this)">Del</button>
+      </div>`;
+    }).join('');
+  } catch(e) { el.innerHTML=`<div style="font-family:var(--mono);font-size:.7rem;color:var(--gray);">Could not load history.</div>`; }
+}
+
+window.deleteNotif = async function(id, btn) {
+  await deleteDoc(doc(db,'notifications',id));
+  btn.closest('div[style]').remove();
+  showToast('Deleted','warning');
+};
+
+async function populateNotifyTutorSelect() {
+  const sel = document.getElementById('notify-tutor-select');
+  if (!sel) return;
+  if (allTutors.length===0) {
+    const snap = await getDocs(query(collection(db,'users'),where('role','==','tutor')));
+    allTutors = snap.docs.map(d=>({id:d.id,...d.data()}));
+  }
+  const existing = new Set(Array.from(sel.options).map(o=>o.value).filter(Boolean));
+  allTutors.forEach(t => {
+    if (!existing.has(t.id)) {
+      const opt = document.createElement('option');
+      opt.value = t.id; opt.textContent = t.fullName||t.email||t.id;
+      sel.appendChild(opt);
+    }
+  });
+}
+
+// ── SETTINGS / REVENUE ─────────────────────────────────────────────
+async function loadSettings() {
+  try {
+    const snap = await getDoc(doc(db,'settings','revenue'));
+    if (snap.exists()) {
+      const d = snap.data();
+      document.getElementById('set-course-pct').value = d.tutorCoursePct ?? 70;
+      document.getElementById('set-cert-pct').value   = d.tutorCertPct   ?? 50;
+      document.getElementById('set-activation-fee').value = d.activationFee ?? 1000;
+      updateSplitPreview();
+    }
+  } catch(e) {}
+}
+
+function updateSplitPreview() {
+  const cp = parseFloat(document.getElementById('set-course-pct')?.value) || 0;
+  const pp = parseFloat(document.getElementById('set-cert-pct')?.value)   || 0;
+  const el = document.getElementById('set-split-preview');
+  if (el) el.innerHTML = `Course enrolment: tutor gets <strong style="color:var(--green);">${cp}%</strong>, platform keeps <strong style="color:var(--amber);">${(100-cp).toFixed(1)}%</strong><br>
+     Certificate fee: tutor gets <strong style="color:var(--green);">${pp}%</strong>, platform keeps <strong style="color:var(--amber);">${(100-pp).toFixed(1)}%</strong>`;
+}
+document.addEventListener('input', e => {
+  if (e.target.id==='set-course-pct'||e.target.id==='set-cert-pct') updateSplitPreview();
+});
+
+window.saveRevenueSettings = async function() {
+  const cp = parseFloat(document.getElementById('set-course-pct').value);
+  const pp = parseFloat(document.getElementById('set-cert-pct').value);
+  if (isNaN(cp)||isNaN(pp)||cp<0||cp>100||pp<0||pp>100) { showToast('Enter valid percentages (0–100).','error'); return; }
+  const btn = document.getElementById('btn-save-rev');
+  btn.disabled=true; btn.textContent='Saving…';
+  try {
+    await setDoc(doc(db,'settings','revenue'),{ tutorCoursePct:cp, tutorCertPct:pp, updatedAt:serverTimestamp() },{merge:true});
+    showToast('Revenue settings saved ✓','success');
+  } catch(e) { showToast('Failed: '+e.message,'error'); }
+  btn.disabled=false; btn.textContent='Save Revenue Settings';
+};
+
+window.saveActivationFee = async function() {
+  const fee = parseFloat(document.getElementById('set-activation-fee').value);
+  if (isNaN(fee)||fee<0) { showToast('Enter a valid fee.','error'); return; }
+  try {
+    await setDoc(doc(db,'settings','revenue'),{ activationFee:fee, updatedAt:serverTimestamp() },{merge:true});
+    showToast('Activation fee saved ✓','success');
+  } catch(e) { showToast('Failed: '+e.message,'error'); }
+};
+
+// ── CREATE TUTOR ACCOUNT ───────────────────────────────────────────
+window.genPassword = function() {
+  const chars = 'ABCDEFGHJKLMNPQRSTUVWXYZabcdefghjkmnpqrstuvwxyz23456789!@#$';
+  let pw = '';
+  for (let i=0;i<10;i++) pw += chars[Math.floor(Math.random()*chars.length)];
+  document.getElementById('ct-pw').value = pw;
+};
+
+window.createTutorAccount = async function() {
+  const name  = document.getElementById('ct-name').value.trim();
+  const email = document.getElementById('ct-email').value.trim();
+  const pw    = document.getElementById('ct-pw').value.trim();
+  const spec  = document.getElementById('ct-spec').value.trim();
+  if (!name||!email||!pw) { showToast('Name, email and password are required.','error'); return; }
+  if (pw.length<6) { showToast('Password must be at least 6 characters.','error'); return; }
+  const btn = document.getElementById('btn-create-tutor');
+  btn.disabled=true; btn.textContent='Creating…';
+  try {
+    const apiKey = 'AIzaSyDjSs8AoDt6bG4-_FxWJbRLFM0tyR2S2D0';
+    const res = await fetch(`https://identitytoolkit.googleapis.com/v1/accounts:signUp?key=${apiKey}`,{
+      method:'POST', headers:{'Content-Type':'application/json'},
+      body: JSON.stringify({ email, password:pw, returnSecureToken:true })
+    });
+    const data = await res.json();
+    if (data.error) throw new Error(data.error.message);
+    const uid = data.localId;
+    const nameParts = name.split(' ');
+    await setDoc(doc(db,'users',uid),{
+      uid, email,
+      firstName: nameParts[0], lastName: nameParts.slice(1).join(' ')||'',
+      fullName: name, role:'tutor', status:'active',
+      specialisation: spec||'', isVerified:true,
+      createdAt: serverTimestamp(), createdBy:'admin',
+    });
+    allTutors.push({id:uid, uid, email, fullName:name, role:'tutor', status:'active'});
+    closeModal('create-tutor-modal');
+    ['ct-name','ct-email','ct-pw','ct-spec'].forEach(id=>{ const el=document.getElementById(id); if(el) el.value=''; });
+    showToast(`Account created — share the password with ${name} ✓`,'success');
+    loadTutors();
+  } catch(e) {
+    const msgs = {'EMAIL_EXISTS':'An account with this email already exists.','INVALID_EMAIL':'Invalid email address.'};
+    showToast(msgs[e.message]||'Error: '+e.message,'error');
+  }
+  btn.disabled=false; btn.textContent='Create Account →';
+};
+
+// ── EXTEND showPanel to load new panels ───────────────────────────
+const _baseShowPanel = window.showPanel;
+window.showPanel = function(id) {
+  _baseShowPanel(id);
+  if (id==='courses') loadCourses(currentCourseFilter);
+  if (id==='tutors') loadTutors();
+  if (id==='students') loadStudents();
+  if (id==='payments') loadPayments();
+  if (id==='certs') loadCerts();
+  if (id==='notify') { populateNotifyTutorSelect(); loadNotifyHistory(); }
+  if (id==='settings') loadSettings();
+};
+
+} catch(e) {
+  console.error('Module init error:', e);
+  // Always hide the loader so the error is visible
+  var loader = document.getElementById('auth-loading');
+  if (loader) { loader.classList.add('hide'); setTimeout(function(){ loader.remove(); }, 350); }
+  var toast = document.getElementById('toast');
+  if (toast) {
+    toast.innerHTML = 'Load error: ' + e.message;
+    toast.className = 'toast show error';
+    toast.style.zIndex = '99999';
+  }
+}
+</script>
+</body>
+</html>

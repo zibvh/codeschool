@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <title>Privacy Policy — codeSchool</title>
+  <meta name="description" content="Learn how codeSchool collects, uses, and protects your personal data in compliance with the Nigerian Data Protection Regulation (NDPR).">
+  <meta name="robots" content="index, follow">
+  <link rel="canonical" href="https://codeSchool.onrender.com/privacy-policy.html">
+
+  <!-- Open Graph -->
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="Privacy Policy — codeSchool">
+  <meta property="og:description" content="Learn how codeSchool collects, uses, and protects your personal data in compliance with the NDPR.">
+  <meta property="og:url" content="https://codeSchool.onrender.com/privacy-policy.html">
+  <meta property="og:image" content="https://codeSchool.onrender.com/codeSchool.png">
+  <meta property="og:site_name" content="codeSchool">
+  <meta property="og:locale" content="en_NG">
+
+  <!-- Twitter Card -->
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Privacy Policy — codeSchool">
+  <meta name="twitter:description" content="Learn how codeSchool collects, uses, and protects your personal data in compliance with the NDPR.">
+  <meta name="twitter:image" content="https://codeSchool.onrender.com/codeSchool.png">
+
+  <!-- Theme & mobile -->
+  <meta name="theme-color" content="#0B1A0E">
+  <link rel="icon" type="image/png" href="codeSchool.png">
+  <link rel="apple-touch-icon" href="codeSchool.png">
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Mono:wght@300;400;500&family=Outfit:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --blue: #1A4720; --blue-mid: #2A7040; --blue-glow: #4A9B5F;
+      --red: #C47B1A; --red-bright: #E89020;
+      --white: #FFFFFF; --dark: #0B1A0E; --dark2: #122010;
+      --gray: #8A94B8; --gray2: #4A5378;
+      --border: rgba(255,255,255,0.08);
+      --green: #22C55E;
+      --mono: 'DM Mono', monospace; --display: 'Syne', sans-serif; --body: 'Outfit', sans-serif;
+    }
+    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body {
+      font-family: var(--body); background: var(--dark); color: var(--white);
+      min-height: 100vh; overflow-x: hidden;
+      display: flex; flex-direction: column; align-items: center;
+      line-height: 1.7;
+    }
+    /* Background */
+    body::before {
+      content: ''; position: fixed; inset: 0; z-index: 0; pointer-events: none;
+      background-image: linear-gradient(rgba(74,155,95,0.04) 1px, transparent 1px),
+                        linear-gradient(90deg, rgba(74,155,95,0.04) 1px, transparent 1px);
+      background-size: 55px 55px;
+      mask-image: radial-gradient(ellipse 80% 80% at 50% 20%, black 20%, transparent 100%);
+    }
+
+    /* Nav */
+    nav {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+      padding: 0 5%; height: 72px;
+      display: flex; align-items: center; justify-content: space-between;
+      background: rgba(11,26,14,0.88); backdrop-filter: blur(20px);
+      border-bottom: 1px solid var(--border);
+    }
+    .logo { font-family: var(--display); font-size: 1.5rem; font-weight: 800; letter-spacing: -0.03em; color: var(--white); text-decoration: none; }
+    .logo span { color: var(--amber); }
+    .nav-links { display: flex; align-items: center; gap: 2rem; list-style: none; }
+    .nav-links a { font-family: var(--mono); font-size: 0.78rem; color: var(--gray); text-decoration: none; letter-spacing: .05em; transition: color .2s; }
+    .nav-links a:hover { color: var(--white); }
+
+    .policy-container {
+      position: relative; z-index: 1; width: 100%; max-width: 800px;
+      margin-top: 120px; padding: 2rem 5% 4rem;
+    }
+    .policy-card {
+      background: rgba(18,32,16,0.6); backdrop-filter: blur(24px);
+      border: 1px solid var(--border); border-radius: 16px;
+      padding: 3rem 2.5rem; box-shadow: 0 24px 60px rgba(0,0,0,0.4);
+    }
+    h1 { font-family: var(--display); font-size: 2.5rem; font-weight: 800; letter-spacing: -0.03em; margin-bottom: 0.5rem; }
+    h1 span { color: var(--forest-glow); }
+    .last-updated { font-family: var(--mono); font-size: 0.7rem; color: var(--gray2); margin-bottom: 2.5rem; }
+    h2 { font-family: var(--display); font-size: 1.4rem; font-weight: 700; margin: 2.5rem 0 1rem; color: var(--forest-glow); border-top: 1px solid var(--border); padding-top: 1.5rem; }
+    h3 { font-family: var(--display); font-size: 1.1rem; font-weight: 600; margin: 1.5rem 0 0.75rem; color: var(--white); }
+    p, li { font-size: 0.95rem; color: var(--gray); margin-bottom: 1rem; }
+    strong { color: var(--white); font-weight: 600; }
+    a { color: var(--forest-glow); text-decoration: underline; text-underline-offset: 4px; }
+    a:hover { text-decoration: none; }
+    ul { padding-left: 1.5rem; margin-bottom: 1.5rem; }
+    li { margin-bottom: 0.5rem; }
+
+    @media(max-width: 768px) {
+      .policy-card { padding: 2rem 1.5rem; }
+      h1 { font-size: 2rem; }
+      .nav-links { display: none; }
+      .policy-container { margin-top: 100px; }
+    }
+  </style>
+</head>
+<body>
+  <nav>
+    <a href="index.html" class="logo">frNt<span>c</span>Oda</a>
+    <div class="nav-links">
+      <a href="index.html">← Back to Home</a>
+    </div>
+  </nav>
+
+  <div class="policy-container">
+    <div class="policy-card">
+      <h1>Privacy <span>Policy</span></h1>
+      <div class="last-updated">Last Updated: 26th October, 2026</div>
+
+      <p>At <strong>codeSchool</strong>, we take your privacy seriously. This policy explains how we collect, use, and protect your personal data in accordance with the <strong>Nigerian Data Protection Regulation (NDPR)</strong> and other applicable laws. By using our platform, you agree to the practices described below.</p>
+
+      <h2>1. Who We Are</h2>
+      <p>codeSchool is an e-learning platform operated from Nigeria. We connect students with expert tutors, process course enrollments, issue certificates, and manage payments. For any data protection inquiries, you can contact our Data Protection Officer (DPO) at <a href="mailto:codeSchool@gmail.com">codeSchool@gmail.com</a>.</p>
+
+      <h2>2. Information We Collect</h2>
+      <h3>2.1 Information You Provide to Us</h3>
+      <ul>
+        <li><strong>Account details:</strong> Full name, email address, phone number, and password.</li>
+        <li><strong>Tutor profiles:</strong> Specialisation, teaching experience, and bank account details for payouts.</li>
+        <li><strong>Payment information:</strong> We do <strong>not</strong> store your full credit card or bank details. All payment transactions are processed securely through <strong>Paystack</strong>. We only store a transaction reference for record purposes.</li>
+        <li><strong>Communications:</strong> Any information you share when contacting our support team.</li>
+      </ul>
+
+      <h3>2.2 Information Collected Automatically</h3>
+      <ul>
+        <li><strong>Usage data:</strong> Pages visited, courses enrolled, progress tracking, and time spent on the platform. This helps us improve your learning experience.</li>
+        <li><strong>Device data:</strong> Browser type, IP address, and device identifiers for security and analytics purposes.</li>
+        <li><strong>Cookies:</strong> Small text files stored on your device to keep you logged in and remember your preferences. You can control cookie settings in your browser.</li>
+      </ul>
+
+      <h2>3. How We Use Your Information</h2>
+      <p>We use the information we collect for the following purposes:</p>
+      <ul>
+        <li><strong>To provide our service:</strong> Enrolling you in courses, tracking your progress, issuing certificates, and displaying your name on certificates.</li>
+        <li><strong>To process payments:</strong> Facilitating transactions and payouts through our payment partners.</li>
+        <li><strong>To communicate:</strong> Sending you important account updates, verification emails, course announcements, and support responses.</li>
+        <li><strong>For tutors:</strong> Displaying your profile, course statistics, and managing your content. Your payout details are used solely for the purpose of sending your earnings.</li>
+        <li><strong>To improve security:</strong> Monitoring for fraudulent activity and enforcing our Terms of Service.</li>
+        <li><strong>Marketing (with consent):</strong> Sending promotional emails about new courses or features, which you can opt out of at any time.</li>
+      </ul>
+
+      <h2>4. Legal Basis for Processing (NDPR)</h2>
+      <p>Under the NDPR, our legal basis for processing your data includes:</p>
+      <ul>
+        <li><strong>Performance of a contract:</strong> To provide the courses and services you've enrolled in.</li>
+        <li><strong>Legitimate interests:</strong> For analytics, security, fraud prevention, and improving our platform, where these do not override your rights.</li>
+        <li><strong>Consent:</strong> For sending marketing communications and placing non-essential cookies. You have the right to withdraw consent at any time.</li>
+        <li><strong>Legal obligation:</strong> To comply with applicable Nigerian laws and regulations.</li>
+      </ul>
+
+      <h2>5. How We Share Your Data</h2>
+      <p>We do not sell your personal data. We only share it in specific circumstances:</p>
+      <ul>
+        <li><strong>With tutors:</strong> When you enroll in a course, the tutor will see your name and progress to guide your learning.</li>
+        <li><strong>On certificates:</strong> Your full name and the course title are printed on the certificate you earn, which you can then share as you choose.</li>
+        <li><strong>Service providers:</strong> We use trusted third parties like <strong>Firebase</strong> (data storage), <strong>Paystack</strong> (payment processing), and <strong>EmailJS</strong> (email notifications). These providers are contractually bound to protect your data.</li>
+        <li><strong>Legal and safety:</strong> We may disclose data if required by law or to protect the rights, property, or safety of codeSchool, our users, or the public.</li>
+      </ul>
+
+      <h2>6. Data Security &amp; Retention</h2>
+      <p>We implement industry-standard security measures, including encryption in transit (SSL/TLS) and at rest, to protect your data. We retain your personal data for as long as your account is active or as needed to provide you services. If you delete your account, we will anonymise or delete your data within 60 days, except where we are required to retain it for legal or audit purposes (e.g., payment records).</p>
+
+      <h2>7. Your Rights (NDPR)</h2>
+      <p>As a data subject under the NDPR, you have the right to:</p>
+      <ul>
+        <li><strong>Access</strong> the personal data we hold about you.</li>
+        <li><strong>Rectify</strong> any inaccurate or incomplete data.</li>
+        <li><strong>Erase</strong> your data ("right to be forgotten") under certain conditions.</li>
+        <li><strong>Restrict or object</strong> to the processing of your data.</li>
+        <li><strong>Data portability</strong> for data you've provided, in a structured, commonly used format.</li>
+      </ul>
+      <p>To exercise any of these rights, please contact us at <a href="mailto:codeSchool@gmail.com">codeSchool@gmail.com</a>. We will respond to your request within one month, as required by law.</p>
+
+      <h2>8. Children's Privacy</h2>
+      <p>codeSchool is not intended for children under the age of 13. We do not knowingly collect personal data from children. If we become aware that a child has provided us with personal data, we will take steps to delete it immediately.</p>
+
+      <h2>9. International Transfers</h2>
+      <p>Our core infrastructure is hosted globally via Firebase. By using our service, your data may be transferred to and processed in countries outside Nigeria. We ensure that any such transfer complies with the NDPR and that your data remains protected to the Nigerian standard.</p>
+
+      <h2>10. Changes to This Policy</h2>
+      <p>We may update this policy from time to time. If we make significant changes, we will notify you via email or a prominent notice on our platform. The "Last Updated" date at the top of this page will always reflect the most recent changes.</p>
+
+      <h2>11. Contact Us</h2>
+      <p>If you have any questions about this Privacy Policy or your data, please contact our Data Protection Officer:</p>
+      <p>
+        <strong>Email:</strong> <a href="mailto:codeSchool@gmail.com">codeSchool@gmail.com</a><br>
+       <!-- <strong>Address:</strong> codeSchool Data Protection Office, [Your Business Address Here], Nigeria.
+      --> </p>
+    </div>
+  </div>
+</body>
+</html>

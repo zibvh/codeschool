@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <title>Terms of Service — codeSchool</title>
+  <meta name="description" content="The rules and guidelines for using the codeSchool platform for students and tutors.">
+  <meta name="robots" content="index, follow">
+  <link rel="canonical" href="https://codeSchool.onrender.com/terms-of-service.html">
+
+  <!-- Open Graph -->
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="Terms of Service — codeSchool">
+  <meta property="og:description" content="The rules and guidelines for using the codeSchool platform.">
+  <meta property="og:url" content="https://codeSchool.onrender.com/terms-of-service.html">
+  <meta property="og:image" content="https://codeSchool.onrender.com/codeSchool.png">
+  <meta property="og:site_name" content="codeSchool">
+  <meta property="og:locale" content="en_NG">
+
+  <!-- Twitter Card -->
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Terms of Service — codeSchool">
+  <meta name="twitter:description" content="The rules and guidelines for using the codeSchool platform.">
+  <meta name="twitter:image" content="https://codeSchool.onrender.com/codeSchool.png">
+
+  <!-- Theme & mobile -->
+  <meta name="theme-color" content="#0B1A0E">
+  <link rel="icon" type="image/png" href="codeSchool.png">
+  <link rel="apple-touch-icon" href="codeSchool.png">
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Mono:wght@300;400;500&family=Outfit:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --blue: #1A4720; --blue-mid: #2A7040; --blue-glow: #4A9B5F;
+      --red: #C47B1A; --red-bright: #E89020;
+      --white: #FFFFFF; --dark: #0B1A0E; --dark2: #122010;
+      --gray: #8A94B8; --gray2: #4A5378;
+      --border: rgba(255,255,255,0.08);
+      --green: #22C55E;
+      --mono: 'DM Mono', monospace; --display: 'Syne', sans-serif; --body: 'Outfit', sans-serif;
+    }
+    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body {
+      font-family: var(--body); background: var(--dark); color: var(--white);
+      min-height: 100vh; overflow-x: hidden;
+      display: flex; flex-direction: column; align-items: center;
+      line-height: 1.7;
+    }
+    /* Background */
+    body::before {
+      content: ''; position: fixed; inset: 0; z-index: 0; pointer-events: none;
+      background-image: linear-gradient(rgba(74,155,95,0.04) 1px, transparent 1px),
+                        linear-gradient(90deg, rgba(74,155,95,0.04) 1px, transparent 1px);
+      background-size: 55px 55px;
+      mask-image: radial-gradient(ellipse 80% 80% at 50% 20%, black 20%, transparent 100%);
+    }
+
+    /* Nav */
+    nav {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+      padding: 0 5%; height: 72px;
+      display: flex; align-items: center; justify-content: space-between;
+      background: rgba(11,26,14,0.88); backdrop-filter: blur(20px);
+      border-bottom: 1px solid var(--border);
+    }
+    .logo { font-family: var(--display); font-size: 1.5rem; font-weight: 800; letter-spacing: -0.03em; color: var(--white); text-decoration: none; }
+    .logo span { color: var(--amber); }
+    .nav-links { display: flex; align-items: center; gap: 2rem; list-style: none; }
+    .nav-links a { font-family: var(--mono); font-size: 0.78rem; color: var(--gray); text-decoration: none; letter-spacing: .05em; transition: color .2s; }
+    .nav-links a:hover { color: var(--white); }
+
+    .policy-container {
+      position: relative; z-index: 1; width: 100%; max-width: 800px;
+      margin-top: 120px; padding: 2rem 5% 4rem;
+    }
+    .policy-card {
+      background: rgba(18,32,16,0.6); backdrop-filter: blur(24px);
+      border: 1px solid var(--border); border-radius: 16px;
+      padding: 3rem 2.5rem; box-shadow: 0 24px 60px rgba(0,0,0,0.4);
+    }
+    h1 { font-family: var(--display); font-size: 2.5rem; font-weight: 800; letter-spacing: -0.03em; margin-bottom: 0.5rem; }
+    h1 span { color: var(--green); }
+    .last-updated { font-family: var(--mono); font-size: 0.7rem; color: var(--gray2); margin-bottom: 2.5rem; }
+    h2 { font-family: var(--display); font-size: 1.4rem; font-weight: 700; margin: 2.5rem 0 1rem; color: var(--green); border-top: 1px solid var(--border); padding-top: 1.5rem; }
+    h3 { font-family: var(--display); font-size: 1.1rem; font-weight: 600; margin: 1.5rem 0 0.75rem; color: var(--white); }
+    p, li { font-size: 0.95rem; color: var(--gray); margin-bottom: 1rem; }
+    strong { color: var(--white); font-weight: 600; }
+    a { color: var(--forest-glow); text-decoration: underline; text-underline-offset: 4px; }
+    a:hover { text-decoration: none; }
+    ul { padding-left: 1.5rem; margin-bottom: 1.5rem; }
+    li { margin-bottom: 0.5rem; }
+
+    @media(max-width: 768px) {
+      .policy-card { padding: 2rem 1.5rem; }
+      h1 { font-size: 2rem; }
+      .nav-links { display: none; }
+      .policy-container { margin-top: 100px; }
+    }
+  </style>
+</head>
+<body>
+  <nav>
+    <a href="index.html" class="logo">frNt<span>c</span>Oda</a>
+    <div class="nav-links">
+      <a href="index.html">← Back to Home</a>
+    </div>
+  </nav>
+
+  <div class="policy-container">
+    <div class="policy-card">
+      <h1>Terms of <span>Service</span></h1>
+      <div class="last-updated">Last Updated: 26th October, 2026</div>
+
+      <p>Welcome to <strong>codeSchool</strong>. By accessing or using our website and services, you agree to be bound by these Terms of Service. If you do not agree, please do not use our platform.</p>
+
+      <h2>1. Account Terms</h2>
+      <ul>
+        <li>You must be at least 13 years old to use the service.</li>
+        <li>You are responsible for maintaining the security of your account and password. The platform cannot and will not be liable for any loss or damage from your failure to comply with this security obligation.</li>
+        <li>You are responsible for all content posted and activity that occurs under your account.</li>
+        <li>You must not use the platform for any illegal or unauthorised purpose. You must not violate any laws in your jurisdiction (including but not limited to copyright laws).</li>
+      </ul>
+
+      <h2>2. Payments, Fees, and Payouts</h2>
+      <h3>For Students</h3>
+      <ul>
+        <li>All payments for courses are processed securely through <strong>Paystack</strong>. By purchasing a course, you agree to Paystack's terms of service.</li>
+        <li>Prices are listed in Nigerian Naira (₦) and are subject to change. Upon successful payment, you gain lifetime access to the course content.</li>
+        <li>A separate fee applies for the issuance of a verified certificate upon course completion. Certificates are generated after the fee is paid.</li>
+      </ul>
+      <h3>For Tutors</h3>
+      <ul>
+        <li><strong>Revenue Split:</strong> For every course enrollment, codeSchool pays you <strong>91.5%</strong> of the course price. The remaining 8.5% covers platform processing fees. For certificate purchases, revenue is split <strong>50/50</strong>.</li>
+        <li>You must link a valid Paystack subaccount to receive automatic payouts. codeSchool is not responsible for delays caused by incorrect payout details.</li>
+        <li>A one-time, non-refundable tutor registration fee of <strong>₦1,000</strong> is required to activate your instructor account and begin creating courses.</li>
+        <li>All courses must pass an administrative review before going live to ensure quality standards.</li>
+      </ul>
+
+      <h2>3. Intellectual Property &amp; Content</h2>
+      <ul>
+        <li><strong>Your Content:</strong> Tutors retain full ownership of the course content they create and upload. You grant codeSchool a worldwide, non-exclusive license to host, display, and distribute your course content on the platform for the purpose of operating the service.</li>
+        <li><strong>Platform Content:</strong> The codeSchool name, logo, and platform design are proprietary and may not be used without written permission.</li>
+        <li><strong>Copyright Infringement:</strong> If you believe that any content on our platform infringes your copyright, please contact us at <a href="mailto:codeSchool@gmail.com">codeSchool@gmail.com</a> with a detailed notice.</li>
+      </ul>
+
+      <h2>4. User Conduct</h2>
+      <ul>
+        <li>You agree not to upload, post, or transmit any content that is unlawful, harmful, threatening, abusive, harassing, defamatory, vulgar, obscene, or invasive of another's privacy.</li>
+        <li>You will not attempt to reverse engineer, hack, or gain unauthorised access to the codeSchool platform or its servers.</li>
+        <li>Tutors may not solicit students for off-platform transactions or redirect payments away from the codeSchool payment system.</li>
+      </ul>
+
+      <h2>5. Disclaimers &amp; Limitation of Liability</h2>
+      <ul>
+        <li><strong>"As Is" Basis:</strong> The service is provided on an "as is" and "as available" basis. codeSchool makes no warranties, express or implied, regarding the accuracy, completeness, or reliability of any course content provided by tutors.</li>
+        <li><strong>Not Liable for Damages:</strong> To the fullest extent permitted by Nigerian law, codeSchool shall not be liable for any indirect, incidental, special, consequential, or punitive damages, or any loss of profits or revenues, whether incurred directly or indirectly.</li>
+        <li><strong>Cap on Liability:</strong> In any event, our total liability to you for any damages, losses, or causes of action shall not exceed the amount you have paid us in the twelve (12) months immediately preceding the claim.</li>
+      </ul>
+
+      <h2>6. Termination</h2>
+      <p>We reserve the right to suspend or terminate your account at any time, with or without notice, for any violation of these Terms of Service. Upon termination, your right to use the service will immediately cease. Your course enrollment data may be preserved for a reasonable period for audit purposes.</p>
+
+      <h2>7. Governing Law</h2>
+      <p>These Terms shall be governed and construed in accordance with the laws of the Federal Republic of Nigeria, without regard to its conflict of law provisions. Any disputes arising out of or relating to these Terms shall be resolved exclusively in the courts of Nigeria.</p>
+
+      <h2>8. Changes to Terms</h2>
+      <p>We may update these terms from time to time. We will notify you of any material changes by posting the new Terms of Service on this page and updating the "Last Updated" date. Your continued use of the platform after any changes constitutes your acceptance of the new Terms.</p>
+
+      <h2>9. Contact</h2>
+      <p>If you have any questions about these Terms, please contact us at <a href="mailto:codeSchool@gmail.com">codeSchool@gmail.com</a>.</p>
+    </div>
+  </div>
+</body>
+</html>

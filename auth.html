@@ -1,0 +1,583 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>Sign In — codeSchool</title>
+<meta name="description" content="Sign in or create your codeSchool student account.">
+<meta name="theme-color" content="#0B1A0E">
+<link rel="icon" type="image/png" href="codeSchool.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Mono:wght@400;500&family=Outfit:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+:root{
+  --dark:#0B1A0E;--dark2:#122010;
+  --green:#22C55E;--green-dim:rgba(34,197,94,.12);
+  --amber:#E89020;
+  --white:#fff;--gray:#8892B0;--gray2:#4A5578;
+  --border:rgba(255,255,255,.08);--border-focus:rgba(34,197,94,.4);
+  --display:'Syne',sans-serif;--mono:'DM Mono',monospace;--body:'Outfit',sans-serif;
+  --radius:16px;--radius-sm:10px;
+}
+html{scroll-behavior:smooth;}
+body{
+  font-family:var(--body);background:var(--dark);color:var(--white);
+  min-height:100vh;display:flex;flex-direction:column;align-items:center;
+  justify-content:center;padding:1.5rem 1rem 3rem;overflow-x:hidden;position:relative;
+}
+.bg-grid{position:fixed;inset:0;pointer-events:none;z-index:0;
+  background-image:linear-gradient(rgba(34,197,94,.025) 1px,transparent 1px),
+    linear-gradient(90deg,rgba(34,197,94,.025) 1px,transparent 1px);
+  background-size:40px 40px;}
+.bg-orb{position:fixed;border-radius:50%;filter:blur(110px);pointer-events:none;z-index:0;}
+.bg-orb1{width:600px;height:600px;background:rgba(34,197,94,.06);top:-200px;right:-200px;animation:drift1 16s ease-in-out infinite alternate;}
+.bg-orb2{width:500px;height:500px;background:rgba(74,155,95,.05);bottom:-100px;left:-200px;animation:drift2 20s ease-in-out infinite alternate;}
+@keyframes drift1{from{transform:translate(0,0);}to{transform:translate(-50px,40px);}}
+@keyframes drift2{from{transform:translate(0,0);}to{transform:translate(40px,-50px);}}
+
+nav{position:fixed;top:0;left:0;right:0;z-index:100;display:flex;align-items:center;
+  justify-content:space-between;padding:.9rem 2rem;
+  background:rgba(11,26,14,.88);backdrop-filter:blur(20px);border-bottom:1px solid var(--border);}
+.logo{font-family:var(--display);font-weight:800;font-size:1.1rem;color:var(--white);text-decoration:none;letter-spacing:-.03em;}
+.logo span{color:var(--green);}
+.nav-back{font-family:var(--mono);font-size:.72rem;color:var(--gray);text-decoration:none;
+  transition:color .2s;display:flex;align-items:center;gap:.35rem;}
+.nav-back:hover{color:var(--white);}
+
+.auth-wrapper{position:relative;z-index:1;width:100%;max-width:440px;padding-top:5.5rem;padding-bottom:2rem;}
+
+.auth-header{text-align:center;margin-bottom:1.75rem;}
+.role-badge{display:inline-flex;align-items:center;gap:.5rem;background:var(--green-dim);
+  border:1px solid rgba(34,197,94,.25);border-radius:100px;padding:.4rem 1rem;
+  font-family:var(--mono);font-size:.68rem;color:var(--green);letter-spacing:.04em;
+  text-transform:uppercase;margin-bottom:1rem;}
+.auth-headline{font-family:var(--display);font-size:2rem;font-weight:800;letter-spacing:-.04em;line-height:1.1;margin-bottom:.4rem;}
+.auth-sub{font-family:var(--mono);font-size:.7rem;color:var(--gray);letter-spacing:.04em;text-transform:uppercase;}
+
+/* Card */
+.auth-card{background:rgba(18,32,16,.65);backdrop-filter:blur(24px);
+  border:1px solid var(--border);border-radius:var(--radius);overflow:hidden;
+  box-shadow:0 24px 60px rgba(0,0,0,.4),inset 0 1px 0 rgba(255,255,255,.06);}
+.card-top{padding:1.5rem 1.75rem 0;}
+.card-title{font-family:var(--display);font-size:1.05rem;font-weight:700;letter-spacing:-.02em;margin-bottom:.15rem;}
+.card-sub{font-family:var(--mono);font-size:.63rem;color:var(--gray);letter-spacing:.03em;}
+.card-body{padding:1.4rem 1.75rem 1.75rem;}
+
+/* Social buttons row */
+.social-row{display:grid;grid-template-columns:1fr 1fr 1fr;gap:.6rem;margin-bottom:1rem;}
+.btn-social{display:flex;align-items:center;justify-content:center;gap:.5rem;
+  background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.1);
+  border-radius:var(--radius-sm);color:var(--white);
+  font-family:var(--mono);font-size:.7rem;letter-spacing:.02em;
+  padding:.72rem .5rem;cursor:pointer;transition:background .2s,border-color .2s;white-space:nowrap;}
+.btn-social:hover{background:rgba(255,255,255,.09);border-color:rgba(255,255,255,.2);}
+.btn-social:disabled{opacity:.5;cursor:not-allowed;}
+.btn-social svg{flex-shrink:0;width:16px;height:16px;}
+
+/* Divider */
+.divider{display:flex;align-items:center;gap:.75rem;margin:.9rem 0;}
+.divider::before,.divider::after{content:'';flex:1;height:1px;background:var(--border);}
+.divider-text{font-family:var(--mono);font-size:.62rem;color:var(--gray2);white-space:nowrap;letter-spacing:.04em;}
+
+/* Verify banner */
+.verify-banner{background:rgba(34,197,94,.07);border:1px solid rgba(34,197,94,.2);
+  border-radius:var(--radius-sm);padding:1rem 1.1rem;margin-bottom:1rem;
+  font-family:var(--mono);font-size:.7rem;color:var(--green);line-height:1.8;display:none;}
+.verify-banner.show{display:block;}
+.verify-banner strong{color:var(--white);}
+.resend-link{color:var(--green);cursor:pointer;text-decoration:underline;}
+
+/* Form */
+.form-group{margin-bottom:1rem;}
+.form-label{display:block;font-family:var(--mono);font-size:.65rem;color:var(--gray);
+  text-transform:uppercase;letter-spacing:.08em;margin-bottom:.42rem;}
+.input-wrap{position:relative;display:flex;align-items:center;}
+.input-icon{position:absolute;left:.9rem;pointer-events:none;opacity:.4;display:flex;align-items:center;}
+.input-icon svg{width:15px;height:15px;stroke:var(--gray);}
+.form-input{width:100%;background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.1);
+  border-radius:var(--radius-sm);color:var(--white);font-family:var(--body);font-size:.88rem;
+  padding:.75rem 1rem .75rem 2.6rem;
+  transition:border-color .2s,background .2s,box-shadow .2s;outline:none;-webkit-appearance:none;}
+.form-input.no-icon{padding-left:1rem;}
+.form-input::placeholder{color:var(--gray2);}
+.form-input:focus{border-color:var(--border-focus);background:rgba(34,197,94,.04);box-shadow:0 0 0 3px rgba(34,197,94,.1);}
+.has-toggle .form-input{padding-right:3.4rem;}
+.toggle-pw{position:absolute;right:.8rem;background:none;border:none;color:var(--gray);
+  cursor:pointer;transition:color .2s;padding:.35rem;display:flex;align-items:center;}
+.toggle-pw:hover{color:var(--white);}
+.toggle-pw svg{width:16px;height:16px;stroke:currentColor;}
+
+.forgot-row{display:flex;justify-content:flex-end;margin-top:.35rem;}
+.forgot-link{font-family:var(--mono);font-size:.63rem;color:var(--gray);text-decoration:none;transition:color .2s;}
+.forgot-link:hover{color:var(--green);}
+
+.name-row{display:grid;grid-template-columns:1fr 1fr;gap:.75rem;}
+
+/* Submit */
+.btn-submit{width:100%;padding:.88rem 1rem;border:none;border-radius:var(--radius-sm);
+  font-family:var(--display);font-size:.92rem;font-weight:700;letter-spacing:-.01em;
+  cursor:pointer;transition:opacity .2s,transform .15s;margin-top:.2rem;
+  background:linear-gradient(135deg,#0f5c28,var(--green));
+  color:#fff;box-shadow:0 4px 24px rgba(34,197,94,.25);}
+.btn-submit:active{transform:scale(.98);}
+.btn-submit:disabled{opacity:.5;cursor:not-allowed;}
+
+/* Switch link */
+.switch-row{text-align:center;margin-top:1.25rem;font-family:var(--mono);font-size:.7rem;color:var(--gray);}
+.switch-link{color:var(--green);cursor:pointer;text-decoration:none;background:none;border:none;
+  font-family:var(--mono);font-size:.7rem;padding:0;}
+.switch-link:hover{text-decoration:underline;}
+
+/* Terms */
+.terms-note{font-family:var(--mono);font-size:.61rem;color:var(--gray2);
+  text-align:center;margin-top:.85rem;line-height:1.7;}
+.terms-note a{color:var(--gray);text-decoration:none;}
+.terms-note a:hover{color:var(--green);}
+
+/* Panel transition */
+.auth-panel{display:none;}
+.auth-panel.active{display:block;}
+
+@keyframes spin{to{transform:rotate(360deg)}}
+.spinner{display:inline-block;width:13px;height:13px;border:2px solid rgba(255,255,255,.25);
+  border-top-color:#fff;border-radius:50%;animation:spin .6s linear infinite;
+  margin-right:.5rem;vertical-align:middle;}
+.toast{position:fixed;top:0;left:0;right:0;background:var(--dark2);
+  border-bottom:3px solid rgba(74,155,95,.5);padding:.7rem 1.5rem;
+  font-family:var(--mono);font-size:.75rem;color:var(--white);z-index:9999;
+  transform:translateY(-100%);opacity:0;transition:transform .25s ease,opacity .25s;
+  box-shadow:0 4px 24px rgba(0,0,0,.4);display:flex;align-items:center;gap:.6rem;min-height:44px;}
+.toast.show{transform:translateY(0);opacity:1;}
+.toast.success{border-bottom-color:rgba(34,197,94,.7);background:rgba(5,25,12,.97);}
+.toast.error{border-bottom-color:rgba(232,144,32,.7);background:rgba(28,5,8,.97);}
+.toast.info{border-bottom-color:rgba(74,155,95,.5);background:rgba(11,26,14,.97);}
+
+@media(max-width:480px){
+  .auth-wrapper{padding-top:5rem;}
+  .auth-headline{font-size:1.65rem;}
+  .card-body,.card-top{padding-left:1.25rem;padding-right:1.25rem;}
+  .social-row{grid-template-columns:1fr;}
+  .name-row{grid-template-columns:1fr;}
+  nav{padding:.75rem 1rem;}
+}
+</style>
+</head>
+<body>
+<div class="bg-grid"></div>
+<div class="bg-orb bg-orb1"></div>
+<div class="bg-orb bg-orb2"></div>
+
+<nav>
+  <a href="index.html" class="logo">codeSchool</a>
+  <a href="index.html" class="nav-back">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" style="width:14px;height:14px"><line x1="19" y1="12" x2="5" y2="12"/><polyline points="12 19 5 12 12 5"/></svg>
+    Home
+  </a>
+</nav>
+
+<div class="auth-wrapper">
+  <div class="auth-header">
+    <div class="role-badge">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" style="width:13px;height:13px"><path d="M22 10v6M2 10l10-5 10 5-10 5z"/><path d="M6 12v5c3 3 9 3 12 0v-5"/></svg>
+      Student Portal
+    </div>
+    <div class="auth-headline" id="page-headline">Welcome back</div>
+    <div class="auth-sub" id="page-sub">Sign in to your account</div>
+  </div>
+
+  <div class="auth-card">
+    <div class="card-top">
+      <div class="card-title" id="card-title">Sign In</div>
+      <div class="card-sub" id="card-sub">Use any method below</div>
+    </div>
+
+    <div class="card-body">
+
+      <!-- Social buttons — shared by both panels, always visible -->
+      <div class="social-row">
+        <button class="btn-social" id="btn-google" onclick="handleGoogleAuth('google')" data-label="Google">
+          <svg viewBox="0 0 48 48"><path fill="#EA4335" d="M24 9.5c3.54 0 6.71 1.22 9.21 3.6l6.85-6.85C35.9 2.38 30.47 0 24 0 14.62 0 6.51 5.38 2.56 13.22l7.98 6.19C12.43 13.08 17.74 9.5 24 9.5z"/><path fill="#4285F4" d="M46.98 24.55c0-1.57-.15-3.09-.38-4.55H24v9.02h12.94c-.58 2.96-2.26 5.48-4.78 7.18l7.73 6c4.51-4.18 7.09-10.36 7.09-17.65z"/><path fill="#FBBC05" d="M10.53 28.59c-.48-1.45-.76-2.99-.76-4.59s.27-3.14.76-4.59l-7.98-6.19C.92 16.46 0 20.12 0 24c0 3.88.92 7.54 2.56 10.78l7.97-6.19z"/><path fill="#34A853" d="M24 48c6.48 0 11.93-2.13 15.89-5.81l-7.73-6c-2.18 1.48-4.97 2.31-8.16 2.31-6.26 0-11.57-3.58-13.47-8.91l-7.98 6.19C6.51 42.62 14.62 48 24 48z"/></svg>
+          Google
+        </button>
+        <button class="btn-social" id="btn-github" onclick="handleGoogleAuth('github')" data-label="GitHub">
+          <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 0C5.374 0 0 5.373 0 12c0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23A11.509 11.509 0 0112 5.803c1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576C20.566 21.797 24 17.3 24 12c0-6.627-5.373-12-12-12z"/></svg>
+          GitHub
+        </button>
+        <button class="btn-social" id="btn-email-toggle" onclick="toggleEmailForm()" data-label="Email">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="4" width="20" height="16" rx="2"/><polyline points="2,4 12,13 22,4"/></svg>
+          Email
+        </button>
+      </div>
+
+      <!-- Verify banner -->
+      <div class="verify-banner" id="verify-banner">
+        <strong>📧 Verify your email first.</strong><br>
+        We sent a link to <strong id="verify-email-show"></strong>.<br>
+        Click the link in that email, then sign in here.<br>
+        Didn't get it? <span class="resend-link" onclick="resendVerification()">Resend email</span>
+      </div>
+
+      <!-- LOGIN panel (default) -->
+      <div class="auth-panel active" id="panel-login">
+        <div class="divider" id="email-divider-login" style="display:none"><span class="divider-text">sign in with email</span></div>
+        <div id="email-form-login" style="display:none">
+          <div class="form-group">
+            <label class="form-label">Email Address</label>
+            <div class="input-wrap">
+              <span class="input-icon"><svg viewBox="0 0 24 24" fill="none" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="4" width="20" height="16" rx="2"/><polyline points="2,4 12,13 22,4"/></svg></span>
+              <input type="email" class="form-input" id="l-email" placeholder="you@example.com" autocomplete="email">
+            </div>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Password</label>
+            <div class="input-wrap has-toggle">
+              <span class="input-icon"><svg viewBox="0 0 24 24" fill="none" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="7.5" cy="15.5" r="5.5"/><path d="M21 2l-9.6 9.6"/><path d="M15.5 7.5l3 3L22 7l-3-3"/></svg></span>
+              <input type="password" class="form-input" id="l-pw" placeholder="Your password" autocomplete="current-password">
+              <button class="toggle-pw" onclick="togglePw('l-pw',this)" type="button">
+                <svg viewBox="0 0 24 24" fill="none" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+              </button>
+            </div>
+            <div class="forgot-row"><a href="#" class="forgot-link" id="forgot-link">Forgot password?</a></div>
+          </div>
+          <button class="btn-submit" id="btn-login" onclick="handleLogin()" data-label="Sign In →">Sign In →</button>
+        </div>
+        <div class="switch-row">
+          Don't have an account? <button class="switch-link" onclick="switchPanel('signup')">Sign up</button>
+        </div>
+      </div>
+
+      <!-- SIGNUP panel (hidden by default) -->
+      <div class="auth-panel" id="panel-signup">
+        <div class="divider" id="email-divider-signup" style="display:none"><span class="divider-text">sign up with email</span></div>
+        <div id="email-form-signup" style="display:none">
+          <div class="name-row">
+            <div class="form-group">
+              <label class="form-label">First Name</label>
+              <input type="text" class="form-input no-icon" id="s-fname" placeholder="Ada" autocomplete="given-name">
+            </div>
+            <div class="form-group">
+              <label class="form-label">Last Name</label>
+              <input type="text" class="form-input no-icon" id="s-lname" placeholder="Okafor" autocomplete="family-name">
+            </div>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Email Address</label>
+            <div class="input-wrap">
+              <span class="input-icon"><svg viewBox="0 0 24 24" fill="none" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="4" width="20" height="16" rx="2"/><polyline points="2,4 12,13 22,4"/></svg></span>
+              <input type="email" class="form-input" id="s-email" placeholder="you@example.com" autocomplete="email">
+            </div>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Password</label>
+            <div class="input-wrap has-toggle">
+              <span class="input-icon"><svg viewBox="0 0 24 24" fill="none" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="7.5" cy="15.5" r="5.5"/><path d="M21 2l-9.6 9.6"/><path d="M15.5 7.5l3 3L22 7l-3-3"/></svg></span>
+              <input type="password" class="form-input" id="s-pw" placeholder="Min. 8 characters" autocomplete="new-password">
+              <button class="toggle-pw" onclick="togglePw('s-pw',this)" type="button">
+                <svg viewBox="0 0 24 24" fill="none" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+              </button>
+            </div>
+          </div>
+          <button class="btn-submit" id="btn-signup" onclick="handleSignup()" data-label="Create Account →">Create Account →</button>
+          <div class="terms-note">
+            By signing up you agree to our <a href="terms.html">Terms</a> and <a href="privacy.html">Privacy Policy</a>.
+          </div>
+        </div>
+        <div class="switch-row">
+          Already have an account? <button class="switch-link" onclick="switchPanel('login')">Sign in</button>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<div id="toast" class="toast"></div>
+
+<script>
+const EYE_ON  = `<svg viewBox="0 0 24 24" fill="none" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>`;
+const EYE_OFF = `<svg viewBox="0 0 24 24" fill="none" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94"/><path d="M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19"/><line x1="1" y1="1" x2="23" y2="23"/></svg>`;
+
+let _emailOpen = false;
+let _currentPanel = 'login';
+
+function togglePw(id, btn) {
+  const inp = document.getElementById(id);
+  const show = inp.type === 'password';
+  inp.type = show ? 'text' : 'password';
+  btn.innerHTML = show ? EYE_OFF : EYE_ON;
+}
+function showToast(msg, type) {
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.className = 'toast show ' + (type || '');
+  clearTimeout(t._to);
+  t._to = setTimeout(() => t.classList.remove('show'), 3500);
+}
+function setLoading(id, on) {
+  const b = document.getElementById(id);
+  if (!b) return;
+  b.disabled = on;
+  b.innerHTML = on ? '<span class="spinner"></span>Please wait…' : b.dataset.label;
+}
+
+function switchPanel(panel) {
+  _currentPanel = panel;
+  // Hide both panels
+  document.getElementById('panel-login').classList.remove('active');
+  document.getElementById('panel-signup').classList.remove('active');
+  document.getElementById('panel-' + panel).classList.add('active');
+
+  // Update headline/sub
+  const isLogin = panel === 'login';
+  document.getElementById('page-headline').textContent = isLogin ? 'Welcome back'      : 'Create account';
+  document.getElementById('page-sub').textContent      = isLogin ? 'Sign in to your account' : 'Join thousands of learners';
+  document.getElementById('card-title').textContent    = isLogin ? 'Sign In'             : 'Sign Up';
+
+  // Email form visibility carries over based on _emailOpen state
+  const divider  = document.getElementById('email-divider-' + panel);
+  const form     = document.getElementById('email-form-'    + panel);
+  if (divider) divider.style.display = _emailOpen ? 'flex' : 'none';
+  if (form)    form.style.display    = _emailOpen ? 'block': 'none';
+}
+
+function toggleEmailForm() {
+  _emailOpen = !_emailOpen;
+  const panel   = _currentPanel;
+  const divider = document.getElementById('email-divider-' + panel);
+  const form    = document.getElementById('email-form-'    + panel);
+  if (divider) divider.style.display = _emailOpen ? 'flex'  : 'none';
+  if (form)    form.style.display    = _emailOpen ? 'block' : 'none';
+  // Highlight email button when open
+  const btn = document.getElementById('btn-email-toggle');
+  btn.style.borderColor = _emailOpen ? 'rgba(34,197,94,.5)' : '';
+  btn.style.color       = _emailOpen ? 'var(--green)' : '';
+}
+
+// Safe stubs before module loads
+window.handleLogin = window.handleSignup =
+  () => showToast('Loading — try again in a moment.', 'info');
+window.handleGoogleAuth = () => showToast('Loading — try again in a moment.', 'info');
+window.resendVerification = () => {};
+</script>
+
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
+import {
+  getAuth, onAuthStateChanged,
+  signInWithEmailAndPassword, createUserWithEmailAndPassword,
+  sendEmailVerification, sendPasswordResetEmail,
+  GoogleAuthProvider, GithubAuthProvider,
+  signInWithRedirect, getRedirectResult,
+  signOut
+} from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
+import {
+  getFirestore, doc, getDoc, setDoc, updateDoc, serverTimestamp
+} from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
+
+const firebaseConfig = {
+  apiKey:            "AIzaSyDjSs8AoDt6bG4-_FxWJbRLFM0tyR2S2D0",
+  authDomain:        "codeschool-41f52.firebaseapp.com",
+  projectId:         "codeschool-41f52",
+  storageBucket:     "codeschool-41f52.firebasestorage.app",
+  messagingSenderId: "224975256200",
+  appId:             "1:224975256200:web:68ffc1a1160f3315d77d3d"
+};
+
+const app           = initializeApp(firebaseConfig);
+const auth          = getAuth(app);
+const db            = getFirestore(app);
+const googleProv    = new GoogleAuthProvider();
+const githubProv    = new GithubAuthProvider();
+googleProv.addScope('profile');
+googleProv.addScope('email');
+githubProv.addScope('user:email');
+
+// ── Guarantee Firestore doc exists ───────────────────────────────
+async function ensureUserDoc(user, extras = {}) {
+  const ref  = doc(db, 'users', user.uid);
+  const snap = await getDoc(ref);
+  if (snap.exists()) {
+    if (!snap.data().isVerified && user.emailVerified) {
+      await updateDoc(ref, { isVerified: true }).catch(() => {});
+    }
+    return snap.data();
+  }
+  const raw   = user.displayName || '';
+  const parts = raw.trim().split(' ');
+  const first = extras.firstName || parts[0]  || '';
+  const last  = extras.lastName  || parts.slice(1).join(' ') || '';
+  const full  = (first + ' ' + last).trim() || raw || 'Student';
+  const data  = {
+    uid: user.uid, email: user.email,
+    firstName: first, lastName: last, fullName: full,
+    role: 'student', status: 'active',
+    photoURL: user.photoURL || '',
+    isVerified: user.emailVerified,
+    streak: 0, lastActiveDate: null,
+    hiddenCourses: [], createdAt: serverTimestamp(),
+  };
+  await setDoc(ref, data);
+  return data;
+}
+
+function redirectByRole(role) {
+  const map = { student: 'student-dashboard.html', admin: 'admin-dashboard.html', tutor: 'tutor-dashboard.html' };
+  if (map[role]) window.location.href = map[role];
+}
+
+// ── Handle redirect result (Google / GitHub) ─────────────────────
+(async () => {
+  try {
+    const result = await getRedirectResult(auth);
+    if (!result) return;
+    const profile = await ensureUserDoc(result.user);
+    showToast('Signed in! Loading dashboard…', 'success');
+    setTimeout(() => redirectByRole(profile.role), 700);
+  } catch (e) {
+    const msgs = {
+      'auth/account-exists-with-different-credential':
+        'An account with this email already exists. Sign in with a different method.',
+      'auth/user-cancelled': null,
+      'auth/cancelled-popup-request': null,
+    };
+    const msg = msgs[e.code];
+    if (msg !== null) showToast(msg || 'Sign-in failed. Please try again.', 'error');
+  }
+})();
+
+// ── Auto-redirect already logged-in users ────────────────────────
+onAuthStateChanged(auth, async (user) => {
+  if (!user) return;
+  try {
+    const snap = await getDoc(doc(db, 'users', user.uid));
+    if (snap.exists()) redirectByRole(snap.data().role);
+  } catch (_) {}
+});
+
+// ── Email/password login ──────────────────────────────────────────
+window.handleLogin = async function () {
+  const email = document.getElementById('l-email').value.trim();
+  const pw    = document.getElementById('l-pw').value;
+  if (!email || !pw) { showToast('Enter your email and password.', 'error'); return; }
+  setLoading('btn-login', true);
+  try {
+    const cred = await signInWithEmailAndPassword(auth, email, pw);
+    const user = cred.user;
+    if (!user.emailVerified) {
+      await signOut(auth);
+      document.getElementById('verify-email-show').textContent = email;
+      document.getElementById('verify-banner').classList.add('show');
+      window._pendingEmail = email; window._pendingPw = pw;
+      showToast('Please verify your email before signing in.', 'error');
+      setLoading('btn-login', false); return;
+    }
+    const profile = await ensureUserDoc(user);
+    if (profile.status === 'suspended') {
+      await signOut(auth);
+      showToast('Account suspended. Contact support.', 'error');
+      setLoading('btn-login', false); return;
+    }
+    showToast('Welcome back!', 'success');
+    setTimeout(() => redirectByRole(profile.role), 700);
+  } catch (e) {
+    const msgs = {
+      'auth/user-not-found':     'No account with this email.',
+      'auth/wrong-password':     'Incorrect password.',
+      'auth/invalid-credential': 'Email or password is incorrect.',
+      'auth/invalid-email':      'Invalid email address.',
+      'auth/too-many-requests':  'Too many attempts. Try again later.',
+      'auth/user-disabled':      'This account has been disabled.',
+    };
+    showToast(msgs[e.code] || 'Sign-in failed: ' + e.message, 'error');
+    setLoading('btn-login', false);
+  }
+};
+
+// ── Email/password signup ─────────────────────────────────────────
+window.handleSignup = async function () {
+  const firstName = document.getElementById('s-fname').value.trim();
+  const lastName  = document.getElementById('s-lname').value.trim();
+  const email     = document.getElementById('s-email').value.trim();
+  const pw        = document.getElementById('s-pw').value;
+  if (!firstName)    { showToast('Enter your first name.', 'error'); return; }
+  if (!email)        { showToast('Enter your email address.', 'error'); return; }
+  if (pw.length < 8) { showToast('Password must be at least 8 characters.', 'error'); return; }
+  setLoading('btn-signup', true);
+  try {
+    const cred = await createUserWithEmailAndPassword(auth, email, pw);
+    await ensureUserDoc(cred.user, { firstName, lastName });
+    await sendEmailVerification(cred.user);
+    await signOut(auth);
+    switchPanel('login');
+    document.getElementById('verify-email-show').textContent = email;
+    document.getElementById('verify-banner').classList.add('show');
+    window._pendingEmail = email; window._pendingPw = pw;
+    showToast('Account created! Check your email to verify.', 'success');
+    setLoading('btn-signup', false);
+  } catch (e) {
+    const msgs = {
+      'auth/email-already-in-use': 'An account with this email already exists.',
+      'auth/invalid-email':        'Invalid email address.',
+      'auth/weak-password':        'Password too weak — use at least 8 characters.',
+    };
+    showToast(msgs[e.code] || 'Sign-up failed: ' + e.message, 'error');
+    setLoading('btn-signup', false);
+  }
+};
+
+// ── Google + GitHub (both use redirect — no COOP issues) ─────────
+window.handleGoogleAuth = async function (provider) {
+  const prov = provider === 'github' ? githubProv : googleProv;
+  ['btn-google','btn-github','btn-email-toggle'].forEach(id => {
+    const b = document.getElementById(id);
+    if (b) b.disabled = true;
+  });
+  const btn = document.getElementById(provider === 'github' ? 'btn-github' : 'btn-google');
+  if (btn) btn.innerHTML = `<span class="spinner"></span>${provider === 'github' ? 'GitHub' : 'Google'}`;
+  try {
+    await signInWithRedirect(auth, prov);
+  } catch (e) {
+    showToast('Could not start sign-in. Try again.', 'error');
+    ['btn-google','btn-github','btn-email-toggle'].forEach(id => {
+      const b = document.getElementById(id);
+      if (b) { b.disabled = false; b.innerHTML = b.dataset.label || b.innerHTML; }
+    });
+  }
+};
+
+// ── Forgot password ───────────────────────────────────────────────
+document.getElementById('forgot-link').addEventListener('click', async e => {
+  e.preventDefault();
+  const email = document.getElementById('l-email').value.trim();
+  if (!email) { showToast('Enter your email address first.', 'error'); return; }
+  try {
+    await sendPasswordResetEmail(auth, email);
+    showToast('Password reset email sent — check your inbox.', 'success');
+  } catch (_) {
+    showToast('Could not send reset email — check the address.', 'error');
+  }
+});
+
+// ── Resend verification ───────────────────────────────────────────
+window.resendVerification = async function () {
+  const email = window._pendingEmail;
+  const pw    = window._pendingPw || document.getElementById('l-pw').value;
+  if (!email || !pw) { showToast('Enter your password below, then click Resend.', 'info'); return; }
+  try {
+    const cred = await signInWithEmailAndPassword(auth, email, pw);
+    await sendEmailVerification(cred.user);
+    await signOut(auth);
+    showToast('Verification email resent!', 'success');
+  } catch (_) {
+    showToast('Could not resend — check your password is entered.', 'error');
+  }
+};
+
+// ── Enter key ────────────────────────────────────────────────────
+document.getElementById('l-email').addEventListener('keydown', e => { if (e.key==='Enter') document.getElementById('l-pw').focus(); });
+document.getElementById('l-pw').addEventListener('keydown',    e => { if (e.key==='Enter') window.handleLogin(); });
+document.getElementById('s-pw').addEventListener('keydown',    e => { if (e.key==='Enter') window.handleSignup(); });
+</script>
+</body>
+</html>

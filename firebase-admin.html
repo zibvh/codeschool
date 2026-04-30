@@ -1,0 +1,1738 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>Firebase Console — codeSchool</title>
+<meta name="theme-color" content="#0B1509">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<link rel="icon" type="image/png" href="codeSchool.png">
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@300;400;500;600;700&family=Space+Grotesk:wght@300;400;500;600;700&family=Syne:wght@700;800&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg:#0B1509;--bg2:#0E1A0C;--bg3:#122010;--bg4:#162614;
+  --border:rgba(255,255,255,.07);--border2:rgba(255,255,255,.12);
+  --txt:#E8EDF8;--txt2:#8A96B8;--txt3:#4A5578;
+  --accent:#7BC47F;--accent2:#3A8A50;--accent-glow:rgba(123,196,127,.15);
+  --green:#00E87A;--red:#F0A030;--amber:#FFAA00;--purple:#A855F7;--orange:#F0A030;
+  --mono:'JetBrains Mono',monospace;
+  --sans:'Space Grotesk',sans-serif;
+  --display:'Syne',sans-serif;
+  --nav:60px;--side:260px;
+  --radius:10px;
+}
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box;}
+html,body{height:100%;overflow-x:hidden;}
+body{font-family:var(--sans);background:var(--bg);color:var(--txt);display:flex;flex-direction:column;}
+
+/* ── TOPBAR ── */
+.topbar{height:var(--nav);background:rgba(11,21,9,.96);border-bottom:1px solid var(--border);backdrop-filter:blur(20px);display:flex;align-items:center;justify-content:space-between;padding:0 1rem;position:sticky;top:0;z-index:200;flex-shrink:0;overflow:hidden;}
+.logo{font-family:var(--display);font-size:1.2rem;font-weight:800;color:var(--txt);text-decoration:none;letter-spacing:-.02em;}
+.logo em{color:var(--accent);font-style:normal;}
+.logo-badge{font-family:var(--mono);font-size:.5rem;background:rgba(123,196,127,.1);border:1px solid rgba(123,196,127,.3);color:var(--accent);padding:.2rem .5rem;border-radius:4px;letter-spacing:.1em;text-transform:uppercase;margin-left:.5rem;vertical-align:middle;}
+.topbar-right{display:flex;align-items:center;gap:.75rem;}
+.conn-indicator{display:flex;align-items:center;gap:.4rem;font-family:var(--mono);font-size:.6rem;color:var(--txt2);}
+.conn-dot{width:6px;height:6px;border-radius:50%;background:var(--green);animation:pulse 2s infinite;}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.5}}
+.topbar-av{width:32px;height:32px;border-radius:50%;background:linear-gradient(135deg,var(--accent2),var(--accent));display:flex;align-items:center;justify-content:center;font-family:var(--display);font-weight:800;font-size:.75rem;cursor:pointer;flex-shrink:0;}
+
+/* ── LAYOUT ── */
+.app-body{display:flex;flex:1;overflow:hidden;}
+
+/* ── SIDEBAR ── */
+.sidebar{width:var(--side);background:var(--bg2);border-right:1px solid var(--border);display:flex;flex-direction:column;flex-shrink:0;overflow-y:auto;}
+.sidebar-section{padding:.5rem .75rem;margin-top:.25rem;}
+.sidebar-label{font-family:var(--mono);font-size:.55rem;letter-spacing:.14em;text-transform:uppercase;color:var(--txt3);padding:.5rem .75rem .35rem;margin-top:.5rem;}
+.nav-item{display:flex;align-items:center;gap:.65rem;padding:.55rem .75rem;border-radius:var(--radius);cursor:pointer;transition:all .15s;color:var(--txt2);font-size:.85rem;border:none;background:none;width:100%;text-align:left;position:relative;}
+.nav-item:hover{background:rgba(255,255,255,.04);color:var(--txt);}
+.nav-item.active{background:rgba(123,196,127,.08);color:var(--accent);border:1px solid rgba(123,196,127,.15);}
+.nav-icon{width:18px;text-align:center;font-size:.95rem;flex-shrink:0;}
+.nav-count{margin-left:auto;font-family:var(--mono);font-size:.58rem;background:rgba(255,51,85,.15);color:var(--amber-dark);padding:.1rem .4rem;border-radius:4px;display:none;}
+.nav-count.show{display:block;}
+.sidebar-footer{padding:1rem .75rem;border-top:1px solid var(--border);margin-top:auto;}
+.sidebar-user{display:flex;align-items:center;gap:.65rem;}
+.su-av{width:30px;height:30px;border-radius:50%;background:linear-gradient(135deg,var(--accent2),var(--accent));display:flex;align-items:center;justify-content:center;font-family:var(--display);font-weight:800;font-size:.7rem;flex-shrink:0;}
+.su-info{flex:1;min-width:0;}
+.su-name{font-size:.8rem;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.su-role{font-family:var(--mono);font-size:.56rem;color:var(--accent);}
+.su-logout{background:none;border:none;cursor:pointer;color:var(--txt3);font-size:.9rem;flex-shrink:0;padding:.25rem;border-radius:4px;transition:color .15s;}
+.su-logout:hover{color:var(--amber-dark);}
+
+/* ── MAIN ── */
+.main{flex:1;overflow-y:auto;overflow-x:hidden;}
+.panel{display:none;padding:1.5rem;max-width:1400px;}
+.panel.active{display:block;animation:fadeUp .2s ease;}
+@keyframes fadeUp{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:translateY(0)}}
+
+/* ── PAGE HEADER ── */
+.page-header{margin-bottom:1.5rem;}
+.page-title{font-family:var(--display);font-size:1.4rem;font-weight:800;letter-spacing:-.03em;margin-bottom:.25rem;}
+.page-sub{font-family:var(--mono);font-size:.65rem;color:var(--txt2);letter-spacing:.04em;}
+
+/* ── CARDS ── */
+.card{background:var(--bg2);border:1px solid var(--border);border-radius:14px;overflow:hidden;}
+.card-header{padding:1rem 1.25rem .85rem;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;gap:.75rem;}
+.card-title{font-family:var(--mono);font-size:.72rem;letter-spacing:.08em;text-transform:uppercase;color:var(--txt2);}
+.card-body{padding:1.25rem;}
+
+/* ── STATS GRID ── */
+.stats-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:.75rem;margin-bottom:1.25rem;}
+.stat{background:var(--bg2);border:1px solid var(--border);border-radius:14px;padding:1.1rem 1.25rem;position:relative;overflow:hidden;}
+.stat::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;}
+.stat-c::before{background:linear-gradient(90deg,var(--accent2),var(--accent));}
+.stat-g::before{background:linear-gradient(90deg,#00b359,var(--green));}
+.stat-r::before{background:linear-gradient(90deg,#cc0033,var(--amber-dark));}
+.stat-a::before{background:linear-gradient(90deg,#cc8800,var(--amber));}
+.stat-p::before{background:linear-gradient(90deg,#7c3aed,var(--purple));}
+.stat-o::before{background:linear-gradient(90deg,#cc4400,var(--orange));}
+.stat-label{font-family:var(--mono);font-size:.6rem;letter-spacing:.1em;text-transform:uppercase;color:var(--txt3);margin-bottom:.4rem;}
+.stat-val{font-family:var(--display);font-size:1.5rem;font-weight:800;letter-spacing:-.04em;line-height:1;}
+.stat-sub{font-family:var(--mono);font-size:.6rem;color:var(--txt3);margin-top:.3rem;}
+
+/* ── COLLECTION EXPLORER ── */
+.explorer-wrap{display:grid;grid-template-columns:1fr;gap:1rem;}
+.coll-card{background:var(--bg2);border:1px solid var(--border);border-radius:14px;overflow:hidden;}
+.coll-header{padding:.9rem 1.25rem;background:var(--bg3);border-bottom:1px solid var(--border);display:flex;align-items:center;gap:.75rem;cursor:pointer;transition:background .15s;}
+.coll-header:hover{background:var(--bg4);}
+.coll-name{font-family:var(--mono);font-size:.78rem;font-weight:600;letter-spacing:.05em;color:var(--accent);}
+.coll-count{font-family:var(--mono);font-size:.6rem;color:var(--txt3);margin-left:.5rem;}
+.coll-chevron{margin-left:auto;color:var(--txt3);transition:transform .2s;font-size:.8rem;}
+.coll-chevron.open{transform:rotate(180deg);}
+.coll-body{display:none;padding:0;}
+.coll-body.open{display:block;}
+.coll-toolbar{padding:.75rem 1.25rem;border-bottom:1px solid var(--border);display:flex;gap:.5rem;flex-wrap:wrap;align-items:center;}
+
+/* ── TABLE ── */
+.tbl-wrap{overflow-x:auto;-webkit-overflow-scrolling:touch;}
+table{width:100%;border-collapse:collapse;min-width:500px;}
+thead tr{background:rgba(255,255,255,.025);}
+th{font-family:var(--mono);font-size:.58rem;letter-spacing:.1em;text-transform:uppercase;color:var(--txt3);padding:.7rem 1rem;text-align:left;white-space:nowrap;border-bottom:1px solid var(--border);}
+tbody tr{border-bottom:1px solid rgba(255,255,255,.035);transition:background .1s;cursor:pointer;}
+tbody tr:last-child{border-bottom:none;}
+tbody tr:hover{background:rgba(123,196,127,.04);}
+td{padding:.6rem 1rem;font-size:.82rem;vertical-align:middle;}
+.td-key{font-family:var(--mono);font-size:.7rem;color:var(--accent);max-width:140px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+.td-val{font-size:.78rem;color:var(--txt2);max-width:200px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font-family:var(--mono);}
+.td-type{font-family:var(--mono);font-size:.58rem;color:var(--txt3);}
+
+/* ── DOCUMENT EDITOR ── */
+.doc-editor{background:var(--bg);border:1px solid var(--border2);border-radius:14px;overflow:hidden;}
+.doc-editor-header{padding:1rem 1.25rem;background:var(--bg3);border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;gap:.75rem;flex-wrap:wrap;}
+.doc-path{font-family:var(--mono);font-size:.7rem;color:var(--txt2);word-break:break-all;}
+.doc-path em{color:var(--accent);font-style:normal;}
+.doc-editor-body{padding:1.25rem;}
+.field-row{display:grid;grid-template-columns:1fr 1.5fr auto;gap:.5rem;align-items:start;margin-bottom:.5rem;}
+.field-key{font-family:var(--mono);font-size:.72rem;color:var(--accent);background:rgba(123,196,127,.06);border:1px solid rgba(123,196,127,.15);border-radius:6px;padding:.45rem .65rem;width:100%;outline:none;color:var(--accent);}
+.field-key::placeholder{color:var(--txt3);}
+.field-val{font-family:var(--mono);font-size:.72rem;background:rgba(255,255,255,.04);border:1px solid var(--border);border-radius:6px;padding:.45rem .65rem;width:100%;outline:none;color:var(--txt);transition:border-color .15s;}
+.field-val:focus{border-color:rgba(123,196,127,.4);box-shadow:0 0 0 3px rgba(123,196,127,.07);}
+.field-val::placeholder{color:var(--txt3);}
+.field-del{background:none;border:1px solid rgba(255,51,85,.2);border-radius:6px;color:var(--amber-dark);padding:.35rem .5rem;cursor:pointer;transition:all .15s;flex-shrink:0;font-size:.8rem;}
+.field-del:hover{background:rgba(255,51,85,.1);}
+.json-editor{width:100%;min-height:220px;font-family:var(--mono);font-size:.72rem;background:rgba(0,0,0,.3);border:1px solid var(--border);border-radius:8px;padding:.9rem;color:var(--txt);outline:none;resize:vertical;line-height:1.7;transition:border-color .15s;}
+.json-editor:focus{border-color:rgba(123,196,127,.4);}
+
+/* ── BUTTONS ── */
+.btn{font-family:var(--mono);font-size:.65rem;letter-spacing:.06em;text-transform:uppercase;padding:.45rem .9rem;border-radius:8px;cursor:pointer;transition:all .15s;border:none;display:inline-flex;align-items:center;gap:.35rem;white-space:nowrap;}
+.btn-primary{background:var(--accent2);color:#fff;}
+.btn-primary:hover{background:#0052cc;}
+.btn-accent{background:rgba(123,196,127,.12);color:var(--accent);border:1px solid rgba(123,196,127,.25);}
+.btn-accent:hover{background:rgba(123,196,127,.2);}
+.btn-ghost{background:rgba(255,255,255,.05);color:var(--txt2);border:1px solid var(--border);}
+.btn-ghost:hover{color:var(--txt);background:rgba(255,255,255,.08);}
+.btn-red{background:rgba(255,51,85,.1);color:var(--amber-dark);border:1px solid rgba(255,51,85,.2);}
+.btn-red:hover{background:rgba(255,51,85,.18);}
+.btn-green{background:rgba(0,232,122,.1);color:var(--green);border:1px solid rgba(0,232,122,.2);}
+.btn-green:hover{background:rgba(0,232,122,.18);}
+.btn-amber{background:rgba(255,170,0,.1);color:var(--amber);border:1px solid rgba(255,170,0,.2);}
+.btn-sm{padding:.3rem .65rem;font-size:.58rem;}
+.btn-full{width:100%;justify-content:center;}
+.btn:disabled{opacity:.4;cursor:not-allowed;}
+
+/* ── BADGE ── */
+.badge{font-family:var(--mono);font-size:.58rem;letter-spacing:.05em;text-transform:uppercase;padding:.16rem .5rem;border-radius:4px;display:inline-block;}
+.b-green{background:rgba(0,232,122,.1);color:var(--green);}
+.b-red{background:rgba(255,51,85,.1);color:var(--amber-dark);}
+.b-blue{background:rgba(58,138,80,.12);color:#66aaff;}
+.b-amber{background:rgba(255,170,0,.1);color:var(--amber);}
+.b-purple{background:rgba(168,85,247,.1);color:var(--purple);}
+.b-gray{background:rgba(255,255,255,.07);color:var(--txt3);}
+
+/* ── FORM ── */
+.form-group{margin-bottom:1rem;}
+.form-label{display:block;font-family:var(--mono);font-size:.6rem;letter-spacing:.1em;text-transform:uppercase;color:var(--txt3);margin-bottom:.4rem;}
+.form-input,.form-select,.form-textarea{width:100%;background:rgba(255,255,255,.04);border:1px solid var(--border);border-radius:8px;padding:.65rem .9rem;font-family:var(--sans);font-size:.875rem;color:var(--txt);outline:none;transition:border-color .15s;}
+.form-input:focus,.form-select:focus,.form-textarea:focus{border-color:rgba(123,196,127,.4);box-shadow:0 0 0 3px rgba(123,196,127,.07);}
+.form-input::placeholder,.form-textarea::placeholder{color:var(--txt3);}
+.form-select{appearance:none;cursor:pointer;}
+.form-textarea{resize:vertical;min-height:100px;font-family:var(--mono);font-size:.78rem;}
+.form-row{display:grid;grid-template-columns:1fr 1fr;gap:.75rem;}
+
+/* ── MODAL ── */
+.modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,.8);z-index:500;display:none;align-items:flex-end;justify-content:center;backdrop-filter:blur(6px);}
+.modal-overlay.open{display:flex;animation:fadeIn .2s ease;}
+@keyframes fadeIn{from{opacity:0}to{opacity:1}}
+.modal{background:var(--bg2);border:1px solid var(--border2);border-radius:20px 20px 0 0;width:100%;max-height:90vh;overflow-y:auto;padding:1.5rem;padding-bottom:calc(1.5rem + env(safe-area-inset-bottom,0));animation:slideUp .3s ease;}
+@keyframes slideUp{from{opacity:0;transform:translateY(50px)}to{opacity:1;transform:translateY(0)}}
+.modal-drag{width:36px;height:4px;background:rgba(255,255,255,.1);border-radius:2px;margin:0 auto 1.25rem;}
+.modal-title{font-family:var(--display);font-size:1.1rem;font-weight:800;letter-spacing:-.02em;margin-bottom:.2rem;}
+.modal-sub{font-family:var(--mono);font-size:.65rem;color:var(--txt2);margin-bottom:1.25rem;word-break:break-all;}
+.modal-footer{display:flex;gap:.5rem;flex-wrap:wrap;margin-top:1.25rem;padding-top:1.25rem;border-top:1px solid var(--border);}
+
+/* ── SEARCH ── */
+.search-bar{display:flex;align-items:center;gap:.5rem;background:rgba(255,255,255,.04);border:1px solid var(--border);border-radius:8px;padding:.45rem .9rem;transition:border-color .15s;flex:1;}
+.search-bar:focus-within{border-color:rgba(123,196,127,.3);}
+.search-bar input{background:none;border:none;outline:none;font-family:var(--sans);font-size:.875rem;color:var(--txt);width:100%;}
+.search-bar input::placeholder{color:var(--txt3);}
+.search-icon{color:var(--txt3);font-size:.8rem;flex-shrink:0;}
+
+/* ── TOAST ── */
+.toast{position:fixed;bottom:1.5rem;right:1.25rem;background:var(--bg3);border:1px solid rgba(123,196,127,.3);border-radius:10px;padding:.75rem 1.1rem;font-family:var(--mono);font-size:.7rem;color:var(--txt);z-index:9999;transform:translateY(80px);opacity:0;transition:all .3s cubic-bezier(.34,1.56,.64,1);max-width:300px;line-height:1.4;box-shadow:0 20px 60px rgba(0,0,0,.5);}
+.toast.show{transform:translateY(0);opacity:1;}
+.toast.success{border-color:rgba(0,232,122,.4);color:var(--green);}
+.toast.error{border-color:rgba(255,51,85,.4);color:var(--amber-dark);}
+.toast.warn{border-color:rgba(255,170,0,.4);color:var(--amber);}
+
+/* ── LOADER ── */
+#boot{position:fixed;inset:0;background:var(--bg);z-index:9999;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:1rem;}
+#boot .bl{font-family:var(--display);font-size:1.8rem;font-weight:800;color:var(--txt);letter-spacing:-.03em;}
+#boot .bl em{color:var(--accent);font-style:normal;}
+#boot .bsub{font-family:var(--mono);font-size:.65rem;color:var(--txt3);letter-spacing:.1em;}
+#boot .spin{width:24px;height:24px;border:2px solid rgba(255,255,255,.08);border-top-color:var(--accent);border-radius:50%;animation:spin .7s linear infinite;}
+@keyframes spin{to{transform:rotate(360deg)}}
+#boot.hide{opacity:0;pointer-events:none;transition:opacity .35s;}
+
+/* ── SKELETON ── */
+.skel{background:linear-gradient(90deg,var(--bg3) 25%,rgba(255,255,255,.04) 50%,var(--bg3) 75%);background-size:200% 100%;animation:shimmer 1.5s infinite;border-radius:8px;}
+@keyframes shimmer{0%{background-position:200% 0}100%{background-position:-200% 0}}
+
+/* ── EMPTY ── */
+.empty{text-align:center;padding:3rem 1rem;color:var(--txt3);}
+.empty-icon{font-size:2rem;margin-bottom:.75rem;}
+.empty-msg{font-family:var(--mono);font-size:.7rem;letter-spacing:.04em;}
+
+/* ── USER ROW ── */
+.user-cell{display:flex;align-items:center;gap:.6rem;}
+.user-av{width:26px;height:26px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-family:var(--display);font-weight:800;font-size:.62rem;flex-shrink:0;}
+.av-b{background:linear-gradient(135deg,var(--accent2),var(--accent));}
+.av-g{background:linear-gradient(135deg,#00b359,var(--green));}
+.av-r{background:linear-gradient(135deg,#cc0033,var(--amber-dark));}
+.av-a{background:linear-gradient(135deg,#cc8800,var(--amber));}
+.av-p{background:linear-gradient(135deg,#7c3aed,var(--purple));}
+
+/* ── ANALYTICS ── */
+.bar-chart{display:flex;flex-direction:column;gap:.55rem;}
+.bar-row{display:flex;align-items:center;gap:.75rem;}
+.bar-lbl{font-family:var(--mono);font-size:.6rem;color:var(--txt2);width:50px;flex-shrink:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+.bar-track{flex:1;height:6px;background:rgba(255,255,255,.05);border-radius:3px;overflow:hidden;}
+.bar-fill{height:100%;border-radius:3px;transition:width 1.2s cubic-bezier(.34,1.2,.64,1);}
+.bar-num{font-family:var(--mono);font-size:.6rem;color:var(--txt3);width:50px;text-align:right;}
+
+/* ── QUERY BUILDER ── */
+.qb-wrap{background:var(--bg);border:1px solid var(--border);border-radius:10px;padding:1rem;}
+.qb-row{display:flex;gap:.5rem;flex-wrap:wrap;align-items:center;margin-bottom:.5rem;}
+.qb-select{background:var(--bg3);border:1px solid var(--border);border-radius:6px;padding:.4rem .65rem;font-family:var(--mono);font-size:.68rem;color:var(--txt);outline:none;cursor:pointer;}
+.qb-input{background:var(--bg3);border:1px solid var(--border);border-radius:6px;padding:.4rem .65rem;font-family:var(--mono);font-size:.68rem;color:var(--txt);outline:none;flex:1;min-width:80px;}
+.qb-input::placeholder{color:var(--txt3);}
+.qb-input:focus,.qb-select:focus{border-color:rgba(123,196,127,.3);}
+
+/* ── SECTION LABEL ── */
+.sec{font-family:var(--mono);font-size:.65rem;letter-spacing:.1em;text-transform:uppercase;color:var(--txt3);margin:1.25rem 0 .6rem;display:flex;align-items:center;gap:.5rem;}
+.sec::after{content:'';flex:1;height:1px;background:var(--border);}
+
+/* ── MOBILE BOTTOM NAV ── */
+.bottom-nav{display:none;position:fixed;bottom:0;left:0;right:0;height:56px;background:rgba(5,10,20,.97);border-top:1px solid var(--border);backdrop-filter:blur(20px);z-index:200;padding-bottom:env(safe-area-inset-bottom,0);}
+.bnav-inner{display:flex;align-items:stretch;height:56px;}
+.bnav-item{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;cursor:pointer;color:var(--txt3);font-family:var(--mono);font-size:.48rem;letter-spacing:.04em;text-transform:uppercase;border:none;background:none;transition:color .15s;}
+.bnav-item.active{color:var(--accent);}
+.bnav-icon{font-size:1rem;}
+
+/* ── RESPONSIVE ── */
+@media(max-width:767px){
+  .sidebar{display:none;}
+  .bottom-nav{display:block;}
+  .main{padding-bottom:80px;}
+  .panel{padding:1rem;}
+  .form-row{grid-template-columns:1fr;}
+  .stats-grid{grid-template-columns:repeat(2,1fr);}
+  .modal{border-radius:20px 20px 0 0;max-height:92vh;}
+}
+@media(min-width:768px){
+  .stats-grid{grid-template-columns:repeat(3,1fr);}
+  body{flex-direction:column;}
+  .app-body{flex-direction:row;}
+  .main{overflow-y:auto;}
+}
+@media(min-width:1024px){
+  .stats-grid{grid-template-columns:repeat(4,1fr);}
+}
+@media(min-width:1280px){
+  .stats-grid{grid-template-columns:repeat(6,1fr);}
+  .explorer-wrap{grid-template-columns:1fr;}
+}
+
+/* ── OVERFLOW UTILS ── */
+.nowrap{white-space:nowrap;}
+.trunc{overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+.mono{font-family:var(--mono);}
+.text-accent{color:var(--accent);}
+.text-green{color:var(--green);}
+.text-red{color:var(--amber-dark);}
+.text-amber{color:var(--amber);}
+.text-gray{color:var(--txt3);}
+.flex-row{display:flex;align-items:center;gap:.4rem;flex-wrap:nowrap;}
+.ml-auto{margin-left:auto;}
+.gap1{gap:1rem;}
+.mt-1{margin-top:1rem;}
+.mb-1{margin-bottom:1rem;}
+.grid-2{display:grid;grid-template-columns:1fr 1fr;gap:1rem;}
+
+/* ── RULES EDITOR ── */
+.rules-editor{font-family:var(--mono);font-size:.7rem;line-height:1.8;background:rgba(0,0,0,.4);border:1px solid var(--border);border-radius:10px;padding:1rem;color:var(--txt);width:100%;min-height:300px;outline:none;resize:vertical;}
+.rules-editor:focus{border-color:rgba(123,196,127,.3);}
+.kw-comment{color:#4A5578;}
+.kw-rule{color:#66aaff;}
+.kw-allow{color:var(--green);}
+.kw-deny{color:var(--amber-dark);}
+
+/* ── ACTIVITY LOG ── */
+.log-item{display:flex;gap:.75rem;padding:.6rem 0;border-bottom:1px solid rgba(255,255,255,.04);}
+.log-item:last-child{border:none;}
+.log-dot{width:8px;height:8px;border-radius:50%;flex-shrink:0;margin-top:5px;}
+.log-content{flex:1;min-width:0;}
+.log-msg{font-size:.82rem;line-height:1.4;}
+.log-time{font-family:var(--mono);font-size:.6rem;color:var(--txt3);margin-top:.2rem;}
+.log-type{font-family:var(--mono);font-size:.58rem;padding:.1rem .4rem;border-radius:4px;}
+
+/* Scrollbar */
+::-webkit-scrollbar{width:5px;height:5px;}
+::-webkit-scrollbar-track{background:transparent;}
+::-webkit-scrollbar-thumb{background:rgba(255,255,255,.1);border-radius:3px;}
+::-webkit-scrollbar-thumb:hover{background:rgba(255,255,255,.2);}
+
+/* ── ADMIN MOBILE FIXES ── */
+@media(max-width:767px){
+  .logo{font-size:.95rem;}
+  .logo-badge{display:none;}
+  .topbar-right .conn-indicator span{display:none;}
+  .topbar a[href="admin-dashboard.html"]{font-size:.5rem;padding:.22rem .45rem;}
+  .coll-toolbar{gap:.35rem;}
+  .coll-toolbar .btn{font-size:.65rem;padding:.3rem .5rem;}
+  .stats-grid{grid-template-columns:repeat(2,1fr);gap:.6rem;}
+  .stat{padding:.85rem 1rem;}
+  .panel{padding:.75rem;}
+  .card-header{padding:.75rem 1rem;}
+  .tbl-wrap{font-size:.72rem;}
+  .td-key{max-width:90px;}
+  .td-val{max-width:120px;}
+}
+@media(max-width:400px){
+  .logo-badge{display:none;}
+  .stats-grid{grid-template-columns:1fr 1fr;}
+  .logo{font-size:.85rem;}
+}
+</style>
+</head>
+<body>
+
+<!-- BOOT LOADER -->
+<div id="boot">
+  <div class="bl">frNt<em>c</em>Oda</div>
+  <div class="bsub">Firebase Console</div>
+  <div class="spin"></div>
+</div>
+
+<!-- TOP BAR -->
+<header class="topbar">
+  <div class="flex-row">
+    <a href="admin-dashboard.html" class="logo">frNt<em>c</em>Oda <span class="logo-badge">DB Console</span></a>
+    <a href="admin-dashboard.html" style="display:flex;align-items:center;gap:.3rem;font-family:var(--mono);font-size:.58rem;letter-spacing:.06em;text-transform:uppercase;color:var(--txt2);background:rgba(255,255,255,.05);border:1px solid var(--border);padding:.28rem .65rem;border-radius:8px;text-decoration:none;transition:all .15s;margin-left:.25rem;" onmouseover="this.style.color='var(--txt)';this.style.background='rgba(255,255,255,.09)'" onmouseout="this.style.color='var(--txt2)';this.style.background='rgba(255,255,255,.05)'">← Admin</a>
+  </div>
+  <div class="topbar-right">
+    <div class="conn-indicator">
+      <div class="conn-dot" id="conn-dot"></div>
+      <span id="conn-label">Connected</span>
+    </div>
+    <div class="topbar-av" id="topbar-av">A</div>
+  </div>
+</header>
+
+<!-- APP BODY -->
+<div class="app-body">
+
+  <!-- SIDEBAR -->
+  <nav class="sidebar">
+    <div class="sidebar-section">
+      <div class="sidebar-label">Overview</div>
+      <button class="nav-item active" data-panel="home" onclick="nav('home')">
+        <span class="nav-icon">⬡</span> Dashboard
+      </button>
+      <button class="nav-item" data-panel="activity" onclick="nav('activity')">
+        <span class="nav-icon">◎</span> Activity Log
+      </button>
+    </div>
+    <div class="sidebar-section">
+      <div class="sidebar-label">Collections</div>
+      <button class="nav-item" data-panel="col-users" onclick="nav('col-users')">
+        <span class="nav-icon">◈</span> users <span class="nav-count" id="nc-users">0</span>
+      </button>
+      <button class="nav-item" data-panel="col-courses" onclick="nav('col-courses')">
+        <span class="nav-icon">◈</span> courses <span class="nav-count" id="nc-courses">0</span>
+      </button>
+      <button class="nav-item" data-panel="col-payments" onclick="nav('col-payments')">
+        <span class="nav-icon">◈</span> payments <span class="nav-count" id="nc-payments">0</span>
+      </button>
+      <button class="nav-item" data-panel="col-certificates" onclick="nav('col-certificates')">
+        <span class="nav-icon">◈</span> certificates <span class="nav-count" id="nc-certificates">0</span>
+      </button>
+      <button class="nav-item" data-panel="col-enrollments" onclick="nav('col-enrollments')">
+        <span class="nav-icon">◈</span> enrollments <span class="nav-count" id="nc-enrollments">0</span>
+      </button>
+      <button class="nav-item" data-panel="col-exams" onclick="nav('col-exams')">
+        <span class="nav-icon">◈</span> exams <span class="nav-count" id="nc-exams">0</span>
+      </button>
+      <button class="nav-item" data-panel="col-custom" onclick="nav('col-custom')">
+        <span class="nav-icon">◈</span> Custom Query
+      </button>
+    </div>
+    <div class="sidebar-section">
+      <div class="sidebar-label">Tools</div>
+      <button class="nav-item" data-panel="bulk-ops" onclick="nav('bulk-ops')">
+        <span class="nav-icon">⬡</span> Bulk Operations
+      </button>
+      <button class="nav-item" data-panel="auth-panel" onclick="nav('auth-panel')">
+        <span class="nav-icon">⊕</span> Auth Users
+      </button>
+      <button class="nav-item" data-panel="import-export" onclick="nav('import-export')">
+        <span class="nav-icon">⇅</span> Import / Export
+      </button>
+    </div>
+    <div class="sidebar-footer">
+      <div class="sidebar-user">
+        <div class="su-av" id="su-av">A</div>
+        <div class="su-info">
+          <div class="su-name" id="su-name">Admin</div>
+          <div class="su-role">DB Console</div>
+        </div>
+        <button class="su-logout" onclick="doLogout()" title="Logout">⬡</button>
+      </div>
+    </div>
+  </nav>
+
+  <!-- MAIN CONTENT -->
+  <main class="main" id="main">
+
+    <!-- ══ DASHBOARD ══ -->
+    <section class="panel active" id="panel-home">
+      <div class="page-header">
+        <div class="page-title">Firebase Console</div>
+        <div class="page-sub">frnt-coda · Firestore + Auth · Real-time read/write</div>
+      </div>
+
+      <div class="stats-grid" id="home-stats">
+        <div class="stat stat-c"><div class="stat-label">Users</div><div class="stat-val" id="hs-users">—</div><div class="stat-sub">Total accounts</div></div>
+        <div class="stat stat-g"><div class="stat-label">Courses</div><div class="stat-val" id="hs-courses">—</div><div class="stat-sub">All statuses</div></div>
+        <div class="stat stat-a"><div class="stat-label">Revenue</div><div class="stat-val" id="hs-revenue">—</div><div class="stat-sub">Total collected</div></div>
+        <div class="stat stat-r"><div class="stat-label">Payments</div><div class="stat-val" id="hs-payments">—</div><div class="stat-sub">Transactions</div></div>
+        <div class="stat stat-p"><div class="stat-label">Certificates</div><div class="stat-val" id="hs-certs">—</div><div class="stat-sub">Issued</div></div>
+        <div class="stat stat-o"><div class="stat-label">Enrollments</div><div class="stat-val" id="hs-enroll">—</div><div class="stat-sub">Student-course</div></div>
+      </div>
+
+      <div class="grid-2" style="gap:1rem;margin-bottom:1rem;">
+        <div class="card">
+          <div class="card-header"><span class="card-title">Revenue — Last 6 Months</span></div>
+          <div class="card-body"><div class="bar-chart" id="rev-chart">
+            <div class="skel" style="height:20px;margin-bottom:6px;"></div>
+            <div class="skel" style="height:20px;margin-bottom:6px;"></div>
+            <div class="skel" style="height:20px;margin-bottom:6px;"></div>
+          </div></div>
+        </div>
+        <div class="card">
+          <div class="card-header"><span class="card-title">User Breakdown</span></div>
+          <div class="card-body"><div class="bar-chart" id="user-chart"></div></div>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-header"><span class="card-title">Recent Activity</span><button class="btn btn-ghost btn-sm" onclick="nav('activity')">View All</button></div>
+        <div class="card-body" id="recent-log">
+          <div class="skel" style="height:18px;margin-bottom:8px;"></div>
+          <div class="skel" style="height:18px;margin-bottom:8px;"></div>
+          <div class="skel" style="height:18px;"></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ══ ACTIVITY LOG ══ -->
+    <section class="panel" id="panel-activity">
+      <div class="page-header">
+        <div class="page-title">Activity Log</div>
+        <div class="page-sub">All console read/write operations this session</div>
+      </div>
+      <div class="card">
+        <div class="card-body" id="activity-log-full">
+          <div class="empty"><div class="empty-icon">◎</div><div class="empty-msg">No activity yet</div></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ══ USERS COLLECTION ══ -->
+    <section class="panel" id="panel-col-users">
+      <div class="page-header flex-row">
+        <div>
+          <div class="page-title">users</div>
+          <div class="page-sub">Firestore Collection · Full read/write</div>
+        </div>
+        <button class="btn btn-accent ml-auto" onclick="openAddDoc('users')">+ New Document</button>
+      </div>
+      <div class="card mb-1">
+        <div class="card-header" style="flex-wrap:wrap;gap:.5rem;">
+          <div class="search-bar"><span class="search-icon">⌕</span><input type="text" placeholder="Search by name, email, role…" id="search-users" oninput="filterCollection('users',this.value)"></div>
+          <div class="flex-row" style="gap:.35rem;">
+            <select class="qb-select" id="filter-users-role" onchange="filterCollection('users','')">
+              <option value="">All Roles</option>
+              <option value="admin">Admin</option>
+              <option value="tutor">Tutor</option>
+              <option value="student">Student</option>
+            </select>
+            <select class="qb-select" id="filter-users-status" onchange="filterCollection('users','')">
+              <option value="">All Status</option>
+              <option value="active">Active</option>
+              <option value="suspended">Suspended</option>
+              <option value="pending">Pending</option>
+            </select>
+            <button class="btn btn-ghost btn-sm" onclick="loadCollection('users',true)">↺ Refresh</button>
+          </div>
+        </div>
+        <div class="tbl-wrap" id="tbl-users">
+          <div style="padding:2rem;text-align:center;"><div class="spin" style="margin:0 auto;"></div></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ══ COURSES COLLECTION ══ -->
+    <section class="panel" id="panel-col-courses">
+      <div class="page-header flex-row">
+        <div>
+          <div class="page-title">courses</div>
+          <div class="page-sub">Firestore Collection · Full read/write</div>
+        </div>
+        <button class="btn btn-accent ml-auto" onclick="openAddDoc('courses')">+ New Document</button>
+      </div>
+      <div class="card mb-1">
+        <div class="card-header" style="flex-wrap:wrap;gap:.5rem;">
+          <div class="search-bar"><span class="search-icon">⌕</span><input type="text" placeholder="Search by title, tutor, language…" id="search-courses" oninput="filterCollection('courses',this.value)"></div>
+          <div class="flex-row" style="gap:.35rem;">
+            <select class="qb-select" id="filter-courses-status" onchange="filterCollection('courses','')">
+              <option value="">All Status</option>
+              <option value="live">Live</option>
+              <option value="pending">Pending</option>
+              <option value="pending_edit">Pending Edit</option>
+              <option value="draft">Draft</option>
+              <option value="rejected">Rejected</option>
+            </select>
+            <button class="btn btn-ghost btn-sm" onclick="loadCollection('courses',true)">↺ Refresh</button>
+          </div>
+        </div>
+        <div class="tbl-wrap" id="tbl-courses">
+          <div style="padding:2rem;text-align:center;"><div class="spin" style="margin:0 auto;"></div></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ══ PAYMENTS COLLECTION ══ -->
+    <section class="panel" id="panel-col-payments">
+      <div class="page-header flex-row">
+        <div>
+          <div class="page-title">payments</div>
+          <div class="page-sub">Firestore Collection · Full read/write</div>
+        </div>
+        <button class="btn btn-accent ml-auto" onclick="openAddDoc('payments')">+ New Document</button>
+      </div>
+      <div class="card mb-1">
+        <div class="card-header" style="flex-wrap:wrap;gap:.5rem;">
+          <div class="search-bar"><span class="search-icon">⌕</span><input type="text" placeholder="Search by student, course…" id="search-payments" oninput="filterCollection('payments',this.value)"></div>
+          <div class="flex-row" style="gap:.35rem;">
+            <select class="qb-select" id="filter-payments-paid" onchange="filterCollection('payments','')">
+              <option value="">All</option>
+              <option value="unpaid">Tutor Unpaid</option>
+              <option value="paid">Tutor Paid</option>
+            </select>
+            <button class="btn btn-ghost btn-sm" onclick="loadCollection('payments',true)">↺ Refresh</button>
+          </div>
+        </div>
+        <div class="tbl-wrap" id="tbl-payments">
+          <div style="padding:2rem;text-align:center;"><div class="spin" style="margin:0 auto;"></div></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ══ CERTIFICATES COLLECTION ══ -->
+    <section class="panel" id="panel-col-certificates">
+      <div class="page-header flex-row">
+        <div>
+          <div class="page-title">certificates</div>
+          <div class="page-sub">Firestore Collection · Full read/write</div>
+        </div>
+        <button class="btn btn-accent ml-auto" onclick="openAddDoc('certificates')">+ New Document</button>
+      </div>
+      <div class="card mb-1">
+        <div class="card-header" style="flex-wrap:wrap;gap:.5rem;">
+          <div class="search-bar"><span class="search-icon">⌕</span><input type="text" placeholder="Search by student, course, certId…" id="search-certificates" oninput="filterCollection('certificates',this.value)"></div>
+          <button class="btn btn-ghost btn-sm" onclick="loadCollection('certificates',true)">↺ Refresh</button>
+        </div>
+        <div class="tbl-wrap" id="tbl-certificates">
+          <div style="padding:2rem;text-align:center;"><div class="spin" style="margin:0 auto;"></div></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ══ ENROLLMENTS COLLECTION ══ -->
+    <section class="panel" id="panel-col-enrollments">
+      <div class="page-header flex-row">
+        <div>
+          <div class="page-title">enrollments</div>
+          <div class="page-sub">Firestore Collection · Full read/write</div>
+        </div>
+        <button class="btn btn-accent ml-auto" onclick="openAddDoc('enrollments')">+ New Document</button>
+      </div>
+      <div class="card mb-1">
+        <div class="card-header" style="flex-wrap:wrap;gap:.5rem;">
+          <div class="search-bar"><span class="search-icon">⌕</span><input type="text" placeholder="Search enrollments…" id="search-enrollments" oninput="filterCollection('enrollments',this.value)"></div>
+          <button class="btn btn-ghost btn-sm" onclick="loadCollection('enrollments',true)">↺ Refresh</button>
+        </div>
+        <div class="tbl-wrap" id="tbl-enrollments">
+          <div style="padding:2rem;text-align:center;"><div class="spin" style="margin:0 auto;"></div></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ══ EXAMS COLLECTION ══ -->
+    <section class="panel" id="panel-col-exams">
+      <div class="page-header flex-row">
+        <div>
+          <div class="page-title">exams</div>
+          <div class="page-sub">Firestore Collection · Full read/write</div>
+        </div>
+        <button class="btn btn-accent ml-auto" onclick="openAddDoc('exams')">+ New Document</button>
+      </div>
+      <div class="card mb-1">
+        <div class="card-header" style="flex-wrap:wrap;gap:.5rem;">
+          <div class="search-bar"><span class="search-icon">⌕</span><input type="text" placeholder="Search exams…" id="search-exams" oninput="filterCollection('exams',this.value)"></div>
+          <button class="btn btn-ghost btn-sm" onclick="loadCollection('exams',true)">↺ Refresh</button>
+        </div>
+        <div class="tbl-wrap" id="tbl-exams">
+          <div style="padding:2rem;text-align:center;"><div class="spin" style="margin:0 auto;"></div></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ══ CUSTOM QUERY ══ -->
+    <section class="panel" id="panel-col-custom">
+      <div class="page-header">
+        <div class="page-title">Custom Query</div>
+        <div class="page-sub">Query any collection with filters, ordering and limits</div>
+      </div>
+      <div class="card mb-1">
+        <div class="card-body">
+          <div class="form-row">
+            <div class="form-group">
+              <label class="form-label">Collection Name</label>
+              <input class="form-input" id="cq-collection" placeholder="e.g. users, payments, courses…">
+            </div>
+            <div class="form-group">
+              <label class="form-label">Limit</label>
+              <input class="form-input" id="cq-limit" type="number" value="50" min="1" max="500">
+            </div>
+          </div>
+          <div class="sec">Filters (optional)</div>
+          <div id="cq-filters">
+            <div class="qb-row">
+              <input class="qb-input" placeholder="field" id="cq-f0-field">
+              <select class="qb-select" id="cq-f0-op">
+                <option>==</option><option>!=</option><option>&gt;</option><option>&lt;</option>
+                <option>&gt;=</option><option>&lt;=</option><option>array-contains</option>
+              </select>
+              <input class="qb-input" placeholder="value" id="cq-f0-val">
+            </div>
+          </div>
+          <div class="flex-row mt-1">
+            <button class="btn btn-ghost btn-sm" onclick="addCQFilter()">+ Add Filter</button>
+            <div style="flex:1"></div>
+            <div class="form-group" style="margin:0;display:flex;align-items:center;gap:.5rem;">
+              <select class="qb-select" id="cq-orderby"><option value="">Order by field</option></select>
+              <select class="qb-select" id="cq-dir"><option value="asc">ASC</option><option value="desc">DESC</option></select>
+            </div>
+            <button class="btn btn-primary" onclick="runCustomQuery()">Run Query</button>
+          </div>
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-header"><span class="card-title" id="cq-result-label">Results</span><span class="badge b-gray" id="cq-count">0 docs</span></div>
+        <div class="tbl-wrap" id="tbl-custom">
+          <div class="empty"><div class="empty-icon">◎</div><div class="empty-msg">Run a query above</div></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ══ BULK OPS ══ -->
+    <section class="panel" id="panel-bulk-ops">
+      <div class="page-header">
+        <div class="page-title">Bulk Operations</div>
+        <div class="page-sub">Mass update, delete, or field-set across multiple documents</div>
+      </div>
+
+      <div class="card mb-1">
+        <div class="card-header"><span class="card-title">Bulk Field Update</span></div>
+        <div class="card-body">
+          <div class="form-row">
+            <div class="form-group">
+              <label class="form-label">Collection</label>
+              <input class="form-input" id="bu-collection" placeholder="collection name">
+            </div>
+            <div class="form-group">
+              <label class="form-label">Filter Field</label>
+              <input class="form-input" id="bu-filter-field" placeholder="e.g. role">
+            </div>
+          </div>
+          <div class="form-row">
+            <div class="form-group">
+              <label class="form-label">Filter Value</label>
+              <input class="form-input" id="bu-filter-val" placeholder="e.g. tutor">
+            </div>
+            <div class="form-group">
+              <label class="form-label">Field to Update</label>
+              <input class="form-input" id="bu-set-field" placeholder="e.g. status">
+            </div>
+          </div>
+          <div class="form-group">
+            <label class="form-label">New Value</label>
+            <input class="form-input" id="bu-set-val" placeholder="e.g. active">
+          </div>
+          <div class="flex-row">
+            <button class="btn btn-ghost btn-sm" onclick="previewBulk()">Preview Affected Docs</button>
+            <button class="btn btn-amber" onclick="executeBulkUpdate()">Execute Update</button>
+          </div>
+          <div id="bulk-preview" style="margin-top:1rem;"></div>
+        </div>
+      </div>
+
+      <div class="card mb-1">
+        <div class="card-header"><span class="card-title">Bulk Delete by Filter</span></div>
+        <div class="card-body">
+          <div class="form-row">
+            <div class="form-group">
+              <label class="form-label">Collection</label>
+              <input class="form-input" id="bd-collection" placeholder="collection name">
+            </div>
+            <div class="form-group">
+              <label class="form-label">Filter Field</label>
+              <input class="form-input" id="bd-filter-field" placeholder="field name">
+            </div>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Filter Value</label>
+            <input class="form-input" id="bd-filter-val" placeholder="value to match">
+          </div>
+          <div class="flex-row">
+            <button class="btn btn-ghost btn-sm" onclick="previewBulkDelete()">Preview</button>
+            <button class="btn btn-red" onclick="executeBulkDelete()">Delete Matching Docs</button>
+          </div>
+          <div id="bulk-delete-preview" style="margin-top:1rem;"></div>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-header"><span class="card-title">Add Field to All Docs</span><span style="font-family:var(--mono);font-size:.6rem;color:var(--txt3);">Non-destructive</span></div>
+        <div class="card-body">
+          <div class="form-row">
+            <div class="form-group">
+              <label class="form-label">Collection</label>
+              <input class="form-input" id="af-collection" placeholder="collection name">
+            </div>
+            <div class="form-group">
+              <label class="form-label">Field Name</label>
+              <input class="form-input" id="af-field" placeholder="new field name">
+            </div>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Default Value (JSON or string)</label>
+            <input class="form-input" id="af-default" placeholder='e.g. "" or false or 0 or null'>
+          </div>
+          <div class="flex-row">
+            <span class="mono text-gray" style="font-size:.68rem;">Only sets field on docs where it's missing</span>
+            <button class="btn btn-green ml-auto" onclick="addFieldToAll()">Add Field</button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ══ AUTH USERS ══ -->
+    <section class="panel" id="panel-auth-panel">
+      <div class="page-header">
+        <div class="page-title">Auth Users</div>
+        <div class="page-sub">Firebase Authentication — linked Firestore records</div>
+      </div>
+      <div class="card mb-1">
+        <div class="card-header" style="flex-wrap:wrap;gap:.5rem;">
+          <div class="search-bar"><span class="search-icon">⌕</span><input type="text" placeholder="Search by email or name…" id="search-auth" oninput="filterAuthUsers(this.value)"></div>
+          <button class="btn btn-ghost btn-sm" onclick="loadAuthUsers()">↺ Refresh</button>
+        </div>
+        <div class="tbl-wrap" id="tbl-auth">
+          <div style="padding:2rem;text-align:center;"><div class="skel" style="height:40px;margin-bottom:6px;"></div><div class="skel" style="height:40px;margin-bottom:6px;"></div></div>
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-header"><span class="card-title">Create Auth User</span></div>
+        <div class="card-body">
+          <div class="form-row">
+            <div class="form-group">
+              <label class="form-label">Full Name</label>
+              <input class="form-input" id="au-name" placeholder="Full name">
+            </div>
+            <div class="form-group">
+              <label class="form-label">Email</label>
+              <input class="form-input" id="au-email" type="email" placeholder="user@example.com">
+            </div>
+          </div>
+          <div class="form-row">
+            <div class="form-group">
+              <label class="form-label">Password</label>
+              <input class="form-input" id="au-password" type="password" placeholder="Min 6 chars">
+            </div>
+            <div class="form-group">
+              <label class="form-label">Role</label>
+              <select class="form-select" id="au-role">
+                <option value="student">Student</option>
+                <option value="tutor">Tutor</option>
+                <option value="admin">Admin</option>
+              </select>
+            </div>
+          </div>
+          <button class="btn btn-primary btn-full" onclick="createAuthUser()">Create User Account</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- ══ IMPORT / EXPORT ══ -->
+    <section class="panel" id="panel-import-export">
+      <div class="page-header">
+        <div class="page-title">Import / Export</div>
+        <div class="page-sub">Backup and restore Firestore collections as JSON</div>
+      </div>
+
+      <div class="card mb-1">
+        <div class="card-header"><span class="card-title">Export Collection</span></div>
+        <div class="card-body">
+          <div class="form-row">
+            <div class="form-group">
+              <label class="form-label">Collection</label>
+              <select class="form-select" id="exp-collection">
+                <option value="users">users</option>
+                <option value="courses">courses</option>
+                <option value="payments">payments</option>
+                <option value="certificates">certificates</option>
+                <option value="enrollments">enrollments</option>
+                <option value="exams">exams</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label class="form-label">Format</label>
+              <select class="form-select" id="exp-format">
+                <option value="json">JSON (full)</option>
+                <option value="csv">CSV (flat)</option>
+              </select>
+            </div>
+          </div>
+          <button class="btn btn-accent btn-full" onclick="exportCollection()">Export Download</button>
+        </div>
+      </div>
+
+      <div class="card mb-1">
+        <div class="card-header"><span class="card-title">Import JSON to Collection</span></div>
+        <div class="card-body">
+          <div class="form-group">
+            <label class="form-label">Target Collection</label>
+            <input class="form-input" id="imp-collection" placeholder="Collection name">
+          </div>
+          <div class="form-group">
+            <label class="form-label">JSON Data (array of objects)</label>
+            <textarea class="form-textarea" id="imp-data" placeholder='[{"field":"value","field2":"value2"},…]' style="min-height:120px;"></textarea>
+          </div>
+          <div class="flex-row">
+            <span class="mono text-amber" style="font-size:.65rem;">⚠ IDs auto-generated · existing docs not overwritten</span>
+            <button class="btn btn-amber ml-auto" onclick="importJSON()">Import</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-header"><span class="card-title">Raw JSON Viewer</span></div>
+        <div class="card-body">
+          <div class="form-row" style="margin-bottom:.75rem;">
+            <input class="form-input" id="raw-collection" placeholder="Collection name">
+            <button class="btn btn-ghost" onclick="loadRawJSON()" style="white-space:nowrap;">Load JSON</button>
+          </div>
+          <textarea class="json-editor" id="raw-output" readonly placeholder="Collection JSON will appear here…"></textarea>
+        </div>
+      </div>
+    </section>
+
+  </main><!-- /main -->
+</div><!-- /app-body -->
+
+<!-- BOTTOM NAV (mobile) -->
+<nav class="bottom-nav">
+  <div class="bnav-inner">
+    <button class="bnav-item active" data-panel="home" onclick="nav('home')">
+      <span class="bnav-icon">⬡</span>Home
+    </button>
+    <button class="bnav-item" data-panel="col-users" onclick="nav('col-users')">
+      <span class="bnav-icon">◈</span>Users
+    </button>
+    <button class="bnav-item" data-panel="col-courses" onclick="nav('col-courses')">
+      <span class="bnav-icon">◈</span>Courses
+    </button>
+    <button class="bnav-item" data-panel="col-payments" onclick="nav('col-payments')">
+      <span class="bnav-icon">◈</span>Pay
+    </button>
+    <button class="bnav-item" data-panel="bulk-ops" onclick="nav('bulk-ops')">
+      <span class="bnav-icon">⬡</span>Tools
+    </button>
+  </div>
+</nav>
+
+<!-- DOCUMENT EDITOR MODAL -->
+<div class="modal-overlay" id="modal-doc" onclick="if(event.target===this)closeModal('modal-doc')">
+  <div class="modal">
+    <div class="modal-drag"></div>
+    <div class="modal-title" id="modal-doc-title">Document</div>
+    <div class="modal-sub" id="modal-doc-path">—</div>
+
+    <div style="display:flex;gap:.35rem;margin-bottom:1rem;">
+      <button class="btn btn-ghost btn-sm" id="editor-tab-form" onclick="switchEditorTab('form')">Fields</button>
+      <button class="btn btn-ghost btn-sm" id="editor-tab-json" onclick="switchEditorTab('json')">JSON</button>
+    </div>
+
+    <!-- FIELDS EDITOR -->
+    <div id="editor-form-view">
+      <div id="fields-list"></div>
+      <button class="btn btn-ghost btn-sm mt-1" onclick="addField()">+ Add Field</button>
+    </div>
+
+    <!-- JSON EDITOR -->
+    <div id="editor-json-view" style="display:none;">
+      <textarea class="json-editor" id="json-edit-area" placeholder="{}"></textarea>
+      <div class="flex-row mt-1">
+        <button class="btn btn-ghost btn-sm" onclick="syncJSONtoFields()">⇄ Sync to Fields</button>
+        <button class="btn btn-ghost btn-sm" onclick="syncFieldsToJSON()">⇄ Sync from Fields</button>
+      </div>
+    </div>
+
+    <div class="modal-footer">
+      <button class="btn btn-green" onclick="saveDocument()">Save Document</button>
+      <button class="btn btn-red" id="btn-delete-doc" onclick="deleteDocModal()" style="display:none;">Delete</button>
+      <button class="btn btn-ghost ml-auto" onclick="closeModal('modal-doc')">Cancel</button>
+    </div>
+  </div>
+</div>
+
+<!-- CONFIRM MODAL -->
+<div class="modal-overlay" id="modal-confirm" onclick="if(event.target===this)closeModal('modal-confirm')">
+  <div class="modal" style="max-width:420px;margin:auto;">
+    <div class="modal-drag"></div>
+    <div class="modal-title" id="confirm-title">Confirm</div>
+    <div class="modal-sub" id="confirm-msg">Are you sure?</div>
+    <div class="modal-footer">
+      <button class="btn btn-red" id="confirm-yes">Confirm</button>
+      <button class="btn btn-ghost ml-auto" onclick="closeModal('modal-confirm')">Cancel</button>
+    </div>
+  </div>
+</div>
+
+<!-- TOAST -->
+<div class="toast" id="toast"></div>
+
+<script type="module">
+import { initializeApp, getApps } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
+import { getAuth, onAuthStateChanged, signOut, createUserWithEmailAndPassword, updateProfile } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
+import {
+  getFirestore, collection, doc, getDocs, getDoc, setDoc, addDoc,
+  updateDoc, deleteDoc, serverTimestamp, query, where, orderBy,
+  limit as fsLimit, writeBatch
+} from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
+
+// ── INIT ──────────────────────────────────────────────────────────────
+const app = getApps().length ? getApps()[0] : initializeApp({
+  apiKey:"AIzaSyATtx9-URlB2-ZKc_4eXIlr8lQxg_dlJAQ",
+  authDomain:"frnt-coda.firebaseapp.com",
+  projectId:"frnt-coda",
+  storageBucket:"frnt-coda.firebasestorage.app",
+  messagingSenderId:"564512970305",
+  appId:"1:564512970305:web:d7fd66bdcf6b8268d4d8c0"
+});
+const auth = getAuth(app);
+const db = getFirestore(app);
+
+// ── STATE ─────────────────────────────────────────────────────────────
+const state = {
+  collections: {},    // collectionName => array of docs
+  currentDoc: null,   // {collection, id, data}
+  activityLog: [],
+  authUsers: [],
+  cqFilters: 1,
+  confirmCallback: null,
+};
+
+// ── BOOT ──────────────────────────────────────────────────────────────
+const bootEl = document.getElementById('boot');
+const failsafe = setTimeout(() => {
+  bootEl.classList.add('hide');
+  toast('Connection timed out','error');
+}, 12000);
+
+onAuthStateChanged(auth, async u => {
+  clearTimeout(failsafe);
+  if (!u) { window.location.href='auth.html'; return; }
+  const snap = await getDoc(doc(db,'users',u.uid));
+  if (!snap.exists() || snap.data().role !== 'admin') {
+    await signOut(auth); window.location.href='auth.html'; return;
+  }
+  const p = snap.data();
+  const name = p.fullName || p.firstName || 'Admin';
+  document.getElementById('topbar-av').textContent = name.charAt(0);
+  document.getElementById('su-av').textContent = name.charAt(0);
+  document.getElementById('su-name').textContent = name;
+  bootEl.classList.add('hide');
+  setTimeout(() => bootEl.remove(), 400);
+  logActivity('info','Session started — ' + name);
+  loadDashboard();
+});
+
+// ── NAVIGATION ────────────────────────────────────────────────────────
+window.nav = function(id) {
+  document.querySelectorAll('.panel').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.nav-item, .bnav-item').forEach(b => b.classList.remove('active'));
+  const panel = document.getElementById('panel-' + id);
+  if (panel) panel.classList.add('active');
+  document.querySelectorAll(`[data-panel="${id}"]`).forEach(b => b.classList.add('active'));
+  document.getElementById('main').scrollTo(0, 0);
+
+  // Lazy-load collections
+  const colMap = {
+    'col-users': 'users', 'col-courses': 'courses',
+    'col-payments': 'payments', 'col-certificates': 'certificates',
+    'col-enrollments': 'enrollments', 'col-exams': 'exams'
+  };
+  if (colMap[id] && !state.collections[colMap[id]]) loadCollection(colMap[id]);
+  if (id === 'auth-panel' && !state.authUsers.length) loadAuthUsers();
+};
+
+// ── DASHBOARD ─────────────────────────────────────────────────────────
+async function loadDashboard() {
+  const collections = ['users','courses','payments','certificates','enrollments','exams'];
+  const snaps = await Promise.all(collections.map(c => getDocs(collection(db, c))));
+  
+  const [users, courses, payments, certificates, enrollments, exams] = snaps.map(
+    (s, i) => s.docs.map(d => ({id: d.id, ...d.data()}))
+  );
+
+  // Cache
+  state.collections['users'] = users;
+  state.collections['courses'] = courses;
+  state.collections['payments'] = payments;
+  state.collections['certificates'] = certificates;
+  state.collections['enrollments'] = enrollments;
+  state.collections['exams'] = exams;
+
+  // Update nav counts
+  const counts = {users, courses, payments, certificates, enrollments, exams};
+  for (const [k, v] of Object.entries(counts)) {
+    const el = document.getElementById('nc-' + k);
+    if (el) { el.textContent = v.length; el.classList.add('show'); }
+  }
+
+  // Stats
+  const revenue = payments.reduce((s, p) => s + (p.amount || 0), 0);
+  document.getElementById('hs-users').textContent = users.length;
+  document.getElementById('hs-courses').textContent = courses.length;
+  document.getElementById('hs-revenue').textContent = '₦' + (revenue/1000).toFixed(0) + 'k';
+  document.getElementById('hs-payments').textContent = payments.length;
+  document.getElementById('hs-certs').textContent = certificates.length;
+  document.getElementById('hs-enroll').textContent = enrollments.length;
+
+  // Revenue chart
+  renderRevenueChart(payments);
+
+  // User breakdown
+  const roles = {student: 0, tutor: 0, admin: 0};
+  users.forEach(u => { roles[u.role] = (roles[u.role] || 0) + 1; });
+  const maxRole = Math.max(...Object.values(roles), 1);
+  document.getElementById('user-chart').innerHTML = Object.entries(roles).map(([r, n]) => `
+    <div class="bar-row">
+      <div class="bar-lbl">${r}</div>
+      <div class="bar-track"><div class="bar-fill" style="width:${(n/maxRole)*100}%;background:var(--accent);"></div></div>
+      <div class="bar-num">${n}</div>
+    </div>`).join('');
+
+  // Recent log
+  renderActivityLog(true);
+  logActivity('success', `Loaded ${users.length} users, ${courses.length} courses, ${payments.length} payments`);
+}
+
+function renderRevenueChart(payments) {
+  const months = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+  const now = new Date();
+  const buckets = {};
+  for (let i = 5; i >= 0; i--) {
+    const d = new Date(now.getFullYear(), now.getMonth() - i, 1);
+    buckets[`${d.getFullYear()}-${d.getMonth()}`] = { label: months[d.getMonth()], amount: 0 };
+  }
+  payments.forEach(p => {
+    if (!p.paidAt?.toDate) return;
+    const d = p.paidAt.toDate();
+    const key = `${d.getFullYear()}-${d.getMonth()}`;
+    if (buckets[key]) buckets[key].amount += p.amount || 0;
+  });
+  const vals = Object.values(buckets);
+  const max = Math.max(...vals.map(v => v.amount), 1);
+  document.getElementById('rev-chart').innerHTML = vals.map(v => `
+    <div class="bar-row">
+      <div class="bar-lbl">${v.label}</div>
+      <div class="bar-track"><div class="bar-fill" style="width:${Math.max((v.amount/max)*100, v.amount>0?2:0)}%;background:linear-gradient(90deg,var(--accent2),var(--accent));"></div></div>
+      <div class="bar-num">${v.amount > 0 ? '₦'+(v.amount/1000).toFixed(0)+'k' : '—'}</div>
+    </div>`).join('');
+}
+
+// ── COLLECTION LOADER ─────────────────────────────────────────────────
+window.loadCollection = async function(colName, forceRefresh = false) {
+  if (!forceRefresh && state.collections[colName]) {
+    renderCollectionTable(colName, state.collections[colName]);
+    return;
+  }
+  const tbl = document.getElementById('tbl-' + colName);
+  if (tbl) tbl.innerHTML = `<div style="padding:2rem;text-align:center;"><div class="spin" style="margin:0 auto;"></div></div>`;
+  try {
+    const snap = await getDocs(collection(db, colName));
+    const docs = snap.docs.map(d => ({ id: d.id, ...d.data() }));
+    state.collections[colName] = docs;
+    renderCollectionTable(colName, docs);
+    logActivity('info', `Loaded ${colName} (${docs.length} docs)`);
+    const nc = document.getElementById('nc-' + colName);
+    if (nc) { nc.textContent = docs.length; nc.classList.add('show'); }
+  } catch (e) {
+    toast('Error loading ' + colName + ': ' + e.message, 'error');
+    logActivity('error', 'Load failed: ' + colName + ' — ' + e.message);
+  }
+};
+
+function getCollectionColumns(colName) {
+  const cols = {
+    users: ['id','fullName','email','role','status','createdAt'],
+    courses: ['id','title','tutorName','language','status','fee','studentsCount'],
+    payments: ['id','studentName','courseTitle','amount','tutorShare','tutorPaid','paidAt'],
+    certificates: ['id','studentName','courseName','certId','issuedAt'],
+    enrollments: ['id','studentId','courseId','progress','completedAt'],
+    exams: ['id','courseId','studentId','score','passed','submittedAt'],
+  };
+  return cols[colName] || null;
+}
+
+function renderCollectionTable(colName, docs, filtered) {
+  const data = filtered !== undefined ? filtered : docs;
+  const tbl = document.getElementById('tbl-' + colName);
+  if (!tbl) return;
+  if (!data.length) {
+    tbl.innerHTML = `<div class="empty"><div class="empty-icon">◈</div><div class="empty-msg">No documents in ${colName}</div></div>`;
+    return;
+  }
+  const cols = getCollectionColumns(colName) || ['id', ...Object.keys(data[0]).slice(0, 5)];
+  const rows = data.map(doc => {
+    const cells = cols.map(c => {
+      let v = doc[c];
+      if (v === undefined || v === null) return `<td class="td-val">—</td>`;
+      if (typeof v === 'object' && v.toDate) v = v.toDate().toLocaleDateString('en-NG');
+      if (typeof v === 'object') v = JSON.stringify(v).slice(0, 60) + '…';
+      if (typeof v === 'boolean') return `<td><span class="badge ${v?'b-green':'b-red'}">${v}</span></td>`;
+      if (c === 'role') return `<td><span class="badge ${v==='admin'?'b-red':v==='tutor'?'b-blue':'b-green'}">${v}</span></td>`;
+      if (c === 'status') return `<td><span class="badge ${v==='live'||v==='active'?'b-green':v==='pending'||v==='pending_edit'?'b-amber':'b-red'}">${v}</span></td>`;
+      if (c === 'amount' || c === 'fee' || c === 'tutorShare') return `<td class="td-val text-green">₦${Number(v).toLocaleString()}</td>`;
+      if (c === 'id') return `<td class="td-key">${String(v).slice(0, 18)}…</td>`;
+      return `<td class="td-val">${String(v).slice(0, 50)}</td>`;
+    }).join('');
+    return `<tr onclick="openDoc('${colName}','${doc.id}')">${cells}</tr>`;
+  });
+  tbl.innerHTML = `<table>
+    <thead><tr>${cols.map(c => `<th>${c}</th>`).join('')}<th></th></tr></thead>
+    <tbody>${rows.join('')}</tbody>
+  </table>`;
+}
+
+// ── FILTER COLLECTIONS ────────────────────────────────────────────────
+window.filterCollection = function(colName, q) {
+  const docs = state.collections[colName] || [];
+  const searchQ = (document.getElementById('search-' + colName)?.value || q || '').toLowerCase().trim();
+  
+  // Role/status filters
+  const roleEl = document.getElementById('filter-' + colName + '-role');
+  const statusEl = document.getElementById('filter-' + colName + '-status');
+  const paidEl = document.getElementById('filter-' + colName + '-paid');
+  const role = roleEl?.value || '';
+  const status = statusEl?.value || '';
+  const paid = paidEl?.value || '';
+
+  let filtered = docs;
+  if (searchQ) {
+    filtered = filtered.filter(d => JSON.stringify(d).toLowerCase().includes(searchQ));
+  }
+  if (role) filtered = filtered.filter(d => d.role === role);
+  if (status) filtered = filtered.filter(d => d.status === status);
+  if (paid === 'unpaid') filtered = filtered.filter(d => !d.tutorPaid && (d.tutorShare || 0) > 0);
+  if (paid === 'paid') filtered = filtered.filter(d => d.tutorPaid);
+
+  renderCollectionTable(colName, docs, filtered);
+};
+
+// ── DOCUMENT EDITOR ───────────────────────────────────────────────────
+window.openDoc = async function(colName, docId) {
+  const cached = (state.collections[colName] || []).find(d => d.id === docId);
+  const data = cached || (await getDoc(doc(db, colName, docId))).data() || {};
+  state.currentDoc = { collection: colName, id: docId, data: { ...data } };
+
+  document.getElementById('modal-doc-title').textContent = 'Edit Document';
+  document.getElementById('modal-doc-path').innerHTML = `<em>${colName}</em> / <em>${docId}</em>`;
+  document.getElementById('btn-delete-doc').style.display = '';
+  document.getElementById('modal-doc').classList.add('open');
+
+  switchEditorTab('form');
+  renderFields(data);
+};
+
+window.openAddDoc = function(colName) {
+  state.currentDoc = { collection: colName, id: null, data: {} };
+  document.getElementById('modal-doc-title').textContent = 'New Document — ' + colName;
+  document.getElementById('modal-doc-path').innerHTML = `<em>${colName}</em> / <em>auto-id</em>`;
+  document.getElementById('btn-delete-doc').style.display = 'none';
+  document.getElementById('modal-doc').classList.add('open');
+  switchEditorTab('form');
+  renderFields({});
+};
+
+window.switchEditorTab = function(tab) {
+  const formView = document.getElementById('editor-form-view');
+  const jsonView = document.getElementById('editor-json-view');
+  const fBtn = document.getElementById('editor-tab-form');
+  const jBtn = document.getElementById('editor-tab-json');
+  if (tab === 'form') {
+    formView.style.display = ''; jsonView.style.display = 'none';
+    fBtn.className = 'btn btn-accent btn-sm'; jBtn.className = 'btn btn-ghost btn-sm';
+  } else {
+    formView.style.display = 'none'; jsonView.style.display = '';
+    jBtn.className = 'btn btn-accent btn-sm'; fBtn.className = 'btn btn-ghost btn-sm';
+    syncFieldsToJSON();
+  }
+};
+
+function renderFields(data) {
+  const container = document.getElementById('fields-list');
+  const entries = Object.entries(data).filter(([k]) => k !== 'id');
+  container.innerHTML = entries.map(([k, v]) => fieldRowHTML(k, v)).join('');
+}
+
+function fieldRowHTML(key, val) {
+  const id = 'f_' + Math.random().toString(36).slice(2, 8);
+  let valStr = typeof val === 'object' && val !== null ? (val.toDate ? val.toDate().toISOString() : JSON.stringify(val)) : String(val ?? '');
+  return `<div class="field-row" id="row_${id}">
+    <input class="field-key" value="${escHtml(key)}" placeholder="field name">
+    <input class="field-val" value="${escHtml(valStr)}" placeholder="value">
+    <button class="field-del" onclick="this.closest('.field-row').remove()">✕</button>
+  </div>`;
+}
+
+window.addField = function() {
+  const container = document.getElementById('fields-list');
+  const div = document.createElement('div');
+  div.innerHTML = fieldRowHTML('', '');
+  container.appendChild(div.firstElementChild);
+};
+
+function collectFields() {
+  const result = {};
+  document.querySelectorAll('#fields-list .field-row').forEach(row => {
+    const k = row.querySelector('.field-key').value.trim();
+    let v = row.querySelector('.field-val').value;
+    if (!k) return;
+    // Auto-parse
+    if (v === 'true') v = true;
+    else if (v === 'false') v = false;
+    else if (v === 'null') v = null;
+    else if (v !== '' && !isNaN(Number(v))) v = Number(v);
+    else { try { v = JSON.parse(v); } catch (_) { /* keep string */ } }
+    result[k] = v;
+  });
+  return result;
+}
+
+window.syncFieldsToJSON = function() {
+  const data = collectFields();
+  document.getElementById('json-edit-area').value = JSON.stringify(data, null, 2);
+};
+
+window.syncJSONtoFields = function() {
+  try {
+    const data = JSON.parse(document.getElementById('json-edit-area').value);
+    renderFields(data);
+    switchEditorTab('form');
+  } catch (e) { toast('Invalid JSON: ' + e.message, 'error'); }
+};
+
+window.saveDocument = async function() {
+  const { collection: colName, id: docId } = state.currentDoc;
+  let data;
+  const activeTab = document.getElementById('editor-json-view').style.display === 'none' ? 'form' : 'json';
+  if (activeTab === 'json') {
+    try { data = JSON.parse(document.getElementById('json-edit-area').value); }
+    catch (e) { toast('Invalid JSON: ' + e.message, 'error'); return; }
+  } else {
+    data = collectFields();
+  }
+  if (!Object.keys(data).length) { toast('No fields to save', 'warn'); return; }
+
+  try {
+    if (docId) {
+      await updateDoc(doc(db, colName, docId), data);
+      // Update cache
+      const idx = (state.collections[colName] || []).findIndex(d => d.id === docId);
+      if (idx >= 0) state.collections[colName][idx] = { id: docId, ...state.collections[colName][idx], ...data };
+      toast('Document updated', 'success');
+      logActivity('success', `Updated ${colName}/${docId}`);
+    } else {
+      const ref = await addDoc(collection(db, colName), { ...data, createdAt: serverTimestamp() });
+      const newDoc = { id: ref.id, ...data };
+      if (!state.collections[colName]) state.collections[colName] = [];
+      state.collections[colName].unshift(newDoc);
+      toast('Document created: ' + ref.id, 'success');
+      logActivity('success', `Created ${colName}/${ref.id}`);
+    }
+    closeModal('modal-doc');
+    renderCollectionTable(colName, state.collections[colName]);
+    // Update count badge
+    const nc = document.getElementById('nc-' + colName);
+    if (nc) nc.textContent = state.collections[colName].length;
+  } catch (e) {
+    toast('Save failed: ' + e.message, 'error');
+    logActivity('error', `Save failed ${colName}: ${e.message}`);
+  }
+};
+
+window.deleteDocModal = function() {
+  const { collection: colName, id: docId } = state.currentDoc;
+  openConfirm('Delete Document', `Permanently delete ${colName}/${docId}? This cannot be undone.`, async () => {
+    try {
+      await deleteDoc(doc(db, colName, docId));
+      state.collections[colName] = (state.collections[colName] || []).filter(d => d.id !== docId);
+      renderCollectionTable(colName, state.collections[colName]);
+      closeModal('modal-doc');
+      toast('Document deleted', 'success');
+      logActivity('warn', `Deleted ${colName}/${docId}`);
+    } catch (e) { toast('Delete failed: ' + e.message, 'error'); }
+  });
+};
+
+// ── CUSTOM QUERY ──────────────────────────────────────────────────────
+let cqFilterCount = 1;
+window.addCQFilter = function() {
+  const n = cqFilterCount++;
+  const div = document.createElement('div');
+  div.className = 'qb-row';
+  div.innerHTML = `
+    <input class="qb-input" placeholder="field" id="cq-f${n}-field">
+    <select class="qb-select" id="cq-f${n}-op">
+      <option>==</option><option>!=</option><option>&gt;</option><option>&lt;</option>
+      <option>&gt;=</option><option>&lt;=</option><option>array-contains</option>
+    </select>
+    <input class="qb-input" placeholder="value" id="cq-f${n}-val">
+    <button class="btn btn-ghost btn-sm" onclick="this.closest('.qb-row').remove()">✕</button>`;
+  document.getElementById('cq-filters').appendChild(div);
+};
+
+window.runCustomQuery = async function() {
+  const colName = document.getElementById('cq-collection').value.trim();
+  if (!colName) { toast('Enter a collection name', 'warn'); return; }
+  const lim = parseInt(document.getElementById('cq-limit').value) || 50;
+  const orderField = document.getElementById('cq-orderby').value;
+  const dir = document.getElementById('cq-dir').value;
+
+  let q = collection(db, colName);
+  const constraints = [];
+  document.querySelectorAll('#cq-filters .qb-row').forEach(row => {
+    const field = row.querySelector('input:first-child')?.value.trim();
+    const op = row.querySelector('select')?.value;
+    let val = row.querySelector('input:last-child')?.value;
+    if (!field || !val) return;
+    if (val === 'true') val = true;
+    else if (val === 'false') val = false;
+    else if (!isNaN(Number(val))) val = Number(val);
+    constraints.push(where(field, op.replace('&gt;','>')
+      .replace('&lt;','<').replace('&gt;=','>=').replace('&lt;=','<='), val));
+  });
+  if (orderField) constraints.push(orderBy(orderField, dir));
+  constraints.push(fsLimit(lim));
+
+  const tbl = document.getElementById('tbl-custom');
+  tbl.innerHTML = `<div style="padding:2rem;text-align:center;"><div class="spin" style="margin:0 auto;"></div></div>`;
+
+  try {
+    const snap = await getDocs(query(q, ...constraints));
+    const docs = snap.docs.map(d => ({ id: d.id, ...d.data() }));
+    document.getElementById('cq-result-label').textContent = colName;
+    document.getElementById('cq-count').textContent = docs.length + ' docs';
+    if (!docs.length) {
+      tbl.innerHTML = `<div class="empty"><div class="empty-icon">◎</div><div class="empty-msg">No documents matched</div></div>`;
+      return;
+    }
+    const cols = ['id', ...Object.keys(docs[0]).filter(k => k !== 'id').slice(0, 6)];
+    const rows = docs.map(d => {
+      const cells = cols.map(c => {
+        let v = d[c];
+        if (v === undefined || v === null) return `<td class="td-val">—</td>`;
+        if (typeof v === 'object' && v.toDate) v = v.toDate().toLocaleDateString('en-NG');
+        if (typeof v === 'object') v = JSON.stringify(v).slice(0, 50);
+        if (typeof v === 'boolean') return `<td><span class="badge ${v?'b-green':'b-red'}">${v}</span></td>`;
+        return c === 'id' ? `<td class="td-key">${String(v).slice(0,18)}…</td>` : `<td class="td-val">${String(v).slice(0,50)}</td>`;
+      }).join('');
+      return `<tr onclick="openDoc('${colName}','${d.id}')">${cells}</tr>`;
+    });
+    tbl.innerHTML = `<table><thead><tr>${cols.map(c=>`<th>${c}</th>`).join('')}</tr></thead><tbody>${rows.join('')}</tbody></table>`;
+    logActivity('info', `Query ${colName} → ${docs.length} docs`);
+  } catch (e) {
+    tbl.innerHTML = `<div class="empty"><div class="empty-icon">✕</div><div class="empty-msg">${e.message}</div></div>`;
+    toast('Query failed: ' + e.message, 'error');
+  }
+};
+
+// ── BULK OPERATIONS ───────────────────────────────────────────────────
+async function getBulkDocs(colName, filterField, filterVal) {
+  if (!colName || !filterField || filterVal === '') return [];
+  let val = filterVal;
+  if (val === 'true') val = true; else if (val === 'false') val = false;
+  else if (!isNaN(Number(val))) val = Number(val);
+  const snap = await getDocs(query(collection(db, colName), where(filterField, '==', val)));
+  return snap.docs.map(d => ({ id: d.id, ...d.data() }));
+}
+
+window.previewBulk = async function() {
+  const colName = document.getElementById('bu-collection').value.trim();
+  const ff = document.getElementById('bu-filter-field').value.trim();
+  const fv = document.getElementById('bu-filter-val').value.trim();
+  const docs = await getBulkDocs(colName, ff, fv);
+  document.getElementById('bulk-preview').innerHTML = docs.length
+    ? `<div class="badge b-amber" style="font-size:.7rem;">${docs.length} documents will be affected</div>
+       <div class="mono text-gray" style="font-size:.65rem;margin-top:.5rem;">${docs.slice(0,5).map(d=>d.id).join(', ')}${docs.length>5?'…':''}</div>`
+    : `<div class="badge b-gray">No matching documents</div>`;
+};
+
+window.executeBulkUpdate = async function() {
+  const colName = document.getElementById('bu-collection').value.trim();
+  const ff = document.getElementById('bu-filter-field').value.trim();
+  const fv = document.getElementById('bu-filter-val').value.trim();
+  const setField = document.getElementById('bu-set-field').value.trim();
+  let setVal = document.getElementById('bu-set-val').value;
+  if (!colName || !ff || !setField) { toast('Fill all fields', 'warn'); return; }
+  if (setVal === 'true') setVal = true; else if (setVal === 'false') setVal = false;
+  else if (!isNaN(Number(setVal)) && setVal !== '') setVal = Number(setVal);
+
+  const docs = await getBulkDocs(colName, ff, fv);
+  if (!docs.length) { toast('No matching documents', 'warn'); return; }
+
+  openConfirm('Bulk Update', `Update ${setField} = ${JSON.stringify(setVal)} on ${docs.length} documents in ${colName}?`, async () => {
+    const batch = writeBatch(db);
+    docs.forEach(d => batch.update(doc(db, colName, d.id), { [setField]: setVal }));
+    await batch.commit();
+    toast(`Updated ${docs.length} documents`, 'success');
+    logActivity('success', `Bulk updated ${colName}: ${setField}=${JSON.stringify(setVal)} on ${docs.length} docs`);
+    delete state.collections[colName];
+  });
+};
+
+window.previewBulkDelete = async function() {
+  const colName = document.getElementById('bd-collection').value.trim();
+  const ff = document.getElementById('bd-filter-field').value.trim();
+  const fv = document.getElementById('bd-filter-val').value.trim();
+  const docs = await getBulkDocs(colName, ff, fv);
+  document.getElementById('bulk-delete-preview').innerHTML = docs.length
+    ? `<div class="badge b-red">${docs.length} documents will be DELETED</div>`
+    : `<div class="badge b-gray">No matching documents</div>`;
+};
+
+window.executeBulkDelete = async function() {
+  const colName = document.getElementById('bd-collection').value.trim();
+  const ff = document.getElementById('bd-filter-field').value.trim();
+  const fv = document.getElementById('bd-filter-val').value.trim();
+  if (!colName || !ff) { toast('Fill all fields', 'warn'); return; }
+
+  const docs = await getBulkDocs(colName, ff, fv);
+  if (!docs.length) { toast('No matching documents', 'warn'); return; }
+
+  openConfirm('Bulk Delete', `Permanently delete ${docs.length} documents from ${colName}? This cannot be undone!`, async () => {
+    const batch = writeBatch(db);
+    docs.forEach(d => batch.delete(doc(db, colName, d.id)));
+    await batch.commit();
+    toast(`Deleted ${docs.length} documents`, 'success');
+    logActivity('warn', `Bulk deleted ${docs.length} docs from ${colName}`);
+    delete state.collections[colName];
+  });
+};
+
+window.addFieldToAll = async function() {
+  const colName = document.getElementById('af-collection').value.trim();
+  const field = document.getElementById('af-field').value.trim();
+  let defVal = document.getElementById('af-default').value;
+  if (!colName || !field) { toast('Fill all fields', 'warn'); return; }
+  if (defVal === 'true') defVal = true; else if (defVal === 'false') defVal = false;
+  else if (defVal === 'null') defVal = null;
+  else if (!isNaN(Number(defVal)) && defVal !== '') defVal = Number(defVal);
+  else { try { defVal = JSON.parse(defVal); } catch (_) {} }
+
+  const snap = await getDocs(collection(db, colName));
+  const missing = snap.docs.filter(d => d.data()[field] === undefined);
+  if (!missing.length) { toast('All documents already have this field', 'success'); return; }
+
+  openConfirm('Add Field', `Add field "${field}" to ${missing.length} documents in ${colName}?`, async () => {
+    const batch = writeBatch(db);
+    missing.forEach(d => batch.update(d.ref, { [field]: defVal }));
+    await batch.commit();
+    toast(`Added "${field}" to ${missing.length} documents`, 'success');
+    logActivity('success', `Added field ${field} to ${missing.length} docs in ${colName}`);
+    delete state.collections[colName];
+  });
+};
+
+// ── AUTH USERS ────────────────────────────────────────────────────────
+window.loadAuthUsers = async function() {
+  // We read from the users Firestore collection since Firebase Admin SDK
+  // isn't available client-side. This shows all auth-linked users.
+  if (!state.collections['users']) await loadCollection('users');
+  state.authUsers = state.collections['users'] || [];
+  renderAuthTable(state.authUsers);
+};
+
+function renderAuthTable(users) {
+  const tbl = document.getElementById('tbl-auth');
+  if (!users.length) {
+    tbl.innerHTML = `<div class="empty"><div class="empty-icon">⊕</div><div class="empty-msg">No users</div></div>`;
+    return;
+  }
+  tbl.innerHTML = `<table>
+    <thead><tr><th>User</th><th>Role</th><th>Status</th><th>Joined</th><th>Actions</th></tr></thead>
+    <tbody>${users.map(u => {
+      const name = u.fullName || u.firstName || '—';
+      const init = name.charAt(0).toUpperCase();
+      const avClass = u.role==='admin'?'av-r':u.role==='tutor'?'av-b':'av-g';
+      const date = u.createdAt?.toDate?.()?.toLocaleDateString('en-NG') || '—';
+      return `<tr>
+        <td><div class="user-cell">
+          <div class="user-av ${avClass}">${init}</div>
+          <div>
+            <div style="font-size:.82rem;font-weight:500;">${name}</div>
+            <div class="mono text-gray" style="font-size:.62rem;">${u.email||'—'}</div>
+          </div>
+        </div></td>
+        <td><span class="badge ${u.role==='admin'?'b-red':u.role==='tutor'?'b-blue':'b-green'}">${u.role||'student'}</span></td>
+        <td><span class="badge ${u.status==='active'?'b-green':u.status==='suspended'?'b-red':'b-amber'}">${u.status||'active'}</span></td>
+        <td class="td-val">${date}</td>
+        <td>
+          <div class="flex-row" style="gap:.35rem;">
+            <button class="btn btn-ghost btn-sm" onclick="openDoc('users','${u.id}')">Edit</button>
+            <button class="btn btn-red btn-sm" onclick="toggleSuspend('${u.id}','${u.status||'active'}')">${u.status==='suspended'?'Restore':'Suspend'}</button>
+          </div>
+        </td>
+      </tr>`;
+    }).join('')}</tbody>
+  </table>`;
+}
+
+window.filterAuthUsers = function(q) {
+  const filtered = state.authUsers.filter(u => JSON.stringify(u).toLowerCase().includes(q.toLowerCase()));
+  renderAuthTable(filtered);
+};
+
+window.toggleSuspend = async function(uid, currentStatus) {
+  const newStatus = currentStatus === 'suspended' ? 'active' : 'suspended';
+  openConfirm(newStatus==='suspended'?'Suspend User':'Restore User',
+    `Set user status to "${newStatus}"?`, async () => {
+      await updateDoc(doc(db, 'users', uid), { status: newStatus });
+      const idx = state.authUsers.findIndex(u => u.id === uid);
+      if (idx >= 0) state.authUsers[idx].status = newStatus;
+      renderAuthTable(state.authUsers);
+      toast('User ' + newStatus, 'success');
+      logActivity('warn', `User ${uid} set to ${newStatus}`);
+    });
+};
+
+window.createAuthUser = async function() {
+  const name = document.getElementById('au-name').value.trim();
+  const email = document.getElementById('au-email').value.trim();
+  const password = document.getElementById('au-password').value;
+  const role = document.getElementById('au-role').value;
+  if (!name || !email || !password) { toast('Fill all fields', 'warn'); return; }
+  if (password.length < 6) { toast('Password must be 6+ chars', 'warn'); return; }
+  try {
+    const cred = await createUserWithEmailAndPassword(auth, email, password);
+    await updateProfile(cred.user, { displayName: name });
+    const uid = cred.user.uid;
+    await setDoc(doc(db, 'users', uid), {
+      fullName: name, email, role, status: 'active',
+      createdAt: serverTimestamp(), uid
+    });
+    toast('User created: ' + email, 'success');
+    logActivity('success', `Created auth user: ${email} (${role})`);
+    document.getElementById('au-name').value = '';
+    document.getElementById('au-email').value = '';
+    document.getElementById('au-password').value = '';
+    delete state.collections['users'];
+    loadAuthUsers();
+  } catch (e) {
+    toast('Create failed: ' + e.message, 'error');
+    logActivity('error', 'Create user failed: ' + e.message);
+  }
+};
+
+// ── IMPORT / EXPORT ───────────────────────────────────────────────────
+window.exportCollection = async function() {
+  const colName = document.getElementById('exp-collection').value;
+  const format = document.getElementById('exp-format').value;
+  toast('Exporting ' + colName + '…');
+
+  try {
+    const snap = await getDocs(collection(db, colName));
+    const docs = snap.docs.map(d => {
+      const data = d.data();
+      // Convert timestamps
+      const cleaned = {};
+      for (const [k, v] of Object.entries(data)) {
+        cleaned[k] = v?.toDate ? v.toDate().toISOString() : v;
+      }
+      return { id: d.id, ...cleaned };
+    });
+
+    let blob, filename;
+    if (format === 'csv') {
+      if (!docs.length) { toast('No documents to export', 'warn'); return; }
+      const keys = [...new Set(docs.flatMap(d => Object.keys(d)))];
+      const csv = [keys.join(','), ...docs.map(d =>
+        keys.map(k => { const v = d[k]; return typeof v === 'string' && v.includes(',') ? `"${v}"` : (v ?? ''); }).join(',')
+      )].join('\n');
+      blob = new Blob([csv], { type: 'text/csv' });
+      filename = colName + '_' + Date.now() + '.csv';
+    } else {
+      blob = new Blob([JSON.stringify(docs, null, 2)], { type: 'application/json' });
+      filename = colName + '_' + Date.now() + '.json';
+    }
+
+    const url = URL.createObjectURL(blob);
+    const a = Object.assign(document.createElement('a'), { href: url, download: filename });
+    a.click();
+    URL.revokeObjectURL(url);
+    toast('Exported ' + docs.length + ' documents', 'success');
+    logActivity('info', `Exported ${colName} (${docs.length} docs, ${format})`);
+  } catch (e) { toast('Export failed: ' + e.message, 'error'); }
+};
+
+window.importJSON = async function() {
+  const colName = document.getElementById('imp-collection').value.trim();
+  const raw = document.getElementById('imp-data').value.trim();
+  if (!colName) { toast('Enter collection name', 'warn'); return; }
+  let data;
+  try { data = JSON.parse(raw); } catch (e) { toast('Invalid JSON', 'error'); return; }
+  if (!Array.isArray(data)) { toast('JSON must be an array', 'warn'); return; }
+
+  openConfirm('Import Data', `Import ${data.length} documents into "${colName}"?`, async () => {
+    try {
+      const batch = writeBatch(db);
+      data.forEach(item => {
+        const { id: _, ...fields } = item;
+        batch.set(doc(collection(db, colName)), { ...fields, importedAt: serverTimestamp() });
+      });
+      await batch.commit();
+      toast('Imported ' + data.length + ' documents', 'success');
+      logActivity('success', `Imported ${data.length} docs into ${colName}`);
+      delete state.collections[colName];
+      document.getElementById('imp-data').value = '';
+    } catch (e) { toast('Import failed: ' + e.message, 'error'); }
+  });
+};
+
+window.loadRawJSON = async function() {
+  const colName = document.getElementById('raw-collection').value.trim();
+  if (!colName) { toast('Enter collection name', 'warn'); return; }
+  try {
+    const snap = await getDocs(collection(db, colName));
+    const docs = snap.docs.map(d => ({ id: d.id, ...d.data() }));
+    document.getElementById('raw-output').value = JSON.stringify(docs, (k, v) =>
+      v && typeof v === 'object' && typeof v.toDate === 'function' ? v.toDate().toISOString() : v, 2);
+    logActivity('info', `Loaded raw JSON for ${colName}`);
+  } catch (e) { toast('Error: ' + e.message, 'error'); }
+};
+
+// ── ACTIVITY LOG ──────────────────────────────────────────────────────
+function logActivity(type, msg) {
+  const entry = { type, msg, time: new Date() };
+  state.activityLog.unshift(entry);
+  if (state.activityLog.length > 200) state.activityLog.pop();
+  renderActivityLog();
+}
+
+function renderActivityLog(homeOnly = false) {
+  const dotColor = { info: 'var(--accent)', success: 'var(--green)', warn: 'var(--amber)', error: 'var(--amber-dark)' };
+  const html = state.activityLog.slice(0, homeOnly ? 8 : 200).map(e => `
+    <div class="log-item">
+      <div class="log-dot" style="background:${dotColor[e.type]||'var(--txt3)'};"></div>
+      <div class="log-content">
+        <div class="log-msg">${e.msg}</div>
+        <div class="log-time">${e.time.toLocaleTimeString('en-NG')}</div>
+      </div>
+    </div>`).join('') || `<div class="empty"><div class="empty-icon">◎</div><div class="empty-msg">No activity yet</div></div>`;
+  if (homeOnly) { const el = document.getElementById('recent-log'); if (el) el.innerHTML = html; }
+  else { const el = document.getElementById('activity-log-full'); if (el) el.innerHTML = html; }
+}
+
+// ── CONFIRM MODAL ─────────────────────────────────────────────────────
+function openConfirm(title, msg, cb) {
+  document.getElementById('confirm-title').textContent = title;
+  document.getElementById('confirm-msg').textContent = msg;
+  state.confirmCallback = cb;
+  document.getElementById('confirm-yes').onclick = async () => {
+    closeModal('modal-confirm');
+    await cb();
+  };
+  document.getElementById('modal-confirm').classList.add('open');
+}
+
+// ── HELPERS ───────────────────────────────────────────────────────────
+window.closeModal = function(id) {
+  document.getElementById(id)?.classList.remove('open');
+};
+
+window.toast = function(msg, type = '') {
+  const t = document.getElementById('toast');
+  t.textContent = msg; t.className = 'toast show ' + type;
+  clearTimeout(t._to); t._to = setTimeout(() => t.classList.remove('show'), 3500);
+};
+
+function escHtml(s) {
+  return String(s ?? '').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+}
+
+window.doLogout = async function() {
+  await signOut(auth);
+  window.location.href = 'auth.html';
+};
+
+// Make loadCollection accessible globally
+window.loadCollection = window.loadCollection || loadCollection;
+</script>
+</body>
+</html>
