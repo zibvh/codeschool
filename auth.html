@@ -472,7 +472,7 @@ let _loginInProgress = false;
         await signOut(auth); _googleSignInInProgress = false; return;
       }
       if (profile.role !== 'student') {
-        showToast('This account is not registered as a student.', 'error');
+        showToast('Wrong Portal', 'error');
         await signOut(auth); _googleSignInInProgress = false; return;
       }
       _googleSignInInProgress = false;
@@ -499,10 +499,10 @@ let _loginInProgress = false;
     }
   } catch(e) {
     if (e.code === 'auth/account-exists-with-different-credential') {
-      showToast('An account already exists with this email. Try a different sign-in method.', 'error');
+      showToast('An account already exists with this email!', 'error');
     } else if (e.code && e.code !== 'auth/popup-closed-by-user') {
       console.error('[codeSchool]', e.code, e.message);
-      showToast('Sign-in failed — please try again', 'error');
+      showToast('Sign-in failed, please try again', 'error');
     }
     _googleSignInInProgress = false;
   }
