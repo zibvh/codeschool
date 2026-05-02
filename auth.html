@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-<title>Login or Signup</title>
+<title>Login or Signup — codeSchool</title>
 <meta name="description" content="Create your codeSchool account or sign in to continue learning.">
 <meta name="theme-color" content="#0B1A0E">
 <meta name="mobile-web-app-capable" content="yes">
@@ -29,7 +29,6 @@ body{
   min-height:100vh;display:flex;flex-direction:column;align-items:center;
   justify-content:center;padding:1.5rem 1rem;overflow-x:hidden;position:relative;
 }
-/* Background */
 .bg-grid{position:fixed;inset:0;pointer-events:none;z-index:0;
   background-image:linear-gradient(rgba(74,155,95,.03) 1px,transparent 1px),
     linear-gradient(90deg,rgba(74,155,95,.03) 1px,transparent 1px);
@@ -40,7 +39,6 @@ body{
 @keyframes drift1{from{transform:translate(0,0);}to{transform:translate(-50px,35px);}}
 @keyframes drift2{from{transform:translate(0,0);}to{transform:translate(35px,-45px);}}
 
-/* Nav */
 nav{position:fixed;top:0;left:0;right:0;z-index:100;display:flex;align-items:center;justify-content:space-between;padding:.9rem 2rem;background:rgba(11,26,14,.85);backdrop-filter:blur(20px);border-bottom:1px solid var(--border);}
 .logo{font-family:var(--display);font-weight:800;font-size:1.1rem;color:var(--white);text-decoration:none;letter-spacing:-.03em;}
 .logo span{color:var(--amber);}
@@ -48,19 +46,15 @@ nav{position:fixed;top:0;left:0;right:0;z-index:100;display:flex;align-items:cen
 .nav-back{font-family:var(--mono);font-size:.72rem;color:var(--gray);text-decoration:none;transition:color .2s;display:flex;align-items:center;gap:.35rem;}
 .nav-back:hover{color:var(--white);}
 
-/* Wrapper */
 .auth-wrapper{position:relative;z-index:1;width:100%;max-width:460px;padding-top:5.5rem;padding-bottom:2rem;}
 
-/* Header */
 .auth-header{text-align:center;margin-bottom:1.75rem;}
 .role-badge{display:inline-flex;align-items:center;gap:.5rem;background:rgba(74,155,95,.1);border:1px solid rgba(74,155,95,.25);border-radius:100px;padding:.4rem 1rem;font-family:var(--mono);font-size:.68rem;color:#4A9B5F;letter-spacing:.04em;text-transform:uppercase;margin-bottom:1rem;}
 .auth-headline{font-family:var(--display);font-size:1.9rem;font-weight:800;letter-spacing:-.04em;line-height:1.1;margin-bottom:.4rem;}
 .auth-sub{font-family:var(--mono);font-size:.7rem;color:var(--gray);letter-spacing:.04em;text-transform:uppercase;}
 
-/* Card */
 .auth-card{background:rgba(18,32,16,.6);backdrop-filter:blur(24px);border:1px solid var(--border);border-radius:var(--radius);overflow:hidden;box-shadow:0 24px 60px rgba(0,0,0,.4),inset 0 1px 0 rgba(255,255,255,.06);}
 
-/* Tabs */
 .tab-bar{display:grid;grid-template-columns:1fr 1fr;border-bottom:1px solid var(--border);background:rgba(0,0,0,.15);}
 .tab-btn{padding:.95rem 1rem;background:transparent;border:none;color:var(--gray);font-family:var(--body);font-size:.85rem;font-weight:600;cursor:pointer;position:relative;transition:color .2s;letter-spacing:-.01em;}
 .tab-btn::after{content:'';position:absolute;bottom:0;left:50%;right:50%;height:2px;border-radius:2px 2px 0 0;background:var(--green);transition:left .25s,right .25s;}
@@ -71,7 +65,6 @@ nav{position:fixed;top:0;left:0;right:0;z-index:100;display:flex;align-items:cen
 .tab-panel.active{display:block;animation:fadeIn .2s ease;}
 @keyframes fadeIn{from{opacity:0;transform:translateY(4px)}to{opacity:1;transform:translateY(0)}}
 
-/* Form elements */
 .form-group{margin-bottom:1.1rem;}
 .form-label{display:block;font-family:var(--mono);font-size:.65rem;color:var(--gray);text-transform:uppercase;letter-spacing:.08em;margin-bottom:.45rem;}
 .form-row{display:grid;grid-template-columns:1fr 1fr;gap:.75rem;}
@@ -96,12 +89,10 @@ nav{position:fixed;top:0;left:0;right:0;z-index:100;display:flex;align-items:cen
 .check-row a{color:var(--green);text-decoration:none;}
 .check-row a:hover{text-decoration:underline;}
 
-/* Notice box */
 .notice-box{background:rgba(74,155,95,.07);border:1px solid rgba(74,155,95,.2);border-radius:var(--radius-sm);padding:.75rem 1rem;margin-bottom:1.1rem;display:flex;gap:.5rem;align-items:flex-start;}
 .notice-body{font-family:var(--mono);font-size:.65rem;color:rgba(255,255,255,.7);line-height:1.7;}
 .notice-body strong{color:var(--white);}
 
-/* Buttons */
 .btn-submit{width:100%;padding:.9rem 1rem;border:none;border-radius:var(--radius-sm);font-family:var(--display);font-size:.92rem;font-weight:700;letter-spacing:-.01em;cursor:pointer;transition:opacity .2s,transform .15s,box-shadow .2s;margin-top:.25rem;background:linear-gradient(135deg,#1A6B30,var(--green));color:#fff;box-shadow:0 4px 24px rgba(74,155,95,.35);}
 .btn-submit:active{transform:scale(.98);}
 .btn-submit:disabled{opacity:.5;cursor:not-allowed;}
@@ -113,12 +104,12 @@ nav{position:fixed;top:0;left:0;right:0;z-index:100;display:flex;align-items:cen
 .social-row{display:grid;grid-template-columns:1fr 1fr;gap:.6rem;}
 .btn-social{width:100%;display:flex;align-items:center;justify-content:center;gap:.7rem;padding:.82rem 1rem;border-radius:var(--radius-sm);background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.12);color:var(--white);font-family:var(--body);font-size:.88rem;font-weight:500;cursor:pointer;transition:background .2s,border-color .2s,box-shadow .2s;}
 .btn-social:hover{background:rgba(255,255,255,.1);border-color:rgba(255,255,255,.22);box-shadow:0 4px 16px rgba(0,0,0,.2);}
+.btn-social:disabled{opacity:.5;cursor:not-allowed;}
 
 .helper-txt{text-align:center;font-family:var(--mono);font-size:.65rem;color:var(--gray);margin-top:1.1rem;}
 .helper-txt a{color:var(--green);text-decoration:none;}
 .helper-txt a:hover{text-decoration:underline;}
 
-/* Spinner / Toast */
 @keyframes spin{to{transform:rotate(360deg)}}
 .spinner{display:inline-block;width:13px;height:13px;border:2px solid rgba(255,255,255,.25);border-top-color:#fff;border-radius:50%;animation:spin .6s linear infinite;margin-right:.5rem;vertical-align:middle;}
 .toast{position:fixed;top:0;left:0;right:0;background:var(--dark2);border-bottom:3px solid rgba(74,155,95,.5);padding:.7rem 1.5rem;font-family:var(--mono);font-size:.75rem;color:var(--white);z-index:9999;transform:translateY(-100%);opacity:0;transition:transform .25s ease,opacity .25s;box-shadow:0 4px 24px rgba(0,0,0,.4);display:flex;align-items:center;gap:.6rem;min-height:44px;}
@@ -133,7 +124,7 @@ nav{position:fixed;top:0;left:0;right:0;z-index:100;display:flex;align-items:cen
   .form-row{grid-template-columns:1fr;}
   .tab-panel{padding:1.4rem 1.1rem;}
   nav{padding:.75rem 1rem;}
-  .social-row{grid-template-columns:1fr;}
+  .social-row{grid-template-columns:1fr 1fr;}
 }
 </style>
 </head>
@@ -143,7 +134,7 @@ nav{position:fixed;top:0;left:0;right:0;z-index:100;display:flex;align-items:cen
 <div class="bg-orb bg-orb2"></div>
 
 <nav>
-  <a href="index.html" class="logo">codeSchool</a>
+  <a href="index.html" class="logo">code<span>School</span></a>
   <div class="nav-links">
     <a href="index.html" class="nav-back">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width:14px;height:14px"><line x1="19" y1="12" x2="5" y2="12"></line><polyline points="12 19 5 12 12 5"></polyline></svg> Home
@@ -195,11 +186,11 @@ nav{position:fixed;top:0;left:0;right:0;z-index:100;display:flex;align-items:cen
       
       <div class="or-divider"><span>or continue with</span></div>
       <div class="social-row">
-<!--        <button class="btn-social" onclick="handleGoogleSignIn()" type="button">
+        <button class="btn-social" id="btn-google" onclick="handleGoogleSignIn()" type="button">
           <svg width="18" height="18" viewBox="0 0 48 48"><path fill="#EA4335" d="M24 9.5c3.54 0 6.71 1.22 9.21 3.6l6.85-6.85C35.9 2.38 30.47 0 24 0 14.62 0 6.51 5.38 2.56 13.22l7.98 6.19C12.43 13.08 17.74 9.5 24 9.5z"/><path fill="#4285F4" d="M46.98 24.55c0-1.57-.15-3.09-.38-4.55H24v9.02h12.94c-.58 2.96-2.26 5.48-4.78 7.18l7.73 6c4.51-4.18 7.09-10.36 7.09-17.65z"/><path fill="#FBBC05" d="M10.53 28.59c-.48-1.45-.76-2.99-.76-4.59s.27-3.14.76-4.59l-7.98-6.19C.92 16.46 0 20.12 0 24c0 3.88.92 7.54 2.56 10.78l7.97-6.19z"/><path fill="#34A853" d="M24 48c6.48 0 11.93-2.13 15.89-5.81l-7.73-6c-2.18 1.48-4.97 2.31-8.16 2.31-6.26 0-11.57-3.59-13.46-8.83l-7.98 6.19C6.51 42.62 14.62 48 24 48z"/></svg>
           Google
-        </button>-->
-        <button class="btn-social" onclick="handleGithubSignIn()" type="button">
+        </button>
+        <button class="btn-social" id="btn-github" onclick="handleGithubSignIn()" type="button">
           <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0 0 24 12c0-6.63-5.37-12-12-12z"/></svg>
           GitHub
         </button>
@@ -217,53 +208,14 @@ nav{position:fixed;top:0;left:0;right:0;z-index:100;display:flex;align-items:cen
       </div>
       
       <div class="form-row">
-        <div class="form-group">
-          <label class="form-label">First Name</label>
-          <input type="text" class="form-input" placeholder="Ada" id="s-fname" autocomplete="given-name">
-        </div>
-        <div class="form-group">
-          <label class="form-label">Last Name</label>
-          <input type="text" class="form-input" placeholder="Okafor" id="s-lname" autocomplete="family-name">
-        </div>
+        <div class="form-group"><label class="form-label">First Name</label><input type="text" class="form-input" placeholder="Ada" id="s-fname" autocomplete="given-name"></div>
+        <div class="form-group"><label class="form-label">Last Name</label><input type="text" class="form-input" placeholder="Okafor" id="s-lname" autocomplete="family-name"></div>
       </div>
-      <div class="form-group">
-        <label class="form-label">Email Address</label>
-        <div class="input-wrap has-icon">
-          <span class="input-icon"><svg viewBox="0 0 24 24" fill="none" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="4" width="20" height="16" rx="2"></rect><polyline points="2,4 12,13 22,4"></polyline></svg></span>
-          <input type="email" class="form-input" placeholder="you@example.com" id="s-email" autocomplete="email">
-        </div>
-      </div>
-      <div class="form-group">
-        <label class="form-label">Phone Number</label>
-        <div class="input-wrap has-icon">
-          <span class="input-icon"><svg viewBox="0 0 24 24" fill="none" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.69 13a19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 3.6 2h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 22 16.92z"></path></svg></span>
-          <input type="tel" class="form-input" placeholder="080x xxx xxxx" id="s-phone" autocomplete="tel">
-        </div>
-      </div>
-      <div class="form-group">
-        <label class="form-label">Password</label>
-        <div class="input-wrap has-icon has-toggle">
-          <span class="input-icon"><svg viewBox="0 0 24 24" fill="none" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="7.5" cy="15.5" r="5.5"></circle><path d="M21 2l-9.6 9.6"></path><path d="M15.5 7.5l3 3L22 7l-3-3"></path></svg></span>
-          <input type="password" class="form-input" placeholder="Min. 6 characters" id="s-pw" autocomplete="new-password">
-          <button class="toggle-pw" onclick="togglePw('s-pw',this)" type="button">
-            <svg viewBox="0 0 24 24" fill="none" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path><circle cx="12" cy="12" r="3"></circle></svg>
-          </button>
-        </div>
-      </div>
-      <div class="form-group">
-        <label class="form-label">Confirm Password</label>
-        <div class="input-wrap has-icon has-toggle">
-          <span class="input-icon"><svg viewBox="0 0 24 24" fill="none" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="7.5" cy="15.5" r="5.5"></circle><path d="M21 2l-9.6 9.6"></path><path d="M15.5 7.5l3 3L22 7l-3-3"></path></svg></span>
-          <input type="password" class="form-input" placeholder="Repeat password" id="s-pw2" autocomplete="new-password">
-          <button class="toggle-pw" onclick="togglePw('s-pw2',this)" type="button">
-            <svg viewBox="0 0 24 24" fill="none" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path><circle cx="12" cy="12" r="3"></circle></svg>
-          </button>
-        </div>
-      </div>
-      <div class="check-row">
-        <input type="checkbox" id="s-terms">
-        <label for="s-terms">I agree to the <a href="terms.html">Terms of Service</a> and <a href="privacy.html">Privacy Policy</a></label>
-      </div>
+      <div class="form-group"><label class="form-label">Email Address</label><div class="input-wrap has-icon"><span class="input-icon"><svg viewBox="0 0 24 24" fill="none" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="4" width="20" height="16" rx="2"></rect><polyline points="2,4 12,13 22,4"></polyline></svg></span><input type="email" class="form-input" placeholder="you@example.com" id="s-email" autocomplete="email"></div></div>
+      <div class="form-group"><label class="form-label">Phone Number</label><div class="input-wrap has-icon"><span class="input-icon"><svg viewBox="0 0 24 24" fill="none" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.69 13a19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 3.6 2h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 22 16.92z"></path></svg></span><input type="tel" class="form-input" placeholder="080x xxx xxxx" id="s-phone" autocomplete="tel"></div></div>
+      <div class="form-group"><label class="form-label">Password</label><div class="input-wrap has-icon has-toggle"><span class="input-icon"><svg viewBox="0 0 24 24" fill="none" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="7.5" cy="15.5" r="5.5"></circle><path d="M21 2l-9.6 9.6"></path><path d="M15.5 7.5l3 3L22 7l-3-3"></path></svg></span><input type="password" class="form-input" placeholder="Min. 6 characters" id="s-pw" autocomplete="new-password"><button class="toggle-pw" onclick="togglePw('s-pw',this)" type="button"><svg viewBox="0 0 24 24" fill="none" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path><circle cx="12" cy="12" r="3"></circle></svg></button></div></div>
+      <div class="form-group"><label class="form-label">Confirm Password</label><div class="input-wrap has-icon has-toggle"><span class="input-icon"><svg viewBox="0 0 24 24" fill="none" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="7.5" cy="15.5" r="5.5"></circle><path d="M21 2l-9.6 9.6"></path><path d="M15.5 7.5l3 3L22 7l-3-3"></path></svg></span><input type="password" class="form-input" placeholder="Repeat password" id="s-pw2" autocomplete="new-password"><button class="toggle-pw" onclick="togglePw('s-pw2',this)" type="button"><svg viewBox="0 0 24 24" fill="none" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path><circle cx="12" cy="12" r="3"></circle></svg></button></div></div>
+      <div class="check-row"><input type="checkbox" id="s-terms"><label for="s-terms">I agree to the <a href="terms.html">Terms of Service</a> and <a href="privacy.html">Privacy Policy</a></label></div>
       <button class="btn-submit" id="btn-signup" onclick="handleSignup()" data-label="Create Account →">Create Account →</button>
       <div class="helper-txt">Already have an account? <a href="#" onclick="switchTab('login');return false;">Log in</a></div>
     </div>
@@ -274,13 +226,11 @@ nav{position:fixed;top:0;left:0;right:0;z-index:100;display:flex;align-items:cen
 <div id="toast" class="toast"></div>
 
 <script>
-// ── SAFE STUBS (before module loads) ──────────────────────────
 window.handleLogin        = function(){ showToast('App loading — please wait a moment.','error'); };
 window.handleSignup       = function(){ showToast('App loading — please wait a moment.','error'); };
 window.handleGoogleSignIn = function(){ showToast('App loading — please wait a moment.','error'); };
 window.handleGithubSignIn = function(){ showToast('App loading — please wait a moment.','error'); };
 
-// ── UI UTILS (run immediately) ─────────────────────────────────
 function switchTab(tab) {
   document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
   document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
@@ -300,8 +250,7 @@ function togglePw(id, btn) {
 
 function showToast(msg, type='') {
   const t = document.getElementById('toast');
-  t.textContent = msg;
-  t.className = 'toast show ' + (type||'');
+  t.textContent = msg; t.className = 'toast show ' + (type||'');
   setTimeout(() => t.classList.remove('show'), 3200);
 }
 
@@ -310,13 +259,11 @@ function setLoading(btn, loading) {
   btn.innerHTML = loading ? '<span class="spinner"></span>Please wait…' : (btn.dataset.label || btn.textContent);
 }
 
-// Enter key support
 document.getElementById('login-pw').addEventListener('keydown', e => { if (e.key === 'Enter') window.handleLogin(); });
 document.getElementById('login-email').addEventListener('keydown', e => { if (e.key === 'Enter') document.getElementById('login-pw').focus(); });
 document.getElementById('s-pw2').addEventListener('keydown', e => { if (e.key === 'Enter') window.handleSignup(); });
 </script>
 
-<!-- ═══ FIREBASE MODULE ═══ -->
 <script type="module">
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
 import {
@@ -327,196 +274,141 @@ import {
   sendEmailVerification,
   GoogleAuthProvider,
   GithubAuthProvider,
-  signInWithRedirect,
-  getRedirectResult,
+  signInWithPopup,
   onAuthStateChanged,
   signOut,
 } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
 import {
-  getFirestore,
-  enableNetwork,
-  collection,
-  doc,
-  setDoc,
-  getDoc,
-  getDocs,
-  updateDoc,
-  deleteDoc,
-  serverTimestamp,
-  query,
-  where,
+  getFirestore, collection, doc, setDoc, getDoc, getDocs, updateDoc, deleteDoc,
+  serverTimestamp, query, where,
 } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
 
-const firebaseConfig = {
-  apiKey:            "AIzaSyDjSs8AoDt6bG4-_FxWJbRLFM0tyR2S2D0",
-  authDomain:        "codeschool-41f52.firebaseapp.com",
-  projectId:         "codeschool-41f52",
-  storageBucket:     "codeschool-41f52.firebasestorage.app",
-  messagingSenderId: "224975256200",
-  appId:             "1:224975256200:web:68ffc1a1160f3315d77d3d",
-};
-
-const app  = initializeApp(firebaseConfig);
+const app  = initializeApp({
+  apiKey:"AIzaSyDjSs8AoDt6bG4-_FxWJbRLFM0tyR2S2D0",
+  authDomain:"codeschool-41f52.firebaseapp.com",
+  projectId:"codeschool-41f52",
+  storageBucket:"codeschool-41f52.firebasestorage.app",
+  messagingSenderId:"224975256200",
+  appId:"1:224975256200:web:68ffc1a1160f3315d77d3d"
+});
 const auth = getAuth(app);
 const db   = getFirestore(app);
 
-// Race-condition flags
-let _googleSignInInProgress = false;
-let _signupInProgress       = false;
-let _loginInProgress        = false;
+let _socialInProgress = false;
 
-// ── REDIRECT RESULT (Google / GitHub) ──────────────────────────
-(async () => {
-  try {
-    // Small delay — Firebase sometimes needs a tick to resolve the redirect
-    await new Promise(r => setTimeout(r, 100));
-    
-    const result = await getRedirectResult(auth);
-    if (!result) return;
-    
-    const user = result.user;
-    console.log("[codeSchool] Redirect result received:", user.email, "provider:", result.providerId);
-    _googleSignInInProgress = true;
-
-    const snap = await getDoc(doc(db, "users", user.uid));
-    
-    if (snap.exists()) {
-      // User already has a Firestore document with this UID
-      const profile = snap.data();
-      console.log("[codeSchool] Existing user found by UID, role:", profile.role);
-      
-      if (profile.status === "suspended") {
-        showToast("Account suspended. Contact support.", "error");
-        await signOut(auth);
-        _googleSignInInProgress = false;
-        return;
-      }
-      
-      _googleSignInInProgress = false;
-      showToast("Logging in…", "success");
-      
-      // Route to correct dashboard based on role
-      const dashboards = {
-        student: "student-dashboard.html",
-        tutor:   "tutor-dashboard.html",
-        admin:   "admin-dashboard.html"
-      };
-      setTimeout(() => { 
-        window.location.href = dashboards[profile.role] || "student-dashboard.html"; 
-      }, 700);
-      
-    } else {
-      // No doc at this UID — check if user exists by email (from email/password signup)
-      const emailQ = query(collection(db, "users"), where("email", "==", user.email || ""));
-      const emailSnap = await getDocs(emailQ);
-      
-      if (!emailSnap.empty) {
-        // Found existing user by email — merge accounts
-        const existingDoc = emailSnap.docs[0];
-        const existingData = existingDoc.data();
-        const existingUID = existingDoc.id;
-        console.log("[codeSchool] Existing user found by email:", existingData.email, "Original UID:", existingUID);
-        
-        if (existingData.status === "suspended") {
-          showToast("Account suspended. Contact support.", "error");
-          await signOut(auth);
-          _googleSignInInProgress = false;
-          return;
-        }
-        
-        // Copy the existing user data to the new Google UID
-        await setDoc(doc(db, "users", user.uid), {
-          uid: user.uid,
-          firstName: existingData.firstName || "",
-          lastName: existingData.lastName || "",
-          fullName: existingData.fullName || user.displayName || "",
-          email: user.email || existingData.email,
-          phone: existingData.phone || "",
-          role: existingData.role || "student",
-          status: existingData.status || "active",
-          emailVerified: true,
-          provider: result.providerId,
-          googleLinked: true,
-          mergedFrom: existingUID,
-          createdAt: existingData.createdAt || serverTimestamp(),
-        });
-        
-        // Update the old doc to mark it as linked
-        await updateDoc(doc(db, "users", existingUID), {
-          googleLinked: true,
-          googleUID: user.uid,
-        });
-        
-        console.log("[codeSchool] Accounts merged successfully");
-        _googleSignInInProgress = false;
-        showToast("Accounts linked! Logging in…", "success");
-        
-        const dashboards = {
-          student: "student-dashboard.html",
-          tutor:   "tutor-dashboard.html",
-          admin:   "admin-dashboard.html"
-        };
-        setTimeout(() => { 
-          window.location.href = dashboards[existingData.role] || "student-dashboard.html"; 
-        }, 900);
-        
-      } else {
-        // Truly new user — create account
-        console.log("[codeSchool] New user — creating account");
-        const nameParts = (user.displayName || "").split(" ");
-        const firstName = nameParts[0] || "Student";
-        const lastName  = nameParts.slice(1).join(" ") || "";
-        const provider  = result.providerId === "github.com" ? "github" : "google";
-        
-        await setDoc(doc(db, "users", user.uid), {
-          uid: user.uid,
-          firstName,
-          lastName,
-          fullName: user.displayName || firstName,
-          email: user.email || "",
-          phone: "",
-          role: "student",
-          status: "active",
-          emailVerified: true,
-          provider,
-          createdAt: serverTimestamp(),
-        });
-        
-        console.log("[codeSchool] Account created successfully");
-        _googleSignInInProgress = false;
-        showToast("Account created! Logging in…", "success");
-        setTimeout(() => { window.location.href = "student-dashboard.html"; }, 900);
-      }
+// ── Process social sign-in result ───────────────────────────────
+async function processSocialUser(user, providerId) {
+  const snap = await getDoc(doc(db, "users", user.uid));
+  
+  if (snap.exists()) {
+    const profile = snap.data();
+    if (profile.status === "suspended") {
+      showToast("Account suspended. Contact support.", "error");
+      await signOut(auth);
+      return;
     }
-  } catch (e) {
-    console.error("[codeSchool] Redirect result error:", e.code, e.message);
-    
-    if (e.code === "auth/account-exists-with-different-credential") {
-      showToast(
-        "An account already exists with this email. Try logging in with your password first.",
-        "error"
-      );
-    } else if (e.code && e.code !== "auth/popup-closed-by-user") {
-      showToast("Sign-in failed, please try again", "error");
-    }
-    _googleSignInInProgress = false;
+    showToast("Welcome back!", "success");
+    const dashboards = { student: "student-dashboard.html", tutor: "tutor-dashboard.html", admin: "admin-dashboard.html" };
+    setTimeout(() => { window.location.href = dashboards[profile.role] || "student-dashboard.html"; }, 700);
+    return;
   }
-})();
 
-// ── AUTO-REDIRECT IF ALREADY LOGGED IN ─────────────────────────
+  // Check if user exists by email
+  const emailQ = query(collection(db, "users"), where("email", "==", user.email || ""));
+  const emailSnap = await getDocs(emailQ);
+  
+  if (!emailSnap.empty) {
+    const existingDoc = emailSnap.docs[0];
+    const existingData = existingDoc.data();
+    const existingUID = existingDoc.id;
+    
+    if (existingData.status === "suspended") {
+      showToast("Account suspended. Contact support.", "error");
+      await signOut(auth);
+      return;
+    }
+    
+    await setDoc(doc(db, "users", user.uid), {
+      uid: user.uid,
+      firstName: existingData.firstName || "",
+      lastName: existingData.lastName || "",
+      fullName: existingData.fullName || user.displayName || "",
+      email: user.email || existingData.email,
+      phone: existingData.phone || "",
+      role: existingData.role || "student",
+      status: existingData.status || "active",
+      emailVerified: true,
+      provider: providerId,
+      mergedFrom: existingUID,
+      createdAt: existingData.createdAt || serverTimestamp(),
+    });
+    
+    await updateDoc(doc(db, "users", existingUID), { [`${providerId}UID`]: user.uid });
+    
+    showToast("Accounts linked! Welcome back.", "success");
+    const dashboards = { student: "student-dashboard.html", tutor: "tutor-dashboard.html", admin: "admin-dashboard.html" };
+    setTimeout(() => { window.location.href = dashboards[existingData.role] || "student-dashboard.html"; }, 900);
+    return;
+  }
+
+  // Brand new user
+  const nameParts = (user.displayName || "").split(" ");
+  const firstName = nameParts[0] || "Student";
+  const lastName  = nameParts.slice(1).join(" ") || "";
+  
+  await setDoc(doc(db, "users", user.uid), {
+    uid: user.uid, firstName, lastName,
+    fullName: user.displayName || firstName,
+    email: user.email || "", phone: "",
+    role: "student", status: "active",
+    emailVerified: true,
+    provider: providerId,
+    createdAt: serverTimestamp(),
+  });
+  
+  showToast("Account created! Welcome to codeSchool.", "success");
+  setTimeout(() => { window.location.href = "student-dashboard.html"; }, 900);
+}
+
+// ── Handle social sign-in errors ────────────────────────────────
+function handleSocialError(e, providerName, btnId) {
+  console.error(`${providerName} sign-in error:`, e.code, e.message);
+  if (e.code === 'auth/popup-closed-by-user') {
+    showToast('Sign-in cancelled.', '');
+  } else if (e.code === 'auth/account-exists-with-different-credential') {
+    showToast('An account already exists with this email. Try logging in with your password.', 'error');
+  } else if (e.code === 'auth/popup-blocked') {
+    showToast('Popup was blocked. Please allow popups for this site.', 'error');
+  } else if (e.code === 'auth/cancelled-popup-request') {
+    showToast('Another sign-in is in progress.', 'warning');
+  } else {
+    showToast(`${providerName} sign-in failed — please try again.`, 'error');
+  }
+  _socialInProgress = false;
+  resetSocialBtn(btnId);
+}
+
+function resetSocialBtn(btnId) {
+  const btn = document.getElementById(btnId);
+  if (!btn) return;
+  btn.disabled = false;
+  if (btnId === 'btn-google') {
+    btn.innerHTML = '<svg width="18" height="18" viewBox="0 0 48 48"><path fill="#EA4335" d="M24 9.5c3.54 0 6.71 1.22 9.21 3.6l6.85-6.85C35.9 2.38 30.47 0 24 0 14.62 0 6.51 5.38 2.56 13.22l7.98 6.19C12.43 13.08 17.74 9.5 24 9.5z"/><path fill="#4285F4" d="M46.98 24.55c0-1.57-.15-3.09-.38-4.55H24v9.02h12.94c-.58 2.96-2.26 5.48-4.78 7.18l7.73 6c4.51-4.18 7.09-10.36 7.09-17.65z"/><path fill="#FBBC05" d="M10.53 28.59c-.48-1.45-.76-2.99-.76-4.59s.27-3.14.76-4.59l-7.98-6.19C.92 16.46 0 20.12 0 24c0 3.88.92 7.54 2.56 10.78l7.97-6.19z"/><path fill="#34A853" d="M24 48c6.48 0 11.93-2.13 15.89-5.81l-7.73-6c-2.18 1.48-4.97 2.31-8.16 2.31-6.26 0-11.57-3.59-13.46-8.83l-7.98 6.19C6.51 42.62 14.62 48 24 48z"/></svg> Google';
+  } else {
+    btn.innerHTML = '<svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0 0 24 12c0-6.63-5.37-12-12-12z"/></svg> GitHub';
+  }
+}
+
+// ── AUTO-REDIRECT IF LOGGED IN ──────────────────────────────────
 onAuthStateChanged(auth, async (user) => {
-  if (!user || _googleSignInInProgress || _signupInProgress || _loginInProgress) return;
+  if (!user || _socialInProgress) return;
   try {
     const snap = await getDoc(doc(db, "users", user.uid));
     if (!snap.exists()) return;
     const role = snap.data().role;
-    const dashboards = {
-      student: "student-dashboard.html",
-      admin:   "admin-dashboard.html",
-      tutor:   "tutor-dashboard.html"
-    };
+    const dashboards = { student: "student-dashboard.html", admin: "admin-dashboard.html", tutor: "tutor-dashboard.html" };
     window.location.href = dashboards[role] || "student-dashboard.html";
-  } catch (e) { /* offline */ }
+  } catch (e) {}
 });
 
 // ── LOGIN ──────────────────────────────────────────────────────
@@ -526,19 +418,14 @@ window.handleLogin = async function() {
   const btn   = document.getElementById('btn-login');
 
   if (!email || !pw) { showToast('Please enter your email and password.', 'error'); return; }
-
   setLoading(btn, true);
-  _loginInProgress = true;
 
   try {
-    try { await enableNetwork(db); } catch(_) {}
-
     const cred = await signInWithEmailAndPassword(auth, email, pw);
     const snapPre = await getDoc(doc(db, 'users', cred.user.uid));
 
     const isAdminVerified = snapPre.exists() && snapPre.data().isVerified === true;
     if (!cred.user.emailVerified && !isAdminVerified) {
-      _loginInProgress = false;
       await signOut(auth);
       setLoading(btn, false);
       showVerificationPrompt(email);
@@ -549,51 +436,45 @@ window.handleLogin = async function() {
     if (!snapPre.exists()) {
       const pendingSnap = await getDoc(doc(db, 'pending_users', cred.user.uid));
       if (!pendingSnap.exists()) {
-        _loginInProgress = false;
         showToast('Account not found. Please sign up.', 'error');
         await signOut(auth);
         setLoading(btn, false);
         return;
       }
-      const pendingData  = pendingSnap.data();
-      const promotedData = { ...pendingData, emailVerified: true };
-      await setDoc(doc(db, 'users', cred.user.uid), promotedData);
+      const pendingData = pendingSnap.data();
+      await setDoc(doc(db, 'users', cred.user.uid), { ...pendingData, emailVerified: true });
       try { await deleteDoc(doc(db, 'pending_users', cred.user.uid)); } catch(_) {}
-      profile = promotedData;
+      profile = pendingData;
     } else {
       profile = snapPre.data();
     }
 
     if (profile.role !== 'student') {
-      _loginInProgress = false;
-      showToast('This is not a student account. Use the tutor or admin portal.', 'error');
+      showToast('This is not a student account.', 'error');
       await signOut(auth);
       setLoading(btn, false);
       return;
     }
 
     if (profile.status === 'suspended') {
-      _loginInProgress = false;
       showToast('Account suspended. Contact support.', 'error');
       await signOut(auth);
       setLoading(btn, false);
       return;
     }
 
-    _loginInProgress = false;
-    showToast('Welcome back! Loading your dashboard…', 'success');
+    showToast('Welcome back!', 'success');
     setTimeout(() => { window.location.href = 'student-dashboard.html'; }, 800);
 
   } catch(e) {
     const msgs = {
-      'auth/user-not-found':     'No account with this email.',
-      'auth/wrong-password':     'Incorrect password.',
-      'auth/invalid-email':      'Invalid email address.',
-      'auth/too-many-requests':  'Too many attempts. Try again later.',
+      'auth/user-not-found': 'No account with this email.',
+      'auth/wrong-password': 'Incorrect password.',
+      'auth/invalid-email': 'Invalid email address.',
+      'auth/too-many-requests': 'Too many attempts. Try again later.',
       'auth/invalid-credential': 'Email or password is incorrect.',
     };
-    _loginInProgress = false;
-    showToast(msgs[e.code] || 'Sign-in failed — please try again', 'error');
+    showToast(msgs[e.code] || 'Sign-in failed', 'error');
     setLoading(btn, false);
   }
 };
@@ -616,15 +497,13 @@ window.handleSignup = async function() {
 
   const btn = document.getElementById("btn-signup");
   setLoading(btn, true);
-  _signupInProgress = true;
 
   try {
     const cred = await createUserWithEmailAndPassword(auth, email, pw);
     await setDoc(doc(db, "pending_users", cred.user.uid), {
       uid: cred.user.uid,
-      firstName: v("s-fname"),
-      lastName:  v("s-lname"),
-      fullName:  v("s-fname") + " " + v("s-lname"),
+      firstName: v("s-fname"), lastName: v("s-lname"),
+      fullName: v("s-fname") + " " + v("s-lname"),
       email, phone: v("s-phone"),
       role: "student", status: "active",
       emailVerified: false,
@@ -632,18 +511,49 @@ window.handleSignup = async function() {
     });
     await sendEmailVerification(cred.user);
     await signOut(auth);
-    _signupInProgress = false;
     showVerifyBanner(email);
     setLoading(btn, false);
   } catch (e) {
     const msgs = {
       "auth/email-already-in-use": "An account with this email already exists.",
-      "auth/invalid-email":        "That doesn't look like a valid email address.",
-      "auth/weak-password":        "Password is too weak — use at least 6 characters.",
+      "auth/invalid-email": "Invalid email address.",
+      "auth/weak-password": "Password too weak — use at least 6 characters.",
     };
-    _signupInProgress = false;
     showToast(msgs[e.code] || "Something went wrong — please try again", "error");
     setLoading(btn, false);
+  }
+};
+
+// ── GOOGLE SIGN-IN (POPUP) ─────────────────────────────────────
+window.handleGoogleSignIn = async function() {
+  if (_socialInProgress) return;
+  _socialInProgress = true;
+  const btn = document.getElementById('btn-google');
+  if (btn) { btn.disabled = true; btn.innerHTML = '<span class="spinner"></span>Signing in…'; }
+  
+  try {
+    const provider = new GoogleAuthProvider();
+    provider.setCustomParameters({ prompt: 'select_account' });
+    const result = await signInWithPopup(auth, provider);
+    await processSocialUser(result.user, "google");
+  } catch(e) {
+    handleSocialError(e, 'Google', 'btn-google');
+  }
+};
+
+// ── GITHUB SIGN-IN (POPUP) ─────────────────────────────────────
+window.handleGithubSignIn = async function() {
+  if (_socialInProgress) return;
+  _socialInProgress = true;
+  const btn = document.getElementById('btn-github');
+  if (btn) { btn.disabled = true; btn.innerHTML = '<span class="spinner"></span>Signing in…'; }
+  
+  try {
+    const provider = new GithubAuthProvider();
+    const result = await signInWithPopup(auth, provider);
+    await processSocialUser(result.user, "github");
+  } catch(e) {
+    handleSocialError(e, 'GitHub', 'btn-github');
   }
 };
 
@@ -651,46 +561,14 @@ window.handleSignup = async function() {
 document.getElementById('forgot-link').addEventListener('click', async e => {
   e.preventDefault();
   const email = document.getElementById('login-email').value.trim();
-  if (!email) { showToast('Enter your email first, then click Forgot password.', 'error'); return; }
+  if (!email) { showToast('Enter your email first.', 'error'); return; }
   try {
     await sendPasswordResetEmail(auth, email);
     showToast('Password reset email sent — check your inbox.', 'success');
   } catch(er2) {
-    const msgs = {
-      'auth/invalid-email':     'That email address is not valid.',
-      'auth/too-many-requests': 'Too many requests. Wait a few minutes.',
-      'auth/user-not-found':    'No account found with this email.',
-    };
-    showToast(msgs[er2.code] || 'Could not send reset email. Try again.', 'error');
+    showToast('Could not send reset email. Try again.', 'error');
   }
 });
-
-// ── GOOGLE / GITHUB SIGN-IN ────────────────────────────────────
-window.handleGoogleSignIn = async function() {
-  const btn = document.querySelector('#panel-login .btn-social:first-of-type');
-  if (btn) { btn.disabled = true; btn.innerHTML = '<span class="spinner"></span>Redirecting…'; }
-  try {
-    const provider = new GoogleAuthProvider();
-    provider.setCustomParameters({ prompt: 'select_account' });
-    await signInWithRedirect(auth, provider);
-  } catch(e) {
-    console.error("[codeSchool] Google sign-in error:", e.code, e.message);
-    showToast("Google sign-in failed — please try again", "error");
-    if (btn) { btn.disabled = false; btn.innerHTML = 'Google'; }
-  }
-};
-
-window.handleGithubSignIn = async function() {
-  const btn = document.querySelector('#panel-login .btn-social:last-of-type');
-  if (btn) { btn.disabled = true; btn.innerHTML = '<span class="spinner"></span>Redirecting…'; }
-  try {
-    await signInWithRedirect(auth, new GithubAuthProvider());
-  } catch(e) {
-    console.error("[codeSchool] GitHub sign-in error:", e.code, e.message);
-    showToast("GitHub sign-in failed — please try again", "error");
-    if (btn) { btn.disabled = false; btn.innerHTML = 'GitHub'; }
-  }
-};
 
 // ── VERIFICATION FLOW ──────────────────────────────────────────
 function showVerificationPrompt(email) {
@@ -701,19 +579,11 @@ function showVerificationPrompt(email) {
   div.id = "unverified-prompt";
   div.style.cssText = "background:rgba(245,158,11,.09);border:1px solid rgba(245,158,11,.25);border-radius:10px;padding:.85rem 1rem;margin-top:.75rem;font-family:var(--mono);font-size:.72rem;color:#F59E0B;line-height:1.65;";
   div.innerHTML = `
-    <strong>Email not verified.</strong><br>
-    Check your inbox for a verification link.<br>
-    Also check <strong>Spam</strong> / <strong>Promotions</strong>.<br><br>
-    <button onclick="resendVerification('${email}',this)"
-      style="background:rgba(245,158,11,.15);border:1px solid rgba(245,158,11,.3);border-radius:6px;padding:.35rem .85rem;color:#F59E0B;font-family:var(--mono);font-size:.68rem;cursor:pointer;">
-      Resend Verification Email
-    </button>`;
+    <strong>Email not verified.</strong><br>Check your inbox for a verification link.<br>Also check <strong>Spam</strong> / <strong>Promotions</strong>.<br><br>
+    <button onclick="resendVerification('${email}',this)" style="background:rgba(245,158,11,.15);border:1px solid rgba(245,158,11,.3);border-radius:6px;padding:.35rem .85rem;color:#F59E0B;font-family:var(--mono);font-size:.68rem;cursor:pointer;">Resend Verification Email</button>`;
   
-  const loginEmailInput = document.getElementById("login-email");
-  if (loginEmailInput) {
-    const fg = loginEmailInput.closest(".form-group") || loginEmailInput.parentNode;
-    if (fg) fg.insertAdjacentElement("afterend", div);
-  }
+  const fg = document.getElementById("login-email").closest(".form-group");
+  if (fg) fg.insertAdjacentElement("afterend", div);
   showToast("Verify your email before logging in.", "error");
 }
 
@@ -723,16 +593,8 @@ function showVerifyBanner(email) {
   card.innerHTML = `
     <div style="text-align:center;padding:2rem 1.6rem;">
       <div style="font-family:var(--display);font-size:1.3rem;font-weight:800;margin-bottom:.6rem;">Verify Your Email</div>
-      <div style="font-family:var(--mono);font-size:.78rem;color:var(--gray);line-height:1.7;margin-bottom:1rem;">
-        We sent a verification link to<br>
-        <strong style="color:var(--white);">${email}</strong><br><br>
-        Click that link, then come back here to log in.
-      </div>
-      <div style="background:rgba(255,255,255,.04);border:1px solid var(--border);border-radius:10px;padding:1rem;font-family:var(--mono);font-size:.7rem;color:var(--gray);line-height:1.7;margin-bottom:1.25rem;">
-        Don't see it? Check <strong style="color:var(--white);">Spam</strong> or <strong style="color:var(--white);">Promotions</strong>.
-      </div>
-      <button style="width:100%;padding:.8rem;background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.15);border-radius:10px;color:var(--white);font-family:var(--mono);font-size:.72rem;cursor:pointer;margin-bottom:.75rem;"
-        onclick="resendVerification('${email}',this)">Resend Verification Email</button>
+      <div style="font-family:var(--mono);font-size:.78rem;color:var(--gray);line-height:1.7;margin-bottom:1rem;">We sent a verification link to<br><strong style="color:var(--white);">${email}</strong><br><br>Click that link, then come back here to log in.</div>
+      <button style="width:100%;padding:.8rem;background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.15);border-radius:10px;color:var(--white);font-family:var(--mono);font-size:.72rem;cursor:pointer;margin-bottom:.75rem;" onclick="resendVerification('${email}',this)">Resend Verification Email</button>
       <a href="auth.html" style="font-family:var(--mono);font-size:.72rem;color:var(--gray);">Back to Login</a>
     </div>`;
 }
@@ -740,8 +602,7 @@ function showVerifyBanner(email) {
 window.resendVerification = async function(email, btn) {
   const pw = prompt("Enter your password to resend the verification email:");
   if (!pw) return;
-  btn.textContent = "Sending…";
-  btn.disabled    = true;
+  btn.textContent = "Sending…"; btn.disabled = true;
   try {
     const cred = await signInWithEmailAndPassword(auth, email, pw);
     if (cred.user.emailVerified) {
@@ -754,15 +615,9 @@ window.resendVerification = async function(email, btn) {
     await signOut(auth);
     showToast("Verification email resent — check your inbox.", "success");
   } catch(e2) {
-    showToast(
-      e2.code === "auth/wrong-password"
-        ? "Wrong password entered"
-        : "Could not resend — check your connection",
-      "error"
-    );
+    showToast(e2.code === "auth/wrong-password" ? "Wrong password entered" : "Could not resend", "error");
   }
-  btn.textContent = "Resend Verification Email";
-  btn.disabled    = false;
+  btn.textContent = "Resend Verification Email"; btn.disabled = false;
 };
 </script>
 </body>
