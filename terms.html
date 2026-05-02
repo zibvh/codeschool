@@ -24,18 +24,18 @@
   <meta name="twitter:image" content="https://codeschool-q692.onrender.com/codeSchool.png">
 
   <!-- Theme & mobile -->
-  <meta name="theme-color" content="#0B1A0E">
+  <meta name="theme-color" content="#050B1A">
   <link rel="icon" type="image/png" href="codeSchool.png">
   <link rel="apple-touch-icon" href="codeSchool.png">
   <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Mono:wght@300;400;500&family=Outfit:wght@300;400;500;600&display=swap" rel="stylesheet">
   <style>
     :root {
-      --blue: #1A4720; --blue-mid: #2A7040; --blue-glow: #4A9B5F;
+      --blue: #03336b; --blue-mid: #0557a8; --blue-glow: #0693e3;
       --red: #C47B1A; --red-bright: #E89020;
-      --white: #FFFFFF; --dark: #0B1A0E; --dark2: #122010;
+      --white: #FFFFFF; --dark: #050B1A; --dark2: #0A1226;
       --gray: #8A94B8; --gray2: #4A5378;
       --border: rgba(255,255,255,0.08);
-      --green: #22C55E;
+      --green: #0693e3;
       --mono: 'DM Mono', monospace; --display: 'Syne', sans-serif; --body: 'Outfit', sans-serif;
     }
     *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
@@ -49,8 +49,8 @@
     /* Background */
     body::before {
       content: ''; position: fixed; inset: 0; z-index: 0; pointer-events: none;
-      background-image: linear-gradient(rgba(74,155,95,0.04) 1px, transparent 1px),
-                        linear-gradient(90deg, rgba(74,155,95,0.04) 1px, transparent 1px);
+      background-image: linear-gradient(rgba(6,147,227,0.04) 1px, transparent 1px),
+                        linear-gradient(90deg, rgba(6,147,227,0.04) 1px, transparent 1px);
       background-size: 55px 55px;
       mask-image: radial-gradient(ellipse 80% 80% at 50% 20%, black 20%, transparent 100%);
     }
@@ -60,10 +60,11 @@
       position: fixed; top: 0; left: 0; right: 0; z-index: 100;
       padding: 0 5%; height: 72px;
       display: flex; align-items: center; justify-content: space-between;
-      background: rgba(11,26,14,0.88); backdrop-filter: blur(20px);
+      background: rgba(5,11,26,0.88); backdrop-filter: blur(20px);
       border-bottom: 1px solid var(--border);
     }
-    .logo { font-family: var(--display); font-size: 1.5rem; font-weight: 800; letter-spacing: -0.03em; color: var(--white); text-decoration: none; }
+    .logo img{height:36px;width:auto;display:block;}
+  .logo { font-family: var(--display); font-size: 1.5rem; font-weight: 800; letter-spacing: -0.03em; color: var(--white); text-decoration: none; }
     .logo span { color: var(--amber); }
     .nav-links { display: flex; align-items: center; gap: 2rem; list-style: none; }
     .nav-links a { font-family: var(--mono); font-size: 0.78rem; color: var(--gray); text-decoration: none; letter-spacing: .05em; transition: color .2s; }
@@ -74,7 +75,7 @@
       margin-top: 120px; padding: 2rem 5% 4rem;
     }
     .policy-card {
-      background: rgba(18,32,16,0.6); backdrop-filter: blur(24px);
+      background: rgba(10,18,38,0.6); backdrop-filter: blur(24px);
       border: 1px solid var(--border); border-radius: 16px;
       padding: 3rem 2.5rem; box-shadow: 0 24px 60px rgba(0,0,0,0.4);
     }
@@ -99,8 +100,18 @@
   </style>
 </head>
 <body>
+<div id="page-loader" style="position:fixed;inset:0;z-index:9999;background:#050B1A;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:1.5rem;transition:opacity .4s;">
+  <img src="mra.png" alt="codeSchool" style="height:56px;width:auto;animation:loaderPulse 1.5s ease-in-out infinite;">
+  <div style="width:180px;height:2px;background:rgba(6,147,227,.15);border-radius:2px;overflow:hidden;">
+    <div style="height:100%;background:#0693e3;border-radius:2px;animation:loaderBar 1.5s ease-in-out infinite;"></div>
+  </div>
+</div>
+<style>
+@keyframes loaderPulse{0%,100%{opacity:.6;transform:scale(.97)}50%{opacity:1;transform:scale(1)}}
+@keyframes loaderBar{0%{width:0;margin-left:0}60%{width:100%;margin-left:0}100%{width:0;margin-left:100%}}
+</style>
   <nav>
-    <a href="index.html" class="logo">frNt<span>c</span>Oda</a>
+    <a href="index.html" class="logo"><img src="mra.png" alt="codeSchool" style="height:36px;width:auto;object-fit:contain;display:block;"></a>
     <div class="nav-links">
       <a href="index.html">← Back to Home</a>
     </div>
@@ -170,5 +181,11 @@
       <p>If you have any questions about these Terms, please contact us at <a href="mailto:codeSchool@gmail.com">codeSchool@gmail.com</a>.</p>
     </div>
   </div>
+<script>
+window.addEventListener('load',function(){
+  var l=document.getElementById('page-loader');
+  if(l){l.style.opacity='0';setTimeout(function(){l.style.display='none'},400);}
+});
+</script>
 </body>
 </html>

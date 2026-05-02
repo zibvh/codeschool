@@ -32,7 +32,7 @@
 <meta name="twitter:image:alt" content="codeSchool — Learn To Code">
 <meta name="twitter:site" content="@codeSchool">
 
-<meta name="theme-color" content="#0B1A0E">
+<meta name="theme-color" content="#050B1A">
 <meta name="mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
@@ -81,16 +81,16 @@
   }
 }
   :root {
-    --blue: #1A4720;
-    --blue-mid: #2A7040;
+    --blue: #03336b;
+    --blue-mid: #0557a8;
     --blue-light: #1A4FD8;
-    --blue-glow: #4A9B5F;
+    --blue-glow: #0693e3;
     --red: #C47B1A;
     --red-bright: #E89020;
     --cream: #F5F0E8;
     --white: #FFFFFF;
-    --dark: #0B1A0E;
-    --dark2: #122010;
+    --dark: #050B1A;
+    --dark2: #0A1226;
     --gray: #8A94B8;
     --mono: 'DM Mono', monospace;
     --display: 'Syne', sans-serif;
@@ -150,11 +150,12 @@
     padding: 0 5%;
     height: 72px;
     display: flex; align-items: center; justify-content: space-between;
-    background: rgba(11,26,14,0.85);
+    background: rgba(5,11,26,0.85);
     backdrop-filter: blur(20px);
-    border-bottom: 1px solid rgba(74,155,95,0.15);
+    border-bottom: 1px solid rgba(6,147,227,0.15);
   }
 
+  .logo img{height:36px;width:auto;display:block;}
   .logo {
     font-family: var(--display);
     font-size: 1.6rem;
@@ -224,8 +225,8 @@
   .hero-grid-bg {
     position: absolute; inset: 0;
     background-image:
-      linear-gradient(rgba(74,155,95,0.06) 1px, transparent 1px),
-      linear-gradient(90deg, rgba(74,155,95,0.06) 1px, transparent 1px);
+      linear-gradient(rgba(6,147,227,0.06) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(6,147,227,0.06) 1px, transparent 1px);
     background-size: 60px 60px;
     mask-image: radial-gradient(ellipse 80% 80% at 50% 50%, black 30%, transparent 100%);
   }
@@ -257,8 +258,8 @@
     color: var(--forest-glow);
     letter-spacing: 0.1em;
     text-transform: uppercase;
-    background: rgba(74,155,95,0.1);
-    border: 1px solid rgba(74,155,95,0.3);
+    background: rgba(6,147,227,0.1);
+    border: 1px solid rgba(6,147,227,0.3);
     padding: 0.35rem 0.9rem;
     border-radius: 100px;
     margin-bottom: 2rem;
@@ -339,7 +340,7 @@
     text-decoration: none;
     transition: border-color 0.2s, background 0.2s;
   }
-  .btn-outline-big:hover { border-color: var(--forest-glow); background: rgba(74,155,95,0.08); }
+  .btn-outline-big:hover { border-color: var(--forest-glow); background: rgba(6,147,227,0.08); }
 
   .hero-stats {
     display: flex; gap: 3rem;
@@ -373,8 +374,8 @@
     top: 50%;
     transform: translateY(-50%);
     width: 380px;
-    background: rgba(18,32,16,0.7);
-    border: 1px solid rgba(74,155,95,0.2);
+    background: rgba(10,18,38,0.7);
+    border: 1px solid rgba(6,147,227,0.2);
     border-radius: 12px;
     padding: 1.5rem;
     backdrop-filter: blur(20px);
@@ -519,7 +520,7 @@
   .course-card:hover::before { opacity: 1; }
   .course-card:hover {
     transform: translateY(-4px);
-    border-color: rgba(74,155,95,0.3);
+    border-color: rgba(6,147,227,0.3);
     box-shadow: 0 20px 60px rgba(0,0,0,0.3);
   }
   .course-card.featured::before { opacity: 1; background: linear-gradient(90deg, var(--amber-dark), var(--amber)); }
@@ -536,9 +537,9 @@
     margin-bottom: 1rem;
   }
   .badge-html { background: rgba(255,107,107,0.15); color: #F5C060; }
-  .badge-css { background: rgba(74,155,95,0.15); color: var(--forest-glow); }
+  .badge-css { background: rgba(6,147,227,0.15); color: var(--forest-glow); }
   .badge-js { background: rgba(255,214,0,0.15); color: #FFD600; }
-  .badge-other { background: rgba(74,155,95,0.15); color: var(--forest-glow); }
+  .badge-other { background: rgba(6,147,227,0.15); color: var(--forest-glow); }
 
   .course-icon {
     font-size: 2.5rem;
@@ -585,12 +586,12 @@
     text-decoration: none;
     transition: gap 0.2s;
     margin-top: 1rem;
-    border: 1px solid rgba(74,155,95,0.3);
+    border: 1px solid rgba(6,147,227,0.3);
     padding: 0.4rem 1rem;
     border-radius: 4px;
     transition: background 0.2s, color 0.2s;
   }
-  .course-enroll:hover { background: rgba(74,155,95,0.1); color: var(--white); }
+  .course-enroll:hover { background: rgba(6,147,227,0.1); color: var(--white); }
 
   /* how it works */
   .how-section {
@@ -611,12 +612,12 @@
     border-radius: 10px;
     transition: border-color 0.3s;
   }
-  .how-step:hover { border-color: rgba(74,155,95,0.3); }
+  .how-step:hover { border-color: rgba(6,147,227,0.3); }
   .step-num {
     font-family: var(--display);
     font-size: 4rem;
     font-weight: 800;
-    color: rgba(74,155,95,0.12);
+    color: rgba(6,147,227,0.12);
     line-height: 1;
     margin-bottom: 1rem;
     letter-spacing: -0.05em;
@@ -658,7 +659,7 @@
   .cert-feat::before {
     content: '✓';
     width: 20px; height: 20px;
-    background: rgba(74,155,95,0.15);
+    background: rgba(6,147,227,0.15);
     border-radius: 50%;
     display: flex; align-items: center; justify-content: center;
     color: var(--forest-glow);
@@ -904,7 +905,7 @@
     padding: 1.75rem;
     transition: border-color 0.3s;
   }
-  .testi-card:hover { border-color: rgba(74,155,95,0.25); }
+  .testi-card:hover { border-color: rgba(6,147,227,0.25); }
   .testi-quote {
     font-size: 2rem;
     color: var(--amber);
@@ -969,7 +970,8 @@
     gap: 3rem;
     margin-bottom: 3rem;
   }
-  .footer-brand .logo { display: block; margin-bottom: 1rem; font-size: 1.4rem; }
+  .footer-brand .logo img{height:36px;width:auto;display:block;}
+  .logo { display: block; margin-bottom: 1rem; font-size: 1.4rem; }
   .footer-brand p {
     font-size: 0.875rem;
     color: var(--gray);
@@ -1047,7 +1049,7 @@
     position: fixed;
     top: 72px; left: 0; right: 0;
     background: var(--dark2);
-    border-bottom: 1px solid rgba(74,155,95,.15);
+    border-bottom: 1px solid rgba(6,147,227,.15);
     padding: 1.25rem 5%;
     z-index: 99;
     animation: slideDown .25s ease;
@@ -1169,13 +1171,23 @@
 </style>
 </head>
 <body>
+<div id="page-loader" style="position:fixed;inset:0;z-index:9999;background:#050B1A;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:1.5rem;transition:opacity .4s;">
+  <img src="mra.png" alt="codeSchool" style="height:56px;width:auto;animation:loaderPulse 1.5s ease-in-out infinite;">
+  <div style="width:180px;height:2px;background:rgba(6,147,227,.15);border-radius:2px;overflow:hidden;">
+    <div style="height:100%;background:#0693e3;border-radius:2px;animation:loaderBar 1.5s ease-in-out infinite;"></div>
+  </div>
+</div>
+<style>
+@keyframes loaderPulse{0%,100%{opacity:.6;transform:scale(.97)}50%{opacity:1;transform:scale(1)}}
+@keyframes loaderBar{0%{width:0;margin-left:0}60%{width:100%;margin-left:0}100%{width:0;margin-left:100%}}
+</style>
 
 <div class="cursor" id="cursor"></div>
 <div class="cursor-ring" id="cursorRing"></div>
 
 
 <nav>
-  <a href="index.html" class="logo">codeSchool</a>
+  <a href="index.html" class="logo"><img src="mra.png" alt="codeSchool" style="height:36px;width:auto;object-fit:contain;display:block;"></a>
   <ul class="nav-links">
     <li><a href="courses.html">All Courses</a></li>
     <li><a href="#courses">Featured</a></li>
@@ -1496,7 +1508,7 @@
 <footer>
   <div class="footer-grid">
     <div class="footer-brand">
-      <a href="#" class="logo">frNt<span style="color:var(--amber)">c</span>Oda</a>
+      <a href="#" class="logo"><img src="mra.png" alt="codeSchool" style="height:36px;width:auto;object-fit:contain;display:block;"></a>
       <p>Nigeria's premier online coding school. Learn Rust, Python, JavaScript, and more from expert tutors — earn verified certificates and build your career.</p>
     </div>
     <div class="footer-col">
@@ -1580,7 +1592,7 @@
       cursor.style.height = '20px';
       ring.style.width = '52px';
       ring.style.height = '52px';
-      ring.style.borderColor = 'rgba(74,155,95,0.7)';
+      ring.style.borderColor = 'rgba(6,147,227,0.7)';
     });
     el.addEventListener('mouseleave', () => {
       cursor.style.width = '12px';
@@ -1614,18 +1626,18 @@
 </script>
 <!-- login modal -->
 <div class="modal-overlay" id="login-modal" style="position:fixed;inset:0;background:rgba(0,0,0,.78);z-index:500;display:none;align-items:center;justify-content:center;backdrop-filter:blur(8px);">
-  <div style="background:#122010;border:1px solid rgba(74,155,95,.25);border-radius:18px;padding:2.5rem;width:100%;max-width:420px;position:relative;box-shadow:0 50px 120px rgba(0,0,0,.65);animation:mgSlide .3s ease;">
+  <div style="background:#0A1226;border:1px solid rgba(6,147,227,.25);border-radius:18px;padding:2.5rem;width:100%;max-width:420px;position:relative;box-shadow:0 50px 120px rgba(0,0,0,.65);animation:mgSlide .3s ease;">
     <style>
       @keyframes mgSlide{from{opacity:0;transform:translateY(30px)}to{opacity:1;transform:translateY(0)}}
       .modal-overlay.open{display:flex!important;}
       #login-modal .mg-btn-main{font-family:'Syne',sans-serif;font-size:.95rem;font-weight:700;color:#fff;background:#C47B1A;border:none;padding:.85rem;border-radius:8px;cursor:none;width:100%;transition:background .2s;box-shadow:0 8px 30px rgba(196,123,26,.3);margin-bottom:.75rem;display:block;}
       #login-modal .mg-btn-main:hover{background:#E89020;}
       #login-modal .mg-btn-sec{font-family:'Syne',sans-serif;font-size:.9rem;font-weight:600;color:#fff;background:transparent;border:1px solid rgba(255,255,255,.15);padding:.8rem;border-radius:8px;cursor:none;width:100%;transition:border-color .2s;display:block;}
-      #login-modal .mg-btn-sec:hover{border-color:#4A9B5F;color:#4A9B5F;}
+      #login-modal .mg-btn-sec:hover{border-color:#0693e3;color:#0693e3;}
     </style>
     <button onclick="document.getElementById('login-modal').classList.remove('open')" style="position:absolute;top:1.25rem;right:1.25rem;background:none;border:none;cursor:pointer;color:#8A94B8;display:flex;align-items:center;"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" style="width:18px;height:18px"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg></button>
     <div style="background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.08);border-radius:10px;padding:1rem;margin-bottom:1.5rem;display:flex;align-items:center;gap:.85rem;">
-      <div id="mg-icon" style="width:38px;height:38px;border-radius:8px;background:rgba(74,155,95,.12);border:1px solid rgba(74,155,95,.2);display:flex;align-items:center;justify-content:center;flex-shrink:0;"><svg viewBox="0 0 24 24" fill="none" stroke="var(--forest-glow)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" style="width:20px;height:20px"><polyline points="16 18 22 12 16 6"></polyline><polyline points="8 6 2 12 8 18"></polyline></svg></div>
+      <div id="mg-icon" style="width:38px;height:38px;border-radius:8px;background:rgba(6,147,227,.12);border:1px solid rgba(6,147,227,.2);display:flex;align-items:center;justify-content:center;flex-shrink:0;"><svg viewBox="0 0 24 24" fill="none" stroke="var(--forest-glow)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" style="width:20px;height:20px"><polyline points="16 18 22 12 16 6"></polyline><polyline points="8 6 2 12 8 18"></polyline></svg></div>
       <div>
         <div id="mg-ctitle" style="font-family:'Syne',sans-serif;font-size:.95rem;font-weight:700;">—</div>
         <div id="mg-csub" style="font-family:'DM Mono',monospace;font-size:.65rem;color:#8A94B8;margin-top:.15rem;">—</div>
@@ -1686,7 +1698,7 @@ const CODE_SVG = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" str
 const ARR_SVG  = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width:13px;height:13px"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>`;
 
 function langBadge(l){return l==="HTML"?"badge-html":l==="CSS"?"badge-css":l==="JavaScript"?"badge-js":"badge-other";}
-function bannerBg(l){return l==="HTML"?"background:linear-gradient(135deg,rgba(227,79,38,.2) 0%,rgba(10,31,110,.9) 100%)":l==="CSS"?"background:linear-gradient(135deg,rgba(38,77,228,.2) 0%,rgba(10,31,110,.9) 100%)":l==="JavaScript"?"background:linear-gradient(135deg,rgba(247,223,30,.15) 0%,rgba(10,31,110,.9) 100%)":"background:linear-gradient(135deg,rgba(74,155,95,.2) 0%,rgba(11,26,14,.95) 100%)";}
+function bannerBg(l){return l==="HTML"?"background:linear-gradient(135deg,rgba(227,79,38,.2) 0%,rgba(10,31,110,.9) 100%)":l==="CSS"?"background:linear-gradient(135deg,rgba(38,77,228,.2) 0%,rgba(10,31,110,.9) 100%)":l==="JavaScript"?"background:linear-gradient(135deg,rgba(247,223,30,.15) 0%,rgba(10,31,110,.9) 100%)":"background:linear-gradient(135deg,rgba(6,147,227,.2) 0%,rgba(5,11,26,.95) 100%)";}
 
 async function loadHomepageCourses() {
   const wrapper = document.getElementById('homepage-courses-grid');
@@ -1747,6 +1759,12 @@ async function loadHomepageCourses() {
   }
 }
 loadHomepageCourses();
+</script>
+<script>
+window.addEventListener('load',function(){
+  var l=document.getElementById('page-loader');
+  if(l){l.style.opacity='0';setTimeout(function(){l.style.display='none'},400);}
+});
 </script>
 </body>
 </html>
