@@ -287,8 +287,6 @@ import {
   GoogleAuthProvider,
   GithubAuthProvider,
   signInWithPopup,
-  signInWithRedirect,
-  getRedirectResult,
   onAuthStateChanged,
   signOut,
 } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
@@ -309,39 +307,6 @@ const auth = getAuth(app);
 const db   = getFirestore(app);
 
 let _socialInProgress = false;
-
-// ── Handle redirect result on page load (GitHub / Google redirect flow) ──
-(async () => {
-  try {
-    console.log('[Auth] Checking for redirect result…');
-    const result = await getRedirectResult(auth);
-    if (result && result.user) {
-      console.log('[Auth] Redirect result received — provider:', result.providerId, '| uid:', result.user.uid, '| email:', result.user.email);
-      _socialInProgress = true;
-      // Show loading state on whichever button matches
-      const isGithub = result.providerId === 'github.com';
-      const btnId = isGithub ? 'btn-github' : 'btn-google';
-      const btn = document.getElementById(btnId);
-      if (btn) { btn.disabled = true; btn.innerHTML = '<span class="spinner"></span>Signing in…'; }
-      await processSocialUser(result.user, isGithub ? 'github' : 'google');
-    } else {
-      console.log('[Auth] No redirect result — normal page load');
-    }
-  } catch(e) {
-    console.error('[Auth] getRedirectResult error:', e.code, e.message, e);
-    // auth/account-exists-with-different-credential is common here
-    if (e.code === 'auth/account-exists-with-different-credential') {
-      console.error('[Auth] Email already registered with a different provider. Credential:', e.customData?.email);
-      showToast('An account already exists with this email. Try logging in with your password or a different provider.', 'error');
-    } else if (e.code === 'auth/operation-not-allowed') {
-      console.error('[Auth] This sign-in provider is not enabled in Firebase Console → Authentication → Sign-in providers');
-      showToast('This sign-in method is not enabled. Contact support.', 'error');
-    } else if (e.message) {
-      showToast('Sign-in failed — see console for details.', 'error');
-    }
-    _socialInProgress = false;
-  }
-})();
 
 // ── Process social sign-in result ───────────────────────────────
 async function processSocialUser(user, providerId) {
@@ -640,8 +605,11 @@ window.handleGoogleSignIn = async function() {
   try {
     const provider = new GoogleAuthProvider();
     provider.setCustomParameters({ prompt: 'select_account' });
-    console.log('[Auth] Redirecting to Google sign-in…');
-    await signInWithRedirect(auth, provider);
+    console.log('[Auth] Opening Google popup…');
+    console.log('[Auth] authDomain:', auth.config?.authDomain, '| current origin:', window.location.origin);
+    const result = await signInWithPopup(auth, provider);
+    console.log('[Auth] Google popup success — uid:', result.user.uid, '| email:', result.user.email);
+    await processSocialUser(result.user, "google");
   } catch(e) {
     console.error('[Auth] Google signInWithPopup error:', e.code, e.message, e);
     handleSocialError(e, 'Google', 'btn-google');
@@ -661,8 +629,12 @@ window.handleGithubSignIn = async function() {
 
   try {
     const provider = new GithubAuthProvider();
-    console.log('[Auth] Redirecting to GitHub sign-in…');
-    await signInWithRedirect(auth, provider);
+    console.log('[Auth] Opening GitHub popup…');
+    console.log('[Auth] authDomain:', auth.config?.authDomain, '| current origin:', window.location.origin);
+    console.log('[Auth] Expected callback URL: https://codeschool-41f52.firebaseapp.com/__/auth/handler');
+    const result = await signInWithPopup(auth, provider);
+    console.log('[Auth] GitHub popup success — uid:', result.user.uid, '| email:', result.user.email);
+    await processSocialUser(result.user, "github");
   } catch(e) {
     console.error('[Auth] GitHub signInWithPopup error:', e.code, e.message, e);
     handleSocialError(e, 'GitHub', 'btn-github');
