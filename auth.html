@@ -310,91 +310,146 @@ let _socialInProgress = false;
 
 // ── Process social sign-in result ───────────────────────────────
 async function processSocialUser(user, providerId) {
-  const snap = await getDoc(doc(db, "users", user.uid));
-  
-  if (snap.exists()) {
-    const profile = snap.data();
-    if (profile.status === "suspended") {
-      showToast("Account suspended. Contact support.", "error");
-      await signOut(auth);
-      return;
-    }
-    showToast("Welcome back!", "success");
-    const dashboards = { student: "student-dashboard.html", tutor: "tutor-dashboard.html", admin: "admin-dashboard.html" };
-    setTimeout(() => { window.location.href = dashboards[profile.role] || "student-dashboard.html"; }, 700);
-    return;
-  }
+  console.log(`[Auth] processSocialUser — provider: ${providerId}, uid: ${user.uid}, email: ${user.email}`);
+  try {
+    const snap = await getDoc(doc(db, "users", user.uid));
+    console.log(`[Auth] Firestore UID lookup — exists: ${snap.exists()}`, snap.exists() ? snap.data() : 'n/a');
 
-  // Check if user exists by email
-  const emailQ = query(collection(db, "users"), where("email", "==", user.email || ""));
-  const emailSnap = await getDocs(emailQ);
-  
-  if (!emailSnap.empty) {
-    const existingDoc = emailSnap.docs[0];
-    const existingData = existingDoc.data();
-    const existingUID = existingDoc.id;
-    
-    if (existingData.status === "suspended") {
-      showToast("Account suspended. Contact support.", "error");
-      await signOut(auth);
+    if (snap.exists()) {
+      const profile = snap.data();
+      // ── Bug fix: this is the STUDENT auth page — block non-students ──
+      if (profile.role === 'tutor' || profile.role === 'admin') {
+        console.warn(`[Auth] Blocked — role "${profile.role}" attempted login on student auth page`);
+        showToast(`This is a ${profile.role} account. Please use the ${profile.role === 'tutor' ? 'Tutor Login' : 'Staff Portal'} instead.`, 'error');
+        await signOut(auth);
+        _socialInProgress = false;
+        return;
+      }
+      if (profile.status === "suspended") {
+        console.warn('[Auth] Blocked — account suspended');
+        showToast("Account suspended. Contact support.", "error");
+        await signOut(auth);
+        _socialInProgress = false;
+        return;
+      }
+      console.log(`[Auth] Existing student — redirecting to student-dashboard`);
+      showToast("Welcome back!", "success");
+      _socialInProgress = false;
+      setTimeout(() => { window.location.href = "student-dashboard.html"; }, 700);
       return;
     }
-    
+
+    // Check if user exists by email (password account being linked)
+    console.log(`[Auth] No UID doc — querying by email: ${user.email}`);
+    const emailQ = query(collection(db, "users"), where("email", "==", user.email || ""));
+    const emailSnap = await getDocs(emailQ);
+    console.log(`[Auth] Email query — found ${emailSnap.size} doc(s)`);
+
+    if (!emailSnap.empty) {
+      const existingDoc = emailSnap.docs[0];
+      const existingData = existingDoc.data();
+      const existingUID = existingDoc.id;
+      console.log(`[Auth] Matched existing account — uid: ${existingUID}, role: ${existingData.role}, status: ${existingData.status}`);
+
+      // ── Bug fix: block non-student roles even via email merge ──
+      if (existingData.role === 'tutor' || existingData.role === 'admin') {
+        console.warn(`[Auth] Blocked — email-matched role "${existingData.role}" on student auth page`);
+        showToast(`This email belongs to a ${existingData.role} account. Please use the ${existingData.role === 'tutor' ? 'Tutor Login' : 'Staff Portal'}.`, 'error');
+        await signOut(auth);
+        _socialInProgress = false;
+        return;
+      }
+
+      if (existingData.status === "suspended") {
+        console.warn('[Auth] Blocked — matched account suspended');
+        showToast("Account suspended. Contact support.", "error");
+        await signOut(auth);
+        _socialInProgress = false;
+        return;
+      }
+
+      console.log(`[Auth] Writing merged UID doc for ${user.uid}`);
+      await setDoc(doc(db, "users", user.uid), {
+        uid: user.uid,
+        firstName: existingData.firstName || "",
+        lastName: existingData.lastName || "",
+        fullName: existingData.fullName || user.displayName || "",
+        email: user.email || existingData.email,
+        phone: existingData.phone || "",
+        role: "student",
+        status: existingData.status || "active",
+        emailVerified: true,
+        provider: providerId,
+        mergedFrom: existingUID,
+        createdAt: existingData.createdAt || serverTimestamp(),
+      });
+
+      console.log(`[Auth] Updating old doc ${existingUID} with ${providerId}UID`);
+      await updateDoc(doc(db, "users", existingUID), { [`${providerId}UID`]: user.uid });
+
+      console.log('[Auth] Merge complete — redirecting to student-dashboard');
+      showToast("Accounts linked! Welcome back.", "success");
+      _socialInProgress = false;
+      setTimeout(() => { window.location.href = "student-dashboard.html"; }, 900);
+      return;
+    }
+
+    // Brand new user — create as student
+    console.log(`[Auth] New user — creating student account for ${user.email}`);
+    const nameParts = (user.displayName || "").split(" ");
+    const firstName = nameParts[0] || "Student";
+    const lastName  = nameParts.slice(1).join(" ") || "";
+
     await setDoc(doc(db, "users", user.uid), {
-      uid: user.uid,
-      firstName: existingData.firstName || "",
-      lastName: existingData.lastName || "",
-      fullName: existingData.fullName || user.displayName || "",
-      email: user.email || existingData.email,
-      phone: existingData.phone || "",
-      role: existingData.role || "student",
-      status: existingData.status || "active",
+      uid: user.uid, firstName, lastName,
+      fullName: user.displayName || firstName,
+      email: user.email || "", phone: "",
+      role: "student", status: "active",
       emailVerified: true,
       provider: providerId,
-      mergedFrom: existingUID,
-      createdAt: existingData.createdAt || serverTimestamp(),
+      createdAt: serverTimestamp(),
     });
-    
-    await updateDoc(doc(db, "users", existingUID), { [`${providerId}UID`]: user.uid });
-    
-    showToast("Accounts linked! Welcome back.", "success");
-    const dashboards = { student: "student-dashboard.html", tutor: "tutor-dashboard.html", admin: "admin-dashboard.html" };
-    setTimeout(() => { window.location.href = dashboards[existingData.role] || "student-dashboard.html"; }, 900);
-    return;
-  }
 
-  // Brand new user
-  const nameParts = (user.displayName || "").split(" ");
-  const firstName = nameParts[0] || "Student";
-  const lastName  = nameParts.slice(1).join(" ") || "";
-  
-  await setDoc(doc(db, "users", user.uid), {
-    uid: user.uid, firstName, lastName,
-    fullName: user.displayName || firstName,
-    email: user.email || "", phone: "",
-    role: "student", status: "active",
-    emailVerified: true,
-    provider: providerId,
-    createdAt: serverTimestamp(),
-  });
-  
-  showToast("Account created! Welcome to codeSchool.", "success");
-  setTimeout(() => { window.location.href = "student-dashboard.html"; }, 900);
+    console.log('[Auth] New student doc written — redirecting to student-dashboard');
+    showToast("Account created! Welcome to MRA Africa.", "success");
+    _socialInProgress = false;
+    setTimeout(() => { window.location.href = "student-dashboard.html"; }, 900);
+
+  } catch (err) {
+    console.error(`[Auth] processSocialUser ERROR — provider: ${providerId}`, err);
+    console.error(`[Auth] Error code: ${err.code} | message: ${err.message}`);
+    showToast("Sign-in failed. Check the console for details.", "error");
+    await signOut(auth).catch(e => console.error('[Auth] signOut after error failed:', e));
+    _socialInProgress = false;
+  }
 }
 
 // ── Handle social sign-in errors ────────────────────────────────
 function handleSocialError(e, providerName, btnId) {
-  console.error(`${providerName} sign-in error:`, e.code, e.message);
+  console.error(`[Auth] ${providerName} sign-in FAILED`);
+  console.error(`[Auth] Code: ${e.code}`);
+  console.error(`[Auth] Message: ${e.message}`);
+  if (e.email) console.error(`[Auth] Email: ${e.email}`);
+  if (e.credential) console.error(`[Auth] Credential:`, e.credential);
+  console.error('[Auth] Full error object:', e);
+
   if (e.code === 'auth/popup-closed-by-user') {
     showToast('Sign-in cancelled.', '');
   } else if (e.code === 'auth/account-exists-with-different-credential') {
+    console.error('[Auth] IMPORTANT: This email is registered with a different provider. Credential that was attempted:', e.credential);
     showToast('An account already exists with this email. Try logging in with your password.', 'error');
   } else if (e.code === 'auth/popup-blocked') {
     showToast('Popup was blocked. Please allow popups for this site.', 'error');
   } else if (e.code === 'auth/cancelled-popup-request') {
     showToast('Another sign-in is in progress.', 'warning');
+  } else if (e.code === 'auth/operation-not-allowed') {
+    console.error('[Auth] GitHub provider is NOT enabled in Firebase Console → Authentication → Sign-in providers');
+    showToast(`${providerName} sign-in is not enabled. Check Firebase Console.`, 'error');
+  } else if (e.code === 'auth/invalid-api-key') {
+    console.error('[Auth] Invalid Firebase API key — check firebaseConfig');
+    showToast('Configuration error. Contact support.', 'error');
   } else {
-    showToast(`${providerName} sign-in failed — please try again.`, 'error');
+    showToast(`${providerName} sign-in failed — see console for details.`, 'error');
   }
   _socialInProgress = false;
   resetSocialBtn(btnId);
@@ -538,33 +593,47 @@ window.handleSignup = async function() {
 
 // ── GOOGLE SIGN-IN (POPUP) ─────────────────────────────────────
 window.handleGoogleSignIn = async function() {
-  if (_socialInProgress) return;
+  if (_socialInProgress) {
+    console.warn('[Auth] Google sign-in blocked — _socialInProgress is already true. Resetting.');
+    _socialInProgress = false;
+  }
   _socialInProgress = true;
+  console.log('[Auth] Google sign-in initiated');
   const btn = document.getElementById('btn-google');
   if (btn) { btn.disabled = true; btn.innerHTML = '<span class="spinner"></span>Signing in…'; }
-  
+
   try {
     const provider = new GoogleAuthProvider();
     provider.setCustomParameters({ prompt: 'select_account' });
+    console.log('[Auth] Opening Google popup…');
     const result = await signInWithPopup(auth, provider);
+    console.log('[Auth] Google popup success — uid:', result.user.uid, '| email:', result.user.email);
     await processSocialUser(result.user, "google");
   } catch(e) {
+    console.error('[Auth] Google signInWithPopup error:', e.code, e.message, e);
     handleSocialError(e, 'Google', 'btn-google');
   }
 };
 
 // ── GITHUB SIGN-IN (POPUP) ─────────────────────────────────────
 window.handleGithubSignIn = async function() {
-  if (_socialInProgress) return;
+  if (_socialInProgress) {
+    console.warn('[Auth] GitHub sign-in blocked — _socialInProgress is already true (previous attempt may have stalled). Resetting.');
+    _socialInProgress = false;
+  }
   _socialInProgress = true;
+  console.log('[Auth] GitHub sign-in initiated');
   const btn = document.getElementById('btn-github');
   if (btn) { btn.disabled = true; btn.innerHTML = '<span class="spinner"></span>Signing in…'; }
-  
+
   try {
     const provider = new GithubAuthProvider();
+    console.log('[Auth] Opening GitHub popup…');
     const result = await signInWithPopup(auth, provider);
+    console.log('[Auth] GitHub popup success — uid:', result.user.uid, '| email:', result.user.email);
     await processSocialUser(result.user, "github");
   } catch(e) {
+    console.error('[Auth] GitHub signInWithPopup error:', e.code, e.message, e);
     handleSocialError(e, 'GitHub', 'btn-github');
   }
 };
