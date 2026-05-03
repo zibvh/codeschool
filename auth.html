@@ -399,17 +399,13 @@ async function processSocialUser(user, providerId) {
   } catch (err) {
 
     showToast("Sign-in failed. Check the console for details.", "error");
-    await signOut(auth).catch(e =>
-    _socialInProgress = false;)
+    await signOut(auth).catch(() => {});
+    _socialInProgress = false;
   }
 }
 
 // ── Handle social sign-in errors ────────────────────────────────
 function handleSocialError(e, providerName, btnId) {
-
-  if (e.email)
-  if (e.credential)
-
   if (e.code === 'auth/popup-closed-by-user') {
     showToast('Sign-in cancelled.', '');
   } else if (e.code === 'auth/account-exists-with-different-credential') {
@@ -668,9 +664,11 @@ window.resendVerification = async function(email, btn) {
 };
 </script>
 <script>
-window.addEventListener('load',function(){
-  var l=document.getElementById('page-loader');
-  if(l){l.style.opacity='0';setTimeout(function(){l.style.display='none'},400);}
+window.addEventListener('load', function() {
+  setTimeout(function() {
+    var l = document.getElementById('page-loader');
+    if (l) { l.style.opacity = '0'; setTimeout(function() { l.style.display = 'none'; }, 400); }
+  }, 300);
 });
 </script>
 </body>
