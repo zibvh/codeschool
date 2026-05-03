@@ -1709,17 +1709,19 @@ async function loadHomepageCourses() {
       wrapper.innerHTML = `<div style="grid-column:1/-1;text-align:center;padding:2rem;color:var(--gray);font-family:var(--mono);font-size:.85rem;">No courses available yet — check back soon!</div>`;
       return;
     }
-    const courses = snap.docs.slice(0, 3).map(d => {
-      const data = d.data();
+    // Pick 3 random courses
+    const all = snap.docs.map(d => ({ id: d.id, ...d.data() }));
+    const shuffled = all.sort(() => Math.random() - 0.5).slice(0, 3);
+    const courses = shuffled.map(data => {
       const lang = data.language || "HTML";
       const lessonItems = data.lessons || [];
       const lessons   = lessonItems.filter(l=>l.type==="Lesson"||!l.type).length;
       const assigns   = lessonItems.filter(l=>l.type==="Assignment").length;
-      return { id: d.id, lang, lessons, assigns,
+      return { id: data.id, lang, lessons, assigns,
         title: data.title || "Untitled",
         desc: data.description || "",
         price: data.price || 0,
-        tutorName: data.tutorName || data.tutor || 'codeSchool',
+        tutorName: data.tutorName || data.tutor || 'MRA Africa',
         bannerURL: data.bannerURL || '',
       };
     });
@@ -1736,7 +1738,7 @@ async function loadHomepageCourses() {
         </div>
         <h3 class="course-name" style="padding:1.25rem 1.5rem 0;">${c.title}</h3>
         <p class="course-desc" style="padding:0.4rem 1.5rem 0;">${(c.desc||"").slice(0,100)}${c.desc&&c.desc.length>100?"…":""}</p>
-        ${lessons>0?`<div style="font-family:var(--mono);font-size:.68rem;color:var(--gray);padding:.5rem 1.5rem 0;display:flex;gap:.75rem;align-items:center;">${BOOK_SVG} ${lessons} Lessons${assigns>0?` &nbsp;·&nbsp; ${PEN_SVG} ${assigns} Assignments`:''}</div>`:""}
+        ${c.lessons>0?`<div style="font-family:var(--mono);font-size:.68rem;color:var(--gray);padding:.5rem 1.5rem 0;display:flex;gap:.75rem;align-items:center;">${BOOK_SVG} ${c.lessons} Lessons${c.assigns>0?` &nbsp;·&nbsp; ${PEN_SVG} ${c.assigns} Assignments`:''}</div>`:""}
         <div class="course-meta" style="padding:.75rem 1.5rem 1.25rem;margin-top:.75rem;border-top:1px solid rgba(255,255,255,.06);display:flex;justify-content:space-between;align-items:center;">
           <div>
             <div class="course-price"><span class="currency">₦</span>${isFree?'FREE':(c.price||0).toLocaleString()}</div>
@@ -1754,8 +1756,7 @@ async function loadHomepageCourses() {
     });
 
   } catch(e) {
-    console.error("Could not load courses:", e);
-    wrapper.innerHTML = `<div style="grid-column:1/-1;text-align:center;padding:2rem;color:var(--gray);font-family:var(--mono);font-size:.85rem;">Could not load courses. Please refresh.</div>`;
+    wrapper.innerHTML = `<div style="grid-column:1/-1;text-align:center;padding:2rem;color:var(--gray);font-family:var(--mono);font-size:.85rem;"><a href="courses.html" style="color:var(--blue);text-decoration:none;">Browse all programs →</a></div>`;
   }
 }
 loadHomepageCourses();

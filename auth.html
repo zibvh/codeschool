@@ -400,7 +400,7 @@ async function processSocialUser(user, providerId) {
 
     showToast("Sign-in failed. Check the console for details.", "error");
     await signOut(auth).catch(e =>
-    _socialInProgress = false;
+    _socialInProgress = false;)
   }
 }
 

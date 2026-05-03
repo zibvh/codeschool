@@ -1,19 +1,7 @@
 rules_version = '2';
-// ═══════════════════════════════════════════════════════════════════
-// codeSchool — Firestore Security Rules
-// Project: codeschool-41f52
-// Roles: admin | tutor | student
-// Collections: users, pending_users, courses, enrollments, payments,
-//              certificates, submissions, examSubmissions, testResults,
-//              notifications, questions, settings
-// ═══════════════════════════════════════════════════════════════════
 
 service cloud.firestore {
   match /databases/{database}/documents {
-
-    // ──────────────────────────────────────────────────────────────
-    // HELPERS
-    // ──────────────────────────────────────────────────────────────
 
     function isSignedIn() {
       return request.auth != null;
@@ -47,240 +35,112 @@ service cloud.firestore {
       return isSignedIn() && request.auth.uid == uid;
     }
 
-    function onlyFields(fields) {
-      return request.resource.data.diff(resource.data).affectedKeys().hasOnly(fields);
-    }
-
-    // ──────────────────────────────────────────────────────────────
-    // PENDING_USERS
-    // Written during email/password signup BEFORE email verification.
-    // The user is authenticated (Firebase creates the auth account
-    // first) but has no profile doc yet — so we can't call myRole().
-    // Rule: a user may create/read/delete their OWN pending doc only.
-    // The login flow promotes pending_users → users on first login.
-    // ──────────────────────────────────────────────────────────────
     match /pending_users/{uid} {
-      // Owner can read their own pending doc (e.g. resend-verification flow)
       allow read: if isMe(uid) || isAdmin();
-
-      // Any newly-authenticated user can create their own pending doc.
-      // We enforce: uid matches auth, role must be 'student', status 'active'.
       allow create: if isMe(uid)
         && request.resource.data.uid == uid
         && request.resource.data.role == 'student'
         && request.resource.data.status == 'active';
-
-      // No client-side updates to pending docs
       allow update: if isAdmin();
-
-      // Owner or admin can delete (login flow deletes after promotion)
       allow delete: if isMe(uid) || isAdmin();
     }
 
-    // ──────────────────────────────────────────────────────────────
-    // USERS
-    // ──────────────────────────────────────────────────────────────
     match /users/{uid} {
-      // Admins see everyone. Users see themselves. Tutors can see
-      // student profiles (needed for grading/submissions).
-      allow read: if isMe(uid) || isAdmin() || isTutor();
-
-      // Self-registration: a user can create their OWN doc if:
-      //   - They are the authenticated user (isMe)
-      //   - They can only register as 'student' with status 'active'
-      //   - Used by: Google/GitHub social sign-in (no pending_users step)
+      allow read: if isSignedIn();
       allow create: if isAdmin()
         || (isMe(uid)
             && request.resource.data.uid == uid
             && request.resource.data.role == 'student'
             && request.resource.data.status == 'active');
-
-      // Self-update: users can update safe profile fields only.
-      // Cannot change role, status, email, or payment fields.
-      allow update: if isAdmin()
-        || (isMe(uid) && onlyFields([
-             'firstName','lastName','fullName','photoURL',
-             'hiddenCourses','bio','phone'
-           ]));
-
-      // Only admin can delete accounts
+      allow update: if isAdmin() || isMe(uid);
       allow delete: if isAdmin();
     }
 
-    // ──────────────────────────────────────────────────────────────
-    // COURSES
-    // ──────────────────────────────────────────────────────────────
     match /courses/{courseId} {
-      allow read: if resource.data.status == 'live'
-        || isAdmin()
-        || (isTutor() && resource.data.tutorId == request.auth.uid);
-
+      allow read: if true;
       allow create: if isActiveTutor()
         && request.resource.data.tutorId == request.auth.uid
-        && request.resource.data.status == 'pending';
-
+        && request.resource.data.status in ['pending', 'draft'];
       allow update: if isAdmin()
-        || (isActiveTutor()
-            && resource.data.tutorId == request.auth.uid
-            && resource.data.status in ['pending', 'pending_edit', 'draft']);
-
+        || (isActiveTutor() && resource.data.tutorId == request.auth.uid);
       allow delete: if isAdmin()
         || (isActiveTutor()
             && resource.data.tutorId == request.auth.uid
             && resource.data.status in ['pending', 'pending_edit', 'draft', 'deleted']);
     }
 
-    // ──────────────────────────────────────────────────────────────
-    // QUESTIONS
-    // ──────────────────────────────────────────────────────────────
     match /questions/{questionId} {
-      allow read: if isAdmin()
-        || (isTutor() && resource.data.tutorId == request.auth.uid)
-        || (isStudent() && exists(/databases/$(database)/documents/enrollments/$(request.auth.uid + '_' + resource.data.courseId)));
-
+      allow read: if isSignedIn();
       allow write: if isAdmin()
         || (isActiveTutor() && request.resource.data.tutorId == request.auth.uid);
     }
 
-    // ──────────────────────────────────────────────────────────────
-    // ENROLLMENTS
-    // ──────────────────────────────────────────────────────────────
     match /enrollments/{enrollId} {
-      allow read: if isAdmin()
-        || (isSignedIn() && resource.data.studentId == request.auth.uid)
-        || (isTutor() && resource.data.tutorId == request.auth.uid);
-
+      allow read: if isSignedIn();
       allow create: if isStudent()
         && request.resource.data.studentId == request.auth.uid;
-
       allow update: if isAdmin()
-        || (isStudent()
-            && resource.data.studentId == request.auth.uid
-            && onlyFields(['completedLessons','progress','paid','paystackRef',
-                           'certRequested','certIssued','certId','updatedAt']));
-
-      allow delete: if isAdmin();
+        || (isStudent() && resource.data.studentId == request.auth.uid);
+      allow delete: if isAdmin()
+        || (isStudent() && resource.data.studentId == request.auth.uid);
     }
 
-    // ──────────────────────────────────────────────────────────────
-    // PAYMENTS
-    // ──────────────────────────────────────────────────────────────
     match /payments/{payId} {
-      allow read: if isAdmin()
-        || (isTutor() && resource.data.tutorId == request.auth.uid)
-        || (isStudent() && resource.data.studentId == request.auth.uid);
-
+      allow read: if isSignedIn();
       allow create: if isStudent()
         && request.resource.data.studentId == request.auth.uid;
-
       allow update: if isAdmin();
-
       allow delete: if false;
     }
 
-    // ──────────────────────────────────────────────────────────────
-    // CERTIFICATES
-    // ──────────────────────────────────────────────────────────────
     match /certificates/{certId} {
       allow read: if true;
-
       allow create: if isAdmin()
         || (isStudent() && request.resource.data.studentId == request.auth.uid);
-
-      allow update: if isAdmin()
-        || (isStudent()
-            && resource.data.studentId == request.auth.uid
-            && onlyFields(['paid','locked','paidAt','paystackRef']));
-
+      allow update: if isAdmin() || isStudent();
       allow delete: if isAdmin();
     }
 
-    // ──────────────────────────────────────────────────────────────
-    // ASSIGNMENT SUBMISSIONS
-    // ──────────────────────────────────────────────────────────────
     match /submissions/{subId} {
-      allow read: if isAdmin()
-        || (isStudent() && resource.data.studentId == request.auth.uid)
-        || (isTutor() && resource.data.tutorId == request.auth.uid);
-
+      allow read: if isSignedIn();
       allow create: if isStudent()
         && request.resource.data.studentId == request.auth.uid;
-
-      allow update: if isAdmin()
-        || (isTutor()
-            && resource.data.tutorId == request.auth.uid
-            && onlyFields(['score','feedback','graded','gradedAt']));
-
+      allow update: if isAdmin() || isTutor();
       allow delete: if isAdmin();
     }
 
-    // ──────────────────────────────────────────────────────────────
-    // EXAM SUBMISSIONS
-    // ──────────────────────────────────────────────────────────────
     match /examSubmissions/{subId} {
-      allow read: if isAdmin()
-        || (isStudent() && resource.data.studentId == request.auth.uid)
-        || (isTutor() && resource.data.tutorId == request.auth.uid);
-
+      allow read: if isSignedIn();
       allow create: if isStudent()
         && request.resource.data.studentId == request.auth.uid;
-
-      allow update: if isAdmin()
-        || (isTutor()
-            && resource.data.tutorId == request.auth.uid
-            && onlyFields(['score','feedback','graded','gradedAt','passed']));
-
+      allow update: if isAdmin() || isTutor();
       allow delete: if isAdmin();
     }
 
-    // ──────────────────────────────────────────────────────────────
-    // TEST RESULTS
-    // ──────────────────────────────────────────────────────────────
     match /testResults/{resultId} {
-      allow read: if isAdmin()
-        || (isStudent() && resource.data.studentId == request.auth.uid)
-        || (isTutor() && resource.data.tutorId == request.auth.uid);
-
+      allow read: if isSignedIn();
       allow create: if isStudent()
         && request.resource.data.studentId == request.auth.uid;
-
       allow update: if isAdmin();
       allow delete: if isAdmin();
     }
 
-    // ──────────────────────────────────────────────────────────────
-    // NOTIFICATIONS
-    // ──────────────────────────────────────────────────────────────
     match /notifications/{notifId} {
-      allow read: if isAdmin()
-        || (isSignedIn()
-            && (resource.data.userId == request.auth.uid
-                || resource.data.target == 'all'
-                || resource.data.target == request.auth.uid));
-
-      allow create: if isAdmin();
-
-      allow update: if isAdmin()
-        || (isSignedIn()
-            && (resource.data.userId == request.auth.uid
-                || resource.data.target == request.auth.uid
-                || resource.data.target == 'all')
-            && onlyFields(['read', 'readBy']));
-
+      allow read: if isSignedIn()
+        && (resource.data.target == request.auth.uid
+            || resource.data.target == 'all');
+      allow create: if isAdmin() || isTutor() || isStudent();
+      allow update: if isSignedIn()
+        && (resource.data.target == request.auth.uid
+            || resource.data.target == 'all');
       allow delete: if isAdmin();
     }
 
-    // ──────────────────────────────────────────────────────────────
-    // SETTINGS
-    // ──────────────────────────────────────────────────────────────
     match /settings/{docId} {
       allow read: if isSignedIn();
       allow write: if isAdmin();
     }
 
-    // ──────────────────────────────────────────────────────────────
-    // CATCH-ALL
-    // ──────────────────────────────────────────────────────────────
     match /{document=**} {
       allow read, write: if false;
     }
