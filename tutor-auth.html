@@ -327,14 +327,9 @@ document.getElementById('t-pw').addEventListener('keydown', e => { if (e.key ===
 document.getElementById('t-email').addEventListener('keydown', e => { if (e.key === 'Enter') document.getElementById('t-pw').focus(); });
 </script>
 <script>
-// Hide loader once module has had time to initialise.
-// Using requestAnimationFrame + setTimeout ensures the module's
-// window.handleLogin override has run before we reveal the UI.
-window.addEventListener('load', function() {
-  setTimeout(function() {
-    var l = document.getElementById('page-loader');
-    if (l) { l.style.opacity = '0'; setTimeout(function() { l.style.display = 'none'; }, 400); }
-  }, 300);
+window.addEventListener('load',function(){
+  var l=document.getElementById('page-loader');
+  if(l){l.style.opacity='0';setTimeout(function(){l.style.display='none'},400);}
 });
 </script>
 </body>
